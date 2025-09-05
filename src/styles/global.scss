@@ -1,0 +1,32 @@
+@use './utils/reset';
+
+body {
+  overflow-y: scroll;
+
+  font-family: 'Open sans', Arial, sans-serif;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+
+  background-color: var(--color-body-bg);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: var(--min-width);
+  max-width: var(--max-width);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 16px;
+}
+
+:root {
+  --box-shadow: 0 1px 1px 1px rgb(238 238 238);
+  --border-radius: 14px;
+  --min-width: 320px;
+  --max-width: 1280px;
+  @extend %palette;
+}
