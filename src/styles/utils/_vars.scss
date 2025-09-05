@@ -1,0 +1,43 @@
+%palette {
+  --color-text: rgb(38 38 38);
+  --color-text-40: rgb(38 38 38 / 40%);
+  --color-text-30: rgb(38 38 38 / 30%);
+  --color-body-bg: rgb(241 241 241);
+  --color-gray-10: rgb(128 128 128 / 10%);
+  --color-bg: white;
+  --color-violet: #44318d;
+  --color-violet-dark: #2a1b3d;
+  --color-violet-light: rgb(130 95 175);
+  --color-violet-light-10: rgb(130 95 175 / 10%);
+  --color-green-gray: #a4b3b6;
+  --color-accent: #d83f87;
+  --color-accent-10: rgb(216 65 135 / 10%);
+  --color-accent-15: rgb(216 65 135 / 15%);
+  --color-accent-70: rgb(216 65 135 / 70%);
+  --color-error-bg: var(--color-accent-10);
+  --color-btn-bg: var(--color-violet);
+  --color-sec-btn-bg: rgb(68 49 141 / 70%);
+  --color-btn: white;
+  --color-btn-border: transparent;
+  --color-error: var(--color-accent);
+  --color-border: rgb(224 224 224);
+  --color-border-50: rgb(216 216 216 / 50%);
+  --color-border-10: rgb(216 216 216 / 10%);
+  --color-green: rgb(54 161 0);
+  --color-border-input: rgb(128 128 128);
+  --color-link: var(--color-accent-70);
+}
+
+.dark-theme {
+  --color-text: rgb(163 163 163);
+  --color-text-40: rgb(163 163 163 / 40%);
+  --color-text-30: rgb(163 163 163 / 30%);
+  --color-body-bg: rgb(35 39 44);
+  --color-border: rgb(216 216 216 / 20%);
+  --color-bg: rgb(58 60 67);
+  --color-btn-bg: #4628c0;
+  --color-btn: rgb(255 255 255 / 80%);
+  --color-btn-border: rgb(255 255 255 / 20%);
+  --color-error-bg: var(--color-accent-15);
+  --color-sec-btn-bg: rgb(185 185 185 / 50%);
+}
