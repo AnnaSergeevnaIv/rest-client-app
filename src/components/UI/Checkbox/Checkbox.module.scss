@@ -1,0 +1,14 @@
+.wrapper {
+  cursor: pointer;
+
+  display: flex;
+  gap: 6px;
+  align-items: center;
+
+  width: 100%;
+}
+
+.box {
+  cursor: pointer;
+  aspect-ratio: 1;
+}

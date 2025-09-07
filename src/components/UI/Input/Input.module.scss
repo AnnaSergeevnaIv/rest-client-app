@@ -1,0 +1,104 @@
+.wrapper {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  // width: 100%;
+
+  line-height: 1;
+}
+
+.label {
+  overflow: hidden;
+  flex-shrink: 0;
+
+  width: 100%;
+
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.oneline {
+  flex-direction: row;
+  gap: 4px;
+  align-items: center;
+
+  .label {
+    width: unset;
+  }
+}
+
+.input-wrapper {
+  position: relative;
+  flex-grow: 1;
+}
+
+.input {
+  @extend %text-input;
+}
+
+.input[list]::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
+
+.clear-btn,
+.down-arrow,
+.show-password {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.clear-btn,
+.show-password {
+  @extend %btn-primary;
+
+  padding: 4px;
+  border: unset;
+  color: var(--color-text-40);
+  background-color: transparent;
+}
+
+.show-password {
+  left: 8px;
+
+  ~ .input {
+    padding-left: 32px;
+  }
+}
+
+.clear-btn {
+  right: 8px;
+
+  ~ .input {
+    padding-right: 32px;
+  }
+}
+
+.down-arrow {
+  left: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ~ .input {
+    padding-left: 28px;
+  }
+}
+
+.error {
+  position: absolute;
+  bottom: -16px;
+
+  overflow: hidden;
+
+  width: 100%;
+
+  font-size: 10px;
+  color: var(--color-accent);
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

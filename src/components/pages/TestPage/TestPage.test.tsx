@@ -1,10 +1,10 @@
 import { render, screen } from '@testing-library/react';
 import { describe } from 'vitest';
-import { Test } from './Test.tsx';
+import TestPage from './TestPage.tsx';
 
-describe('Test', () => {
+describe('TestPage', () => {
   it(`Renders correctly`, () => {
-    render(<Test />);
+    render(<TestPage />);
     expect(screen.getByText(/test/i)).toBeDefined();
   });
 });
