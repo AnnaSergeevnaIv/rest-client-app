@@ -1,7 +1,7 @@
 'use client';
 
 import clsx from 'clsx';
-import { useRef, type ButtonHTMLAttributes, type MouseEvent, type ReactNode } from 'react';
+import { type ButtonHTMLAttributes, type ReactNode } from 'react';
 import styles from './Button.module.scss';
 
 type ButtonVariant = 'default' | 'primary' | 'secondary';
@@ -20,18 +20,8 @@ export const Button = ({
   className,
   ...rest
 }: ButtonProps): ReactNode => {
-  const childClickedRef = useRef(false);
-
-  const handleClick = ({ target, currentTarget }: MouseEvent<HTMLButtonElement>): void => {
-    if (target === currentTarget) {
-      if (!childClickedRef.current) {
-        onClick?.();
-      }
-      childClickedRef.current = false;
-    } else if (!childClickedRef.current) {
-      childClickedRef.current = true;
-      onClick?.();
-    }
+  const handleClick = (): void => {
+    onClick?.();
   };
   return (
     <button className={clsx(styles[`btn-${variant}`], className)} onClick={handleClick} {...rest}>
