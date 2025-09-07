@@ -49,9 +49,12 @@
 %btn-primary {
   @extend %btn;
 
+  height: 36px;
   padding: 0.8em 1.2em;
   border: 1px solid var(--color-btn-border);
+
   color: var(--color-btn);
+
   background-color: var(--color-btn-bg);
 
   @include mix.focused {
@@ -71,6 +74,7 @@
 
 %text-input {
   width: 100%;
+  height: 36px;
   padding: 8px 16px;
   border: var(--border-style);
   border-radius: var(--border-radius);
@@ -85,6 +89,6 @@
   background-color: var(--color-bg);
 
   &::placeholder {
-    opacity: 0.7;
+    opacity: 0.5;
   }
 }
