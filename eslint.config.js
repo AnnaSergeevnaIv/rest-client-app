@@ -94,6 +94,7 @@ export default defineConfig([
           assertionStyle: 'never',
         },
       ],
+      '@typescript-eslint/triple-slash-reference': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/explicit-function-return-type': 'error',
