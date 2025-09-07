@@ -1,0 +1,90 @@
+@use './mixins' as mix;
+
+%wrapper {
+  width: 100%;
+  min-width: var(--min-width);
+  max-width: var(--max-width);
+  margin: 0 auto;
+}
+
+%section-heading {
+  margin-bottom: 50px;
+  font-size: 32px;
+  text-align: center;
+  text-transform: capitalize;
+}
+
+%subtitle {
+  display: block;
+
+  margin-bottom: 15px;
+
+  font-size: 18px;
+  font-weight: bold;
+  text-transform: capitalize;
+}
+
+%btn {
+  cursor: pointer;
+
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: var(--border-radius);
+
+  font-family: inherit;
+  line-height: 1;
+
+  @include mix.main-transition('filter');
+
+  &:disabled {
+    @include mix.non-interactive {
+      opacity: 0.4;
+    }
+  }
+}
+
+%btn-primary {
+  @extend %btn;
+
+  padding: 0.8em 1.2em;
+  border: 1px solid var(--color-btn-border);
+  color: var(--color-btn);
+  background-color: var(--color-btn-bg);
+
+  @include mix.focused {
+    filter: brightness(0.8);
+  }
+}
+
+%link {
+  color: var(--color-link);
+
+  @include mix.main-transition('color');
+
+  @include mix.focused {
+    color: var(--color-accent);
+  }
+}
+
+%text-input {
+  width: 100%;
+  padding: 8px 16px;
+  border: var(--border-style);
+  border-radius: var(--border-radius);
+
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1;
+  color: inherit;
+
+  appearance: unset;
+  background-color: var(--color-bg);
+
+  &::placeholder {
+    opacity: 0.7;
+  }
+}

@@ -41,3 +41,12 @@
   --color-error-bg: var(--color-accent-15);
   --color-sec-btn-bg: rgb(185 185 185 / 50%);
 }
+
+:root {
+  --box-shadow: 0 1px 1px 1px rgb(238 238 238);
+  --border-radius: 8px;
+  --border-style: 1px solid var(--color-border);
+  --min-width: 180px;
+  --max-width: 1280px;
+  @extend %palette;
+}

@@ -22,11 +22,3 @@ body {
   margin: 0 auto;
   padding: 0 16px;
 }
-
-:root {
-  --box-shadow: 0 1px 1px 1px rgb(238 238 238);
-  --border-radius: 14px;
-  --min-width: 320px;
-  --max-width: 1280px;
-  @extend %palette;
-}
