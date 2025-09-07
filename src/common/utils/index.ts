@@ -79,3 +79,13 @@ export const createRecord = <T = unknown>({
   const entries = keys.map((key, idx) => [key, values[idx] ?? placeholder]);
   return Object.fromEntries(entries) as Record<string, T>;
 };
+
+export const mapObjectValues = <T>(
+  obj: Record<string, unknown>,
+  mapper: (v: unknown) => T,
+): Record<string, T> => {
+  return Object.keys(obj).reduce<Record<string, T>>((res, key) => {
+    res[key] = mapper(obj[key]);
+    return res;
+  }, {});
+};

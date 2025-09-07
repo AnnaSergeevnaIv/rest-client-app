@@ -1,3 +1,9 @@
+export const RoutePath = {
+  Home: '/',
+  About: '/about',
+  Any: '*',
+} as const;
+
 export const LinkProps = {
   target: '_blank',
   rel: 'noopener noreferrer nofollow',
