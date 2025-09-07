@@ -5,7 +5,7 @@ import type { ReactNode } from 'react';
 import type { InputProps } from '../Input/Input.tsx';
 import { Input } from '../Input/Input.tsx';
 
-type DatalistProps = Omit<InputProps, 'list' | 'id'> & {
+type DatalistProps = Omit<InputProps, 'list'> & {
   items: string[];
   listId: string;
 };
