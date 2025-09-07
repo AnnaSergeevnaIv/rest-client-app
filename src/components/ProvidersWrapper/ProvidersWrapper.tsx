@@ -4,6 +4,7 @@
 // import dynamic from 'next/dynamic';
 import type { PropsWithChildren, ReactNode } from 'react';
 // import { Provider } from 'react-redux';
+import { ToastContainer } from 'react-toastify';
 import { AppErrorBoundary } from './ErrorBoundary/AppErrorBoundary.tsx';
 
 type ProvidersProps = PropsWithChildren & {
@@ -22,6 +23,7 @@ export default function ProvidersWrapper({ children }: ProvidersProps): ReactNod
       {children}
       {/* </Provider> */}
       {/* </ThemeProvider> */}
+      <ToastContainer autoClose={1500} position='top-center' hideProgressBar={true} />
     </AppErrorBoundary>
   );
 }

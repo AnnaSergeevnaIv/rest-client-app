@@ -8,6 +8,7 @@ import { Input } from '@/components/UI/Input/Input';
 import { Radio } from '@/components/UI/Radio/Radio.tsx';
 import { Select } from '@/components/UI/Select/Select';
 import { useState, type ReactNode } from 'react';
+import { toast } from 'react-toastify';
 import style from './TestPage.module.scss';
 
 export default function TestPage(): ReactNode {
@@ -19,7 +20,7 @@ export default function TestPage(): ReactNode {
       <div>
         <h2>Text Input example</h2>
         <label className={style.label}>
-          name
+          <span>name</span>
           <Input
             error='Some error message'
             placeholder='input name...'
@@ -62,12 +63,21 @@ export default function TestPage(): ReactNode {
         </label>
       </div>
       {/* Button */}
-      <div>
-        <h2>Button example</h2>
-        <Button label='Download'>
-          <IconDownload size={16} />
-        </Button>
+      <h2>Button example</h2>
+      <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+        <div>
+          <Button label='Download'>
+            <IconDownload size={16} />
+          </Button>
+        </div>
+        <div>
+          <Button label='Show error toast' onClick={() => toast.error('error')} />
+        </div>
+        <div>
+          <Button label='Show success toast' onClick={() => toast.success('success')} />
+        </div>
       </div>
+
       {/* Other */}
       <h2>Other examples</h2>
       <div style={{ display: 'flex', gap: 12 }}>

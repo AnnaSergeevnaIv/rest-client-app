@@ -16,6 +16,7 @@
 .clear-btn,
 .down-arrow,
 .show-password {
+  user-select: none;
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -59,6 +60,8 @@
 }
 
 .error {
+  user-select: none;
+
   position: absolute;
   bottom: -16px;
 

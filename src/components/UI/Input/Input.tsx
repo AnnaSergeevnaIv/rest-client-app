@@ -11,7 +11,6 @@ import {
   type ReactNode,
   type Ref,
 } from 'react';
-import { Button } from '../Button/Button.tsx';
 import styles from './Input.module.scss';
 
 export const ARROW_SIZE = 16;
@@ -50,7 +49,7 @@ export const Input = ({
     setVal(value ?? '');
   }, [value]);
 
-  const handleShowPasswordClick = useCallback((): void => {
+  const handleShowPasswordDown = useCallback((): void => {
     setShowPassword(p => !p);
   }, []);
 
@@ -73,15 +72,15 @@ export const Input = ({
   const errorMsg = Array.isArray(error) ? error[0] : error;
 
   return (
-    <label className={styles.wrapper}>
+    <div className={styles.wrapper}>
       {securely && (
-        <Button
+        <span
           className={styles['show-password']}
-          onClick={handleShowPasswordClick}
+          onMouseDown={handleShowPasswordDown}
           title={SHOW_PASSWORD_BTN_TITLE}
         >
           <EyeIcon size={EYE_SIZE} />
-        </Button>
+        </span>
       )}
       {!securely && showDownArrow && (
         <span className={styles['down-arrow']}>
@@ -89,14 +88,14 @@ export const Input = ({
         </span>
       )}
       {type !== 'search' && (
-        <Button
+        <span
           className={styles['clear-btn']}
           onClick={handleClear}
           style={{ display: val ? 'flex' : 'none' }}
           title={CLEAR_BTN_TITLE}
         >
           {CLEAR_BTN_TEXT}
-        </Button>
+        </span>
       )}
       <input
         ref={ref}
@@ -114,6 +113,6 @@ export const Input = ({
         </p>
       )}
       {children}
-    </label>
+    </div>
   );
 };
