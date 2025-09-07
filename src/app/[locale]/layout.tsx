@@ -3,13 +3,13 @@ import ProvidersWrapper from '@components/ProvidersWrapper/ProvidersWrapper.tsx'
 import { routing } from '@i18n/routing';
 import '@styles/global.scss';
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
-import { Geist } from 'next/font/google';
+import { Open_Sans } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
 const ROOT_ID = 'root';
 
-const geist = Geist({
+const geist = Open_Sans({
   subsets: ['latin'],
 });
 
