@@ -1,0 +1,29 @@
+.wrapper {
+  width: 100%;
+  margin-top: 40px;
+  padding: 40px;
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-accent-10);
+}
+
+.error-info {
+  margin: 0;
+
+  font-size: 12px;
+  line-height: 1.8;
+  word-wrap: break-word;
+  white-space: pre-wrap;
+}
+
+.reset-btn {
+  @extend %btn-primary;
+
+  margin-top: 20px;
+}
+
+.error-heading {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+}

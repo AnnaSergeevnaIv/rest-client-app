@@ -1,0 +1,30 @@
+.wrapper {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+
+  line-height: 1;
+}
+
+.select {
+  @extend %text-input;
+
+  cursor: pointer;
+}
+
+.down-arrow {
+  position: absolute;
+  top: 50%;
+  right: 8px;
+  transform: translateY(-50%);
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  ~ .select {
+    padding-right: 28px;
+  }
+}

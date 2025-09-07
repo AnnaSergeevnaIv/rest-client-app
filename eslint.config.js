@@ -8,14 +8,14 @@ import eslintPluginReactRefresh from 'eslint-plugin-react-refresh';
 import { defineConfig } from 'eslint/config';
 import globals from 'globals';
 import tseslint from 'typescript-eslint';
-import nextConfig from './next-plugin.config.js';
+import nextPlugin from './next-plugin.config.js';
 import prettierConfig from './prettier.config.js';
 
 const ECMA_VERSION = 2022;
 const MAX_LINES_PER_FUNCTION = 120;
 
 export default defineConfig([
-  ...nextConfig,
+  ...nextPlugin,
   { ignores: ['dist', '**/*.test.ts', '**/*.test.js', '**/*.test.tsx'] },
   {
     extends: [
@@ -94,6 +94,7 @@ export default defineConfig([
           assertionStyle: 'never',
         },
       ],
+      '@typescript-eslint/triple-slash-reference': 'off',
       '@typescript-eslint/consistent-type-imports': 'error',
       '@typescript-eslint/consistent-type-definitions': ['error', 'type'],
       '@typescript-eslint/explicit-function-return-type': 'error',
