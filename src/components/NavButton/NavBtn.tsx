@@ -4,6 +4,7 @@ import { hasOwnKeys } from '@/common/utils/type-guards.ts';
 import { redirect, useRouter } from '@/i18n/navigation.ts';
 import { useLocale } from 'next-intl';
 import type { PropsWithChildren, ReactNode } from 'react';
+import { Button } from '../UI/Button/Button.tsx';
 
 type RedirectProps = Partial<Parameters<typeof redirect>[0]>;
 type RouterAction = {
@@ -26,9 +27,9 @@ export const NavBtn = ({ className, text, children, ...rest }: NavButtonProps): 
     }
   };
   return (
-    <button className={className} onClick={handleClick}>
+    <Button className={className} onClick={handleClick}>
       {children}
       {text}
-    </button>
+    </Button>
   );
 };

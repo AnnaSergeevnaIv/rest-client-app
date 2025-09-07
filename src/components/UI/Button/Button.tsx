@@ -16,7 +16,7 @@ export const Button = ({
   label,
   children,
   onClick,
-  variant = 'default',
+  variant = 'primary',
   className,
   ...rest
 }: ButtonProps): ReactNode => {

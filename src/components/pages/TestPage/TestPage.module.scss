@@ -1,6 +1,11 @@
 .wrapper {
   display: flex;
   flex-direction: column;
-  gap: 20px;
+  gap: 42px;
   max-width: 300px;
+}
+
+.label {
+  font-size: 13px;
+  text-transform: capitalize;
 }

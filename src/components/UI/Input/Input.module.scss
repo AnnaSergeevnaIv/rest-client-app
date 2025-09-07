@@ -1,39 +1,8 @@
 .wrapper {
   position: relative;
-
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-
-  // width: 100%;
-
+  display: block;
+  width: fit-content;
   line-height: 1;
-}
-
-.label {
-  overflow: hidden;
-  flex-shrink: 0;
-
-  width: 100%;
-
-  font-size: 13px;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-
-.oneline {
-  flex-direction: row;
-  gap: 4px;
-  align-items: center;
-
-  .label {
-    width: unset;
-  }
-}
-
-.input-wrapper {
-  position: relative;
-  flex-grow: 1;
 }
 
 .input {
@@ -66,7 +35,7 @@
   left: 8px;
 
   ~ .input {
-    padding-left: 32px;
+    padding-left: 36px;
   }
 }
 

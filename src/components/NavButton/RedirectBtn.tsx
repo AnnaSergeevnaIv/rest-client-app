@@ -1,9 +1,8 @@
 'use client';
 
-import clsx from 'clsx';
 import { redirect } from 'next/navigation';
 import type { PropsWithChildren, ReactNode } from 'react';
-import styles from './styles.module.scss';
+import { Button } from '../UI/Button/Button.tsx';
 
 type NavButtonProps = PropsWithChildren & {
   className?: string;
@@ -12,9 +11,9 @@ type NavButtonProps = PropsWithChildren & {
 };
 export const RedirectBtn = ({ className, text, to, children }: NavButtonProps): ReactNode => {
   return (
-    <button className={clsx(styles.btn, className)} onClick={() => redirect(to)}>
+    <Button className={className} onClick={() => redirect(to)}>
       {children}
       {text}
-    </button>
+    </Button>
   );
 };

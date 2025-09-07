@@ -5,6 +5,6 @@ import TestPage from './TestPage.tsx';
 describe('TestPage', () => {
   it(`Renders correctly`, () => {
     render(<TestPage />);
-    expect(screen.getByText(/test/i)).toBeDefined();
+    expect(screen.getAllByText(/example/i)).toBeDefined();
   });
 });

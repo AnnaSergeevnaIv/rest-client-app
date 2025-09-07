@@ -3,10 +3,10 @@
 import clsx from 'clsx';
 import type { ReactNode } from 'react';
 import inputStyles from '../Input/Input.module.scss';
-import type { InputProps } from '../Input/Input.tsx';
+import type { InputBaseProps } from '../Input/Input.tsx';
 import styles from './Checkbox.module.scss';
 
-type CheckboxProps = Omit<InputProps, 'labelPosition'> & {
+export type CheckboxProps = InputBaseProps & {
   label?: string;
 };
 
@@ -15,7 +15,7 @@ export const Checkbox = ({ label, className, error, ...rest }: CheckboxProps): R
   return (
     <label className={clsx(styles.wrapper, className)}>
       <input className={styles.box} type='checkbox' {...rest} />
-      <span className={inputStyles.label}>{label}</span>
+      <span className={styles.label}>{label}</span>
       {errorMsg && <p className={inputStyles.error}>{errorMsg}</p>}
     </label>
   );

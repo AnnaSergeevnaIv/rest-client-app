@@ -1,14 +1,25 @@
 .wrapper {
   cursor: pointer;
+  user-select: none;
 
   display: flex;
   gap: 6px;
   align-items: center;
 
-  width: 100%;
+  max-width: 100%;
 }
 
 .box {
   cursor: pointer;
   aspect-ratio: 1;
+}
+
+.label {
+  overflow: hidden;
+
+  width: 100%;
+
+  font-size: 13px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
