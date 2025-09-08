@@ -1,0 +1,14 @@
+.wrapper {
+  display: flex;
+  flex-direction: row;
+  gap: 42px;
+  justify-content: center;
+
+  width: 100%;
+
+  // max-width: 300px;
+}
+
+.input {
+  width: 100%;
+}
