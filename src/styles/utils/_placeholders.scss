@@ -87,8 +87,15 @@
 
   appearance: unset;
   background-color: var(--color-bg);
+  outline: none;
 
   &::placeholder {
     opacity: 0.5;
+  }
+
+  &:focus,
+  &:focus-visible {
+    outline: 3px solid var(--color-outline);
+    outline-offset: -2px;
   }
 }

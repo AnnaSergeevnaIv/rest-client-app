@@ -49,7 +49,7 @@ export const Input = ({
     setVal(value ?? '');
   }, [value]);
 
-  const handleShowPasswordDown = useCallback((): void => {
+  const handleShowPasswordClick = useCallback((): void => {
     setShowPassword(p => !p);
   }, []);
 
@@ -76,7 +76,7 @@ export const Input = ({
       {securely && (
         <span
           className={styles['show-password']}
-          onMouseDown={handleShowPasswordDown}
+          onClick={handleShowPasswordClick}
           title={SHOW_PASSWORD_BTN_TITLE}
         >
           <EyeIcon size={EYE_SIZE} />
