@@ -27,7 +27,7 @@ export const LangSwitcher = (): ReactNode => {
   };
   return (
     <div style={{ display: 'flex', gap: 4, alignItems: 'center' }}>
-      <IconLang size={18} />
+      <IconLang size={18} style={{ flexShrink: 0 }} />
       <Button variant='default' onClick={toggleLang} disabled={isPending}>
         {getLocale(locale, true)}
       </Button>
