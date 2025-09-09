@@ -16,15 +16,16 @@ export const Button = ({
   label,
   children,
   onClick,
-  variant = 'primary',
   className,
+  type = 'button',
+  variant = 'primary',
   ...rest
 }: ButtonProps): ReactNode => {
-  const handleClick = (): void => {
-    onClick?.();
-  };
+  if (!label && type === 'submit') {
+    label = 'Submit';
+  }
   return (
-    <button className={clsx(styles[`btn-${variant}`], className)} onClick={handleClick} {...rest}>
+    <button className={clsx(styles[`btn-${variant}`], className)} onClick={onClick} {...rest}>
       {children}
       {label && <span>{label}</span>}
     </button>

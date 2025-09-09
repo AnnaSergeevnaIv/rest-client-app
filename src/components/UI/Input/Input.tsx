@@ -2,15 +2,8 @@
 
 import { IconArrowDown, IconEye, IconEyeInvisible } from '@/common/constants/icons.ts';
 import clsx from 'clsx';
-import type { ChangeEvent } from 'react';
-import {
-  useCallback,
-  useEffect,
-  useState,
-  type InputHTMLAttributes,
-  type ReactNode,
-  type Ref,
-} from 'react';
+import type { ChangeEvent, Ref } from 'react';
+import { useCallback, useEffect, useState, type InputHTMLAttributes, type ReactNode } from 'react';
 import styles from './Input.module.scss';
 
 export const ARROW_SIZE = 16;
@@ -22,12 +15,13 @@ const CLEAR_BTN_TITLE = 'Clear';
 export type InputBaseProps = InputHTMLAttributes<HTMLInputElement> & {
   ref?: Ref<HTMLInputElement>;
   error?: string | string[];
+  width?: string | number;
+  wrapperClassName?: string;
 };
 
-export type InputProps = Omit<InputBaseProps, 'onChange'> & {
+export type InputProps = InputBaseProps & {
   showDownArrow?: boolean;
   onClear?: () => void;
-  onChange?: (v: string) => void;
 };
 
 export const Input = ({
@@ -39,6 +33,8 @@ export const Input = ({
   showDownArrow,
   type,
   children,
+  width,
+  wrapperClassName,
   ref,
   ...rest
 }: InputProps): ReactNode => {
@@ -54,9 +50,9 @@ export const Input = ({
   }, []);
 
   const handleChange = useCallback(
-    ({ target }: ChangeEvent<HTMLInputElement>): void => {
-      setVal(target.value);
-      onChange?.(target.value);
+    (e: ChangeEvent<HTMLInputElement>): void => {
+      setVal(e.target.value);
+      onChange?.(e);
     },
     [onChange],
   );
@@ -72,7 +68,7 @@ export const Input = ({
   const errorMsg = Array.isArray(error) ? error[0] : error;
 
   return (
-    <div className={styles.wrapper}>
+    <div className={clsx(styles.wrapper, wrapperClassName)} style={{ width }}>
       {securely && (
         <span
           className={styles['show-password']}
