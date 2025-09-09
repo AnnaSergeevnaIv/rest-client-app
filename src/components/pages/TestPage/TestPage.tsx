@@ -25,7 +25,9 @@ export default function TestPage(): ReactNode {
             error='Some error message'
             placeholder='input name...'
             value={name}
-            onChange={setName}
+            onChange={e => {
+              setName(e.target.value);
+            }}
           />
         </label>
       </div>
