@@ -29,7 +29,8 @@
       "@utils/*": ["./src/common/utils/*"],
       "@constants/*": ["./src/common/constants/*"],
       "@i18n/*": ["./src/i18n/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": [
     "**/*.ts",

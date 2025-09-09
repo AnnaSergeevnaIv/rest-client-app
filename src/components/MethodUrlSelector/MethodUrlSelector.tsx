@@ -56,7 +56,10 @@ export default function MethodUrlSelector({
             type='url'
             placeholder={t('urlPlaceholder')}
             value={field.value}
-            onChange={field.onChange}
+            onChange={v => {
+              field.onChange(v);
+              setValue('url', v);
+            }}
             required={required}
           />
         )}
