@@ -28,7 +28,8 @@
       "@common/*": ["./src/common/*"],
       "@utils/*": ["./src/common/utils/*"],
       "@constants/*": ["./src/common/constants/*"],
-      "@i18n/*": ["./src/i18n/*"]
+      "@i18n/*": ["./src/i18n/*"],
+      "@pages/*": ["./src/components/pages/*"]
     }
   },
   "include": [
