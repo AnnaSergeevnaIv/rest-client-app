@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+import { redirect } from '@/i18n/navigation.ts';
 import type { KeyboardEventKey } from '@constants/index.ts';
 import { ERR_SOMETHING_WRONG } from '@constants/index.ts';
 import type { FormEvent } from 'react';
@@ -93,4 +94,16 @@ export const mapObjectValues = <T>(
 
 export const showErrorToast = (err: unknown): void => {
   toast.error(getErrorMessage(err));
+};
+
+export const redirectAsync = async ({
+  href,
+  locale,
+}: Parameters<typeof redirect>[0]): Promise<void> => {
+  await new Promise(resolve => {
+    setTimeout(() => {
+      redirect({ href, locale });
+      resolve(null);
+    });
+  });
 };

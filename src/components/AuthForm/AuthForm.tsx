@@ -1,9 +1,9 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
 import { RoutePath } from '@/common/constants/index.ts';
-import { showErrorToast } from '@/common/utils/index.ts';
-import { redirect } from '@i18n/navigation.ts';
+import { redirectAsync, showErrorToast } from '@/common/utils/index.ts';
 import { useLocale } from 'next-intl';
 import { useCallback, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,11 +17,10 @@ import style from './AuthForm.module.scss';
 import { validator } from './AuthForm.utils.ts';
 
 const LSKEY_FORM_DATA = 'form-data-gft31h';
-const ANON_EMAIL = 'johndoe@fake.com';
 
 type AuthFormProps = {
   login?: boolean;
-  submitText?: string;
+  submitLabel?: string;
 };
 
 type AuthFormInputs = {
@@ -30,8 +29,8 @@ type AuthFormInputs = {
   confirmPassword: string;
 };
 
-export const AuthForm = ({ login, submitText }: AuthFormProps): ReactNode => {
-  const { signin, signup } = useAuth();
+export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
+  const { signin, signup, loading } = useAuth();
   const locale = useLocale();
   const {
     register,
@@ -56,8 +55,8 @@ export const AuthForm = ({ login, submitText }: AuthFormProps): ReactNode => {
     action(data)
       .then(creds => {
         reset();
-        toast.success(`Welcome, ${creds.user.email ?? ANON_EMAIL}`);
-        redirect({ href: RoutePath.Home, locale });
+        toast.success(`Welcome, ${creds.user.email!}`);
+        void redirectAsync({ href: RoutePath.Home, locale });
       })
       .catch((error: unknown) => {
         console.debug(error);
@@ -111,7 +110,7 @@ export const AuthForm = ({ login, submitText }: AuthFormProps): ReactNode => {
           })}
         />
       )}
-      <Button className={style.submit} type='submit' label={submitText} />
+      <Button className={style.submit} type='submit' label={submitLabel} loading={loading} />
     </form>
   );
 };
