@@ -1,12 +1,13 @@
 .wrapper {
   position: relative;
-  display: block;
-  width: fit-content;
-  line-height: 1;
+  min-width: min-content;
+  max-width: 100%;
 }
 
 .input {
   @extend %text-input;
+
+  width: 100% !important;
 }
 
 .input[list]::-webkit-calendar-picker-indicator {

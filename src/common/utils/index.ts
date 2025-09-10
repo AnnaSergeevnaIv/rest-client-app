@@ -2,6 +2,7 @@
 import type { KeyboardEventKey } from '@constants/index.ts';
 import { ERR_SOMETHING_WRONG } from '@constants/index.ts';
 import type { FormEvent } from 'react';
+import { toast } from 'react-toastify';
 import { isError, isString } from './type-guards.ts';
 
 export * from './type-guards.ts';
@@ -88,4 +89,8 @@ export const mapObjectValues = <T>(
     res[key] = mapper(obj[key]);
     return res;
   }, {});
+};
+
+export const showErrorToast = (err: unknown): void => {
+  toast.error(getErrorMessage(err));
 };

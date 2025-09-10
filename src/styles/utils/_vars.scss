@@ -28,6 +28,7 @@
   --color-border-10: rgb(216 216 216 / 10%);
   --color-border-input: rgb(128 128 128);
   --color-outline: rgb(212 213 232);
+  --color-link: var(--color-violet-light);
 }
 
 .dark-theme {
@@ -50,5 +51,7 @@
   --border-style: 1px solid var(--color-border);
   --min-width: 180px;
   --max-width: 1280px;
+  --transition-duration: 250ms;
+  --transition-func: cubic-bezier(0.4, 0, 0.2, 1);
   @extend %palette;
 }
