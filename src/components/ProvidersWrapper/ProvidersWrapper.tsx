@@ -6,6 +6,8 @@ import type { PropsWithChildren, ReactNode } from 'react';
 // import { Provider } from 'react-redux';
 import { ToastContainer } from 'react-toastify';
 import { AppErrorBoundary } from './ErrorBoundary/AppErrorBoundary.tsx';
+import { FormContext } from '@/contexts/FormContext/FormContext.tsx';
+import { useFormProvider } from '@/hooks/useFormProvider.tsx';
 
 type ProvidersProps = PropsWithChildren & {
   locale?: string;
@@ -16,13 +18,16 @@ type ProvidersProps = PropsWithChildren & {
 // );
 
 export default function ProvidersWrapper({ children }: ProvidersProps): ReactNode {
+  const formProvider = useFormProvider();
   return (
     <AppErrorBoundary>
-      {/* <ThemeProvider> */}
-      {/* <Provider store={store}> */}
-      {children}
-      {/* </Provider> */}
-      {/* </ThemeProvider> */}
+      <FormContext.Provider value={formProvider}>
+        {/* <ThemeProvider> */}
+        {/* <Provider store={store}> */}
+        {children}
+        {/* </Provider> */}
+        {/* </ThemeProvider> */}
+      </FormContext.Provider>
       <ToastContainer autoClose={1500} position='top-center' hideProgressBar={true} />
     </AppErrorBoundary>
   );

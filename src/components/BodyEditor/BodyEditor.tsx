@@ -4,15 +4,13 @@ import { BODY_LANGUAGES } from './BodyEditor.constants';
 import { useState } from 'react';
 import { Select } from '../UI/Select/Select';
 import styles from './BodyEditor.module.scss';
-import { type Control, Controller, type UseFormSetValue } from 'react-hook-form';
+import { type Control, Controller } from 'react-hook-form';
 import { type ClientFormType } from '../pages/Client/Client.types';
 type BodyEditorProps = {
   control: Control<ClientFormType>;
-  setValue: UseFormSetValue<ClientFormType>;
 };
-export default function BodyEditor({ control, setValue }: BodyEditorProps): React.ReactNode {
+export default function BodyEditor({ control }: BodyEditorProps): React.ReactNode {
   const [language, setLanguage] = useState<string>(BODY_LANGUAGES.JSON);
-
   return (
     <div className={styles.wrapper}>
       <Select
@@ -34,11 +32,9 @@ export default function BodyEditor({ control, setValue }: BodyEditorProps): Reac
               wordWrap: 'on',
               automaticLayout: true,
             }}
+            value={field.value}
             language={language}
-            onChange={(v: string | undefined) => {
-              field.onChange(v);
-              setValue('body', v ?? '');
-            }}
+            onChange={field.onChange}
           />
         )}
       />

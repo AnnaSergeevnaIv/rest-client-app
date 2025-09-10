@@ -26,7 +26,6 @@ export default function HeadersEditor({
   fields,
 }: HeadersEditorProps): React.ReactNode {
   const t = useTranslations('HeadersEditor');
-
   const addHeader = (): void => {
     append({ key: '', value: '' });
   };
