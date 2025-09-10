@@ -3,8 +3,9 @@
 import { IconArrowDown, IconEye, IconEyeInvisible } from '@/common/constants/icons.ts';
 import clsx from 'clsx';
 import type { ChangeEvent, Ref } from 'react';
-import { useCallback, useEffect, useState, type InputHTMLAttributes, type ReactNode } from 'react';
+import { useCallback, useState, type InputHTMLAttributes, type ReactNode } from 'react';
 import styles from './Input.module.scss';
+import { useShowClearOnMount } from './Input.utils.ts';
 
 export const ARROW_SIZE = 16;
 const EYE_SIZE = 16;
@@ -39,11 +40,7 @@ export const Input = ({
   ...rest
 }: InputProps): ReactNode => {
   const [showPassword, setShowPassword] = useState(false);
-  const [val, setVal] = useState(value ?? '');
-
-  useEffect(() => {
-    setVal(value ?? '');
-  }, [value]);
+  const { refCallback, showClear, setShowClear } = useShowClearOnMount({ ref });
 
   const handleShowPasswordClick = useCallback((): void => {
     setShowPassword(p => !p);
@@ -51,16 +48,16 @@ export const Input = ({
 
   const handleChange = useCallback(
     (e: ChangeEvent<HTMLInputElement>): void => {
-      setVal(e.target.value);
+      setShowClear(e.target.value.length !== 0);
       onChange?.(e);
     },
-    [onChange],
+    [onChange, setShowClear],
   );
 
   const handleClear = useCallback((): void => {
-    setVal('');
+    setShowClear(false);
     onClear?.();
-  }, [onClear]);
+  }, [onClear, setShowClear]);
 
   const securely = type === 'password';
   const inputType = securely ? (showPassword ? 'text' : 'password') : type;
@@ -87,20 +84,19 @@ export const Input = ({
         <span
           className={styles['clear-btn']}
           onClick={handleClear}
-          style={{ display: val ? 'flex' : 'none' }}
+          style={{ display: showClear ? 'flex' : 'none' }}
           title={CLEAR_BTN_TITLE}
         >
           {CLEAR_BTN_TEXT}
         </span>
       )}
       <input
-        ref={ref}
+        ref={refCallback}
         className={clsx(styles.input, className)}
         type={inputType}
-        value={val}
-        autoComplete='off'
+        value={value}
         onChange={handleChange}
-        title={String(val)}
+        autoComplete='off'
         {...rest}
       />
       {errorMsg && (
