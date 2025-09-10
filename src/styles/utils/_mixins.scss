@@ -1,5 +1,3 @@
-$transition-dur: 250ms;
-
 @mixin hidden($flag: true) {
   @if $flag == true {
     pointer-events: none;
@@ -18,8 +16,8 @@ $transition-dur: 250ms;
 }
 
 @mixin main-transition($props: 'all') {
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-  transition-duration: $transition-dur;
+  transition-timing-function: var(--transition-func);
+  transition-duration: var(--transition-duration);
   transition-property: #{$props};
 }
 

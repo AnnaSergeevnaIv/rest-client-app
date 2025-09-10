@@ -1,0 +1,24 @@
+$padding: 32px;
+
+.heading {
+  @extend %section-heading;
+}
+
+.wrapper {
+  width: fit-content;
+  margin: auto;
+  padding: $padding;
+  border: var(--border-style);
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-bg);
+}
+
+.hint {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: $padding;
+}

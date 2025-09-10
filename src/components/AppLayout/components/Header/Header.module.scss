@@ -1,3 +1,5 @@
+@use '../../../../styles/utils/mixins' as mix;
+
 .header {
   display: flex;
   flex-wrap: wrap;
@@ -5,7 +7,7 @@
   align-items: center;
   justify-content: space-between;
 
-  margin-bottom: 32px;
+  margin-bottom: 40px;
   padding: 24px 0;
   border-bottom: 1px solid var(--color-border);
 }
@@ -25,11 +27,19 @@
 
 .group {
   display: flex;
-  gap: 12px;
+  gap: 32px;
   align-items: center;
 }
 
 .image {
   width: auto;
   height: 20px;
+}
+
+.link {
+  &[data-disable='true'] {
+    @include mix.non-interactive;
+
+    opacity: 0.4;
+  }
 }
