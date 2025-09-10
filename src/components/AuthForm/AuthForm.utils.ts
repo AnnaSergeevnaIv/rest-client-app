@@ -1,4 +1,9 @@
-import { EMAIL_REGEX, PASSWORD_MIN_LEN, ValidationMessage } from './AuthForm.constants.ts';
+import {
+  EMAIL_REGEX,
+  PASSWORD_MAX_LEN,
+  PASSWORD_MIN_LEN,
+  ValidationMessage,
+} from './AuthForm.constants.ts';
 
 const passwordValidator = (value: string): string | undefined => {
   switch (true) {
@@ -19,6 +24,9 @@ const passwordValidator = (value: string): string | undefined => {
 
     case value.length < PASSWORD_MIN_LEN:
       return ValidationMessage.MustBeAtLeast;
+
+    case value.length > PASSWORD_MAX_LEN:
+      return ValidationMessage.MustBeNoLonger;
   }
 };
 

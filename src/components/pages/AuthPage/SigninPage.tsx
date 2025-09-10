@@ -13,7 +13,7 @@ export default function SigninPage(): ReactNode {
     <section>
       <div className={styles.wrapper}>
         <h1 className={styles.heading}>{HEADING}</h1>
-        <AuthForm submitText={SUBMIT_BTN_TEXT} />
+        <AuthForm login submitText={SUBMIT_BTN_TEXT} />
         <div className={styles.hint}>
           <Link href={RoutePath.Signup}>{LINK_TEXT}</Link>
         </div>

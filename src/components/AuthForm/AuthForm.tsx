@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
+import { RoutePath } from '@/common/constants/index.ts';
+import { showErrorToast } from '@/common/utils/index.ts';
+import { redirect } from '@i18n/navigation.ts';
+import { useLocale } from 'next-intl';
 import { useCallback, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { Button } from '../UI/Button/Button.tsx';
 import { Input } from '../UI/Input/Input.tsx';
 import { InputPlaceholder } from './AuthForm.constants.ts';
@@ -10,7 +15,7 @@ import style from './AuthForm.module.scss';
 import { validator } from './AuthForm.utils.ts';
 
 type AuthFormProps = {
-  signup?: boolean;
+  login?: boolean;
   submitText?: string;
 };
 
@@ -20,7 +25,9 @@ type AuthFormInputs = {
   confirmPassword: string;
 };
 
-export const AuthForm = ({ signup, submitText }: AuthFormProps): ReactNode => {
+export const AuthForm = ({ login, submitText }: AuthFormProps): ReactNode => {
+  const { signin, signup } = useAuth();
+  const locale = useLocale();
   const {
     register,
     handleSubmit,
@@ -33,7 +40,10 @@ export const AuthForm = ({ signup, submitText }: AuthFormProps): ReactNode => {
   });
 
   const onSubmit = handleSubmit(data => {
-    console.debug(data);
+    const action = login ? signin : signup;
+    action(data)
+      .then(() => redirect({ href: RoutePath.Home, locale }))
+      .catch(showErrorToast);
   });
 
   const clearInput = useCallback(
@@ -67,7 +77,7 @@ export const AuthForm = ({ signup, submitText }: AuthFormProps): ReactNode => {
           validate: validator.password,
         })}
       />
-      {signup && (
+      {!login && (
         <Input
           type='password'
           placeholder={InputPlaceholder.Confirm}
