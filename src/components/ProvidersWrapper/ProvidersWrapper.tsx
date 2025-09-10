@@ -19,11 +19,9 @@ export default function ProvidersWrapper({ children }: ProvidersProps): ReactNod
   const formProvider = useFormProvider();
   return (
     <AppErrorBoundary>
-<FormContext.Provider value={formProvider}>
-      <AuthProvider>
-{children}
-</AuthProvider>
-<FormContext.Provider value={formProvider}>
+      <FormContext.Provider value={formProvider}>
+        <AuthProvider>{children}</AuthProvider>
+      </FormContext.Provider>
       <ToastContainer autoClose={1500} position='top-center' hideProgressBar={true} />
     </AppErrorBoundary>
   );

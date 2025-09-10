@@ -36,14 +36,14 @@ export default function Client(): React.ReactNode {
   };
 
   return (
-    <>
+    <div className={styles.wrapper}>
       <h1 className={styles.heading}>Client REST</h1>
       <form
         onSubmit={e => {
           e.preventDefault();
           void handleSubmit(onSubmit)();
         }}
-        className={styles.wrapper}
+        className={styles.form}
       >
         <MethodUrlSelector control={control} setValue={setValue} required={true} />
         <HeadersEditor control={control} append={append} remove={remove} fields={fields} />
@@ -56,6 +56,6 @@ export default function Client(): React.ReactNode {
         />
         <Button type='submit' label={t('submit')} />
       </form>
-    </>
+    </div>
   );
 }
