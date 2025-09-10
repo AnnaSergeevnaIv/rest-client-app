@@ -5,6 +5,9 @@ import { type ClientFormType } from './Client.types';
 import HeadersEditor from '@/components/HeadersEditor/HeadersEditor';
 import { useTranslations } from 'next-intl';
 import GeneratedCode from '@/components/GeneratedCode/GeneratedCode';
+import BodyEditor from '@/components/BodyEditor/BodyEditor';
+import styles from './Client.module.scss';
+import { Button } from '@/components/UI/Button/Button';
 
 export default function Client(): React.ReactNode {
   const t = useTranslations('Client');
@@ -23,16 +26,26 @@ export default function Client(): React.ReactNode {
   };
 
   return (
-    <form onSubmit={() => void handleSubmit(onSubmit)()}>
-      <MethodUrlSelector control={control} setValue={setValue} required={true} />
-      <HeadersEditor control={control} append={append} remove={remove} fields={fields} />
-      <GeneratedCode
-        url={watchedFields[0]}
-        method={watchedFields[1]}
-        headers={watchedFields[2]}
-        body={watchedFields[3]}
-      />
-      <input type='submit' value={t('submit')} />
-    </form>
+    <>
+      <h1 className={styles.heading}>Client REST</h1>
+      <form
+        onSubmit={e => {
+          e.preventDefault();
+          void handleSubmit(onSubmit)();
+        }}
+        className={styles.wrapper}
+      >
+        <MethodUrlSelector control={control} setValue={setValue} required={true} />
+        <HeadersEditor control={control} append={append} remove={remove} fields={fields} />
+        <BodyEditor control={control} setValue={setValue} />
+        <GeneratedCode
+          url={watchedFields[0]}
+          method={watchedFields[1]}
+          headers={watchedFields[2]}
+          body={watchedFields[3]}
+        />
+        <Button type='submit' label={t('submit')} />
+      </form>
+    </>
   );
 }

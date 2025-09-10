@@ -25,6 +25,7 @@ export default function MethodUrlSelector({
   const t = useTranslations('MethodUrlSelector');
   const method = path.split('/').pop() ?? '';
   const isMethod = Object.keys(METHODS).includes(method);
+
   useEffect(() => {
     if (!isMethod) {
       router.replace(`/client/${Object.keys(METHODS)[0]}`);
@@ -32,6 +33,7 @@ export default function MethodUrlSelector({
       setValue('method', method as keyof typeof METHODS); // eslint-disable-line @typescript-eslint/consistent-type-assertions
     }
   }, [isMethod, router]);
+
   return (
     <div className={styles.wrapper}>
       <Controller
@@ -55,6 +57,7 @@ export default function MethodUrlSelector({
           <Input
             type='url'
             placeholder={t('urlPlaceholder')}
+            className={styles.input}
             value={field.value}
             onChange={v => {
               field.onChange(v);

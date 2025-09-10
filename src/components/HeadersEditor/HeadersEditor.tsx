@@ -34,7 +34,7 @@ export default function HeadersEditor({
     remove(index);
   };
   return (
-    <div className={styles.headersEditor}>
+    <div className={styles.headers}>
       <Button type='button' label={t('addHeader')} onClick={addHeader} />
       {fields.map((_, index) => {
         return (

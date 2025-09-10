@@ -13,14 +13,18 @@ export async function generateCode(
 ): Promise<string> {
   return new Promise((resolve, reject) => {
     const language = codeLanguage.includes('JavaScript') ? 'JavaScript' : codeLanguage;
-    const bodyObject = body ? { mode: 'raw', raw: body } : undefined;
+
+    const cleanBody = body?.trim();
+    const bodyObject = cleanBody ? { mode: 'raw', raw: cleanBody } : undefined;
+
     const headersArray =
-      headers?.map(header => {
-        return {
-          key: header.key,
-          value: header.value,
-        };
-      }) || [];
+      headers &&
+      headers
+        .filter(header => header.key.trim() && header.value.trim())
+        .map(header => ({
+          key: header.key.trim(),
+          value: header.value.trim(),
+        }));
     const request = new Request({
       url: url,
       method: method,

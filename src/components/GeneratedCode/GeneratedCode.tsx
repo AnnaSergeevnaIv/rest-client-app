@@ -3,22 +3,20 @@
 import { useEffect, useState } from 'react';
 import { CODE_LANGUAGES } from './GeneratedCode.constants';
 import { Select } from '../UI/Select/Select';
-import { type Header } from '../pages/Client/Client.types';
+import { type ClientFormType } from '../pages/Client/Client.types';
 import { generateCode } from './GeneratedCode.utils';
 import { Highlight, themes } from 'prism-react-renderer';
+import styles from './GeneratedCode.module.scss';
+import { getErrorMessage } from '@/common/utils';
+
 export type CodeLanguage = keyof typeof CODE_LANGUAGES;
-type GeneratedCodeProps = {
-  url: string;
-  method: string;
-  headers: Header[];
-  body: string;
-};
+
 export default function GeneratedCode({
   url,
   method,
   headers,
   body,
-}: GeneratedCodeProps): React.ReactNode {
+}: ClientFormType): React.ReactNode {
   const [codeLanguage, setCodeLanguage] = useState<CodeLanguage>('cURL');
   const [code, setCode] = useState<string>('');
   const onChangeCodeLanguage = (v: string): void => {
@@ -30,16 +28,16 @@ export default function GeneratedCode({
         setCode(c);
       })
       .catch((error: unknown) => {
-        console.error('Code generation error:', error);
-        setCode('Error generating code');
+        console.error('Code generation error:', getErrorMessage(error));
+        setCode('Error generating code: ' + getErrorMessage(error));
       });
   }, [codeLanguage, code, url, method, headers, body]);
   return (
-    <div>
+    <div className={styles.wrapper}>
       <Select labelValuePairs={CODE_LANGUAGES} onChange={onChangeCodeLanguage} />
       <Highlight theme={themes.github} code={code} language='tsx'>
         {({ className, style, tokens, getLineProps, getTokenProps }) => (
-          <pre style={style} className={className}>
+          <pre style={style} className={className + ' ' + styles.code}>
             {tokens.map((line, i) => (
               <div key={i} {...getLineProps({ line })}>
                 <span>{i + 1} </span>

@@ -2,11 +2,10 @@
   display: flex;
   flex-direction: column;
   row-gap: 20px;
-  justify-content: center;
-
   width: 100%;
 }
 
-.smth {
-  width: 100% !important;
+.code {
+  min-height: 150px;
+  padding: 20px;
 }
