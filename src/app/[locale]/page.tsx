@@ -8,15 +8,13 @@
 import type { Metadata } from 'next';
 //import { useLocale } from 'next-intl';
 import { type ReactNode } from 'react';
+import HomePage from '@/components/pages/HomePage/HomePage';
 
 export const metadata: Metadata = {
   title: 'Rest Client App',
   description: 'Rest Client App',
 };
 
-export default function HomePage(/*{ searchParams }: PropsWithAppSearchParams*/): ReactNode {
-  //const locale = useLocale();
-  //redirect({ href: RoutePath.Signin, locale });
-
-  return <>Home page</>;
+export default function Home(): ReactNode {
+  return <HomePage />;
 }
