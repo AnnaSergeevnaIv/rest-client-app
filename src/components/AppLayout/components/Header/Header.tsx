@@ -11,10 +11,13 @@ import Image from 'next/image';
 import { useCallback, type ReactNode } from 'react';
 import styles from './Header.module.scss';
 
+const LOGO_PROPS = { src: '/logo.png', alt: 'app logo' };
+const ICON_SIZE = 16;
 const LinkText = {
   Signin: 'Sign in',
   Signup: 'Sign up',
   Logout: 'Logout',
+  Home: 'Home',
 } as const;
 
 export const Header = (): ReactNode => {
@@ -30,9 +33,8 @@ export const Header = (): ReactNode => {
     <header className={styles.header}>
       <Link href={RoutePath.Home}>
         <Image
+          {...LOGO_PROPS}
           className={styles.image}
-          src='/logo.png'
-          alt='logo'
           width={0}
           height={0}
           priority
@@ -59,11 +61,20 @@ export const Header = (): ReactNode => {
           </Link>
         )}
         {isAuth && (
-          <Button label={LinkText.Logout} onClick={handleLogout}>
-            <IconLogout size={16} />
-          </Button>
+          <Link
+            className={styles.link}
+            href={RoutePath.Home}
+            data-disable={!RoutePath.Home.localeCompare(pathname)}
+          >
+            {LinkText.Home}
+          </Link>
         )}
         <LangSwitcher />
+        {isAuth && (
+          <Button className={styles.logout} label={LinkText.Logout} onClick={handleLogout}>
+            <IconLogout size={ICON_SIZE} />
+          </Button>
+        )}
       </div>
     </header>
   );

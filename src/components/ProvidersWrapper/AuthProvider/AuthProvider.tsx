@@ -7,6 +7,7 @@ import { AuthContext } from './AuthContext.tsx';
 export default function AuthProvider({ children }: PropsWithChildren): ReactNode {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
   const [isAuth, setIsAuth] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const handler: FirebaseAuthSubscribeHandler = useCallback(
     (user: User | null) => {
@@ -24,13 +25,29 @@ export default function AuthProvider({ children }: PropsWithChildren): ReactNode
   }, [handler]);
 
   const signin: typeof authClient.signin = async creds => {
-    return await authClient.signin(creds);
+    setLoading(true);
+    try {
+      return await authClient.signin(creds);
+    } finally {
+      setLoading(false);
+    }
   };
   const signup: typeof authClient.signup = async creds => {
-    return await authClient.signup(creds);
+    setLoading(true);
+    try {
+      return await authClient.signup(creds);
+    } finally {
+      setLoading(false);
+    }
   };
   const signout: typeof authClient.signout = async () => {
-    await authClient.signout();
+    setLoading(true);
+    try {
+      await authClient.signout();
+      return;
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -41,6 +58,8 @@ export default function AuthProvider({ children }: PropsWithChildren): ReactNode
         signup,
         signout,
         currentUser,
+        loading,
+        setLoading,
       }}
     >
       {children}
