@@ -7,13 +7,17 @@ import styles from './Button.module.scss';
 
 type ButtonVariant = 'default' | 'primary' | 'secondary';
 
+type SpinnerStyle = {
+  color: string;
+  size: string | number;
+};
+
 type ButtonProps = Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'onClick'> & {
   label?: string;
   variant?: ButtonVariant;
   onClick?: () => void;
   loading?: boolean;
-  loaderColor?: string;
-  loaderSize?: string | number;
+  spinnerStyle?: SpinnerStyle;
 };
 
 export const Button = ({
@@ -23,8 +27,7 @@ export const Button = ({
   className,
   type = 'button',
   variant = 'primary',
-  loaderColor = 'white',
-  loaderSize = 6,
+  spinnerStyle = { color: 'white', size: 6 },
   loading,
   ...rest
 }: ButtonProps): ReactNode => {
@@ -32,7 +35,7 @@ export const Button = ({
     label = 'Submit';
   }
   const content = loading ? (
-    <BeatLoader size={loaderSize} color={loaderColor} />
+    <BeatLoader {...spinnerStyle} />
   ) : (
     <>
       {children}

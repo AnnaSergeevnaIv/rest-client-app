@@ -96,14 +96,17 @@ export const showErrorToast = (err: unknown): void => {
   toast.error(getErrorMessage(err));
 };
 
+type RedirectAsyncResult = Parameters<typeof redirect>[0] & {
+  timeout?: number;
+};
 export const redirectAsync = async ({
   href,
   locale,
-}: Parameters<typeof redirect>[0]): Promise<void> => {
-  await new Promise(resolve => {
+  timeout = 0,
+}: RedirectAsyncResult): Promise<void> => {
+  await new Promise(() => {
     setTimeout(() => {
       redirect({ href, locale });
-      resolve(null);
-    });
+    }, timeout);
   });
 };
