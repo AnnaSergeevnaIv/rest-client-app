@@ -2,6 +2,8 @@ export const RoutePath = {
   Home: '/',
   Signin: '/signin',
   Signup: '/signup',
+  History: '/history',
+  Variables: '/variables',
   Any: '*',
 } as const;
 

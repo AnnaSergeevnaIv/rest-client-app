@@ -1,10 +1,6 @@
-import type { ReactNode } from 'react';
+import VariablesPage from '@/components/pages/VariablesPage/VariablesPage.tsx';
+import { type ReactNode } from 'react';
 
-export default function VariablesPage(): ReactNode {
-  return (
-    <main>
-      <h1>Variables</h1>
-      <p>Here you can manage user variables.</p>
-    </main>
-  );
+export default function Variables(): ReactNode {
+  return <VariablesPage />;
 }
