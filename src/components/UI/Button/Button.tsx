@@ -43,7 +43,12 @@ export const Button = ({
     </>
   );
   return (
-    <button className={clsx(styles[`btn-${variant}`], className)} onClick={onClick} {...rest}>
+    <button
+      className={clsx(styles[`btn-${variant}`], className)}
+      onClick={onClick}
+      type={type}
+      {...rest}
+    >
       {content}
     </button>
   );
