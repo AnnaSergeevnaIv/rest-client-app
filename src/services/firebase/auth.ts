@@ -16,12 +16,18 @@ export type FirebaseAuthSubscribeHandler = NextOrObserver<User>;
 
 class FirebaseAuth {
   private static instance: FirebaseAuth | undefined;
+  private _currentUser: User | null = null;
   private subscribers = new Map<FirebaseAuthSubscribeHandler, Unsubscribe>();
   private auth;
 
   private constructor() {
     const { auth } = initFirebaseApp();
     this.auth = auth;
+    onAuthStateChanged(auth, user => (this._currentUser = user));
+  }
+
+  public get currentUser(): User | null {
+    return this._currentUser;
   }
 
   public static getInstance(): FirebaseAuth {
@@ -48,14 +54,6 @@ class FirebaseAuth {
       unsubscribe();
     });
     this.subscribers.clear();
-  }
-
-  public async getCurrentUser(): Promise<User | null> {
-    return new Promise(resolve => {
-      onAuthStateChanged(this.auth, user => {
-        resolve(user);
-      });
-    });
   }
 
   public async signup({ email, password }: EmailAndPassword): Promise<UserCredential> {

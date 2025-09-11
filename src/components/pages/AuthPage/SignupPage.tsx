@@ -14,7 +14,7 @@ export default function SignupPage(): ReactNode {
     <section>
       <div className={styles.wrapper}>
         <h1 className={styles.heading}>{HEADING}</h1>
-        <AuthForm submitText={SUBMIT_BTN_TEXT} />
+        <AuthForm submitLabel={SUBMIT_BTN_TEXT} />
         <div className={styles.hint}>
           {HINT}
           <Link className={styles.link} href={RoutePath.Signin}>

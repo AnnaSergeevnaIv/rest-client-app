@@ -1,12 +1,14 @@
+/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
 import { RoutePath } from '@/common/constants/index.ts';
-import { showErrorToast } from '@/common/utils/index.ts';
-import { redirect } from '@i18n/navigation.ts';
+import { redirectAsync, showErrorToast } from '@/common/utils/index.ts';
 import { useLocale } from 'next-intl';
 import { useCallback, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
+import useFormPersist from 'react-hook-form-persist';
+import { toast } from 'react-toastify';
 import { useAuth } from '../ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { Button } from '../UI/Button/Button.tsx';
 import { Input } from '../UI/Input/Input.tsx';
@@ -14,9 +16,11 @@ import { InputPlaceholder } from './AuthForm.constants.ts';
 import style from './AuthForm.module.scss';
 import { validator } from './AuthForm.utils.ts';
 
+const LSKEY_FORM_DATA = 'form-data-gft31h';
+
 type AuthFormProps = {
   login?: boolean;
-  submitText?: string;
+  submitLabel?: string;
 };
 
 type AuthFormInputs = {
@@ -25,8 +29,8 @@ type AuthFormInputs = {
   confirmPassword: string;
 };
 
-export const AuthForm = ({ login, submitText }: AuthFormProps): ReactNode => {
-  const { signin, signup } = useAuth();
+export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
+  const { signin, signup, loading } = useAuth();
   const locale = useLocale();
   const {
     register,
@@ -34,16 +38,30 @@ export const AuthForm = ({ login, submitText }: AuthFormProps): ReactNode => {
     setValue,
     trigger,
     watch,
+    reset,
     formState: { errors },
   } = useForm<AuthFormInputs>({
     mode: 'all',
   });
 
+  useFormPersist(LSKEY_FORM_DATA, {
+    watch,
+    setValue,
+    exclude: ['confirmPassword'],
+  });
+
   const onSubmit = handleSubmit(data => {
     const action = login ? signin : signup;
     action(data)
-      .then(() => redirect({ href: RoutePath.Home, locale }))
-      .catch(showErrorToast);
+      .then(creds => {
+        reset();
+        toast.success(`Welcome, ${creds.user.email!}`);
+        void redirectAsync({ href: RoutePath.Home, locale });
+      })
+      .catch((error: unknown) => {
+        console.debug(error);
+        showErrorToast(error);
+      });
   });
 
   const clearInput = useCallback(
@@ -58,6 +76,7 @@ export const AuthForm = ({ login, submitText }: AuthFormProps): ReactNode => {
     <form className={style.form} onSubmit={onSubmit}>
       <Input
         placeholder={InputPlaceholder.Email}
+        autoComplete='on'
         error={errors.email?.message}
         onClear={() => {
           clearInput('email');
@@ -91,7 +110,7 @@ export const AuthForm = ({ login, submitText }: AuthFormProps): ReactNode => {
           })}
         />
       )}
-      <Button className={style.submit} type='submit' label={submitText} />
+      <Button className={style.submit} type='submit' label={submitLabel} loading={loading} />
     </form>
   );
 };
