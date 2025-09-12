@@ -39,8 +39,11 @@
     "react-dom": "19.1.0",
     "react-firebase-hooks": "^5.1.1",
     "react-hook-form": "^7.62.0",
+    "react-hook-form-persist": "^3.0.0",
     "react-icons": "^5.5.0",
+    "react-spinners": "^0.17.0",
     "react-toastify": "^11.0.5",
+    "react-use": "^17.6.0",
     "zod": "^4.1.5"
   },
   "devDependencies": {
