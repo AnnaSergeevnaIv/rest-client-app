@@ -7,7 +7,7 @@ type GetDataReturnType = {
     status: number;
     statusText: string;
     headers: Record<string, string>;
-    body: string;
+    body: unknown;
   } | null;
   error: string | null;
 };
@@ -18,16 +18,11 @@ export const getData = async (formData: ClientFormType): Promise<GetDataReturnTy
     const response = await fetch(formData.url, options);
     const contentType = response.headers.get('content-type');
 
-    let body: string;
+    let body: unknown;
 
     if (contentType?.includes('application/json')) {
       const json: unknown = await response.json();
-
-      if (typeof json === 'object' && json !== null) {
-        body = JSON.stringify(json);
-      } else {
-        body = String(json);
-      }
+      body = json;
     } else {
       body = await response.text();
     }
