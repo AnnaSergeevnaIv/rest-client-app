@@ -26,12 +26,14 @@ export default function HeadersEditor({
   fields,
 }: HeadersEditorProps): React.ReactNode {
   const t = useTranslations('HeadersEditor');
+
   const addHeader = (): void => {
     append({ key: '', value: '' });
   };
   const removeHeader = (index: number): void => {
     remove(index);
   };
+
   return (
     <div className={styles.headers}>
       <Button type='button' label={t('addHeader')} onClick={addHeader} />

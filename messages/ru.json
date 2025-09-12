@@ -13,5 +13,8 @@
   },
   "Client": {
     "submit": "Отправить"
+  },
+  "ResponseSection": {
+    "response": "Ответ сервера"
   }
 }

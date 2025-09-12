@@ -25,7 +25,12 @@ export const Button = ({
     label = 'Submit';
   }
   return (
-    <button className={clsx(styles[`btn-${variant}`], className)} onClick={onClick} {...rest}>
+    <button
+      className={clsx(styles[`btn-${variant}`], className)}
+      onClick={onClick}
+      type={type}
+      {...rest}
+    >
       {children}
       {label && <span>{label}</span>}
     </button>

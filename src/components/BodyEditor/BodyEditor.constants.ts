@@ -1,4 +1,4 @@
 export const BODY_LANGUAGES = {
-  JSON: 'JSON',
+  JSON: 'json',
   text: 'Plain Text',
 } as const;

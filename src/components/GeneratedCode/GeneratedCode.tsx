@@ -3,27 +3,32 @@
 import { useEffect, useState } from 'react';
 import { CODE_LANGUAGES } from './GeneratedCode.constants';
 import { Select } from '../UI/Select/Select';
-import { type ClientFormType } from '../pages/Client/Client.types';
+import type { Header, ClientFormType } from '../pages/Client/Client.types';
 import { generateCode } from './GeneratedCode.utils';
 import { Highlight, themes } from 'prism-react-renderer';
 import styles from './GeneratedCode.module.scss';
 import { getErrorMessage } from '@/common/utils';
+import { type Control, useWatch } from 'react-hook-form';
 
 export type CodeLanguage = keyof typeof CODE_LANGUAGES;
-
-export default function GeneratedCode({
-  url,
-  method,
-  headers,
-  body,
-}: ClientFormType): React.ReactNode {
+type GeneratedCodeProps = {
+  control: Control<ClientFormType>;
+};
+export default function GeneratedCode({ control }: GeneratedCodeProps): React.ReactNode {
   const [codeLanguage, setCodeLanguage] = useState<CodeLanguage>('cURL');
   const [code, setCode] = useState<string>('');
+  const { url, method, headers, body } = useWatch({
+    control,
+  });
   const onChangeCodeLanguage = (v: string): void => {
     setCodeLanguage(v as CodeLanguage); // eslint-disable-line @typescript-eslint/consistent-type-assertions
   };
+
   useEffect(() => {
-    generateCode(codeLanguage, url, method, headers, body)
+    const validHeaders = headers?.filter(
+      (header): header is Header => header.key !== undefined && header.value !== undefined,
+    );
+    generateCode(codeLanguage, url ?? '', method ?? '', validHeaders, body ?? '')
       .then(c => {
         setCode(c);
       })

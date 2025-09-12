@@ -1,39 +1,39 @@
 'use client';
-import { usePathname, useRouter } from 'next/navigation';
 import { Input } from '../UI/Input/Input';
 import { Select } from '../UI/Select/Select';
 import { METHODS } from './MethodUrlSelector.constants';
-import { useEffect } from 'react';
 import { useTranslations } from 'next-intl';
 import styles from './MethodUrlSelector.module.scss';
-import { type Control, Controller, type UseFormSetValue } from 'react-hook-form';
+import { type Control, Controller } from 'react-hook-form';
 import { type ClientFormType } from '../pages/Client/Client.types';
 
 type MethodUrlSelectorProps = {
   control: Control<ClientFormType>;
-  setValue: UseFormSetValue<ClientFormType>;
   required: boolean;
+  onChangeMethod: (v: keyof typeof METHODS) => void;
 };
 
 export default function MethodUrlSelector({
   control,
-  setValue,
   required,
+  onChangeMethod,
 }: MethodUrlSelectorProps): React.ReactNode {
-  const router = useRouter();
-  const path = usePathname();
   const t = useTranslations('MethodUrlSelector');
-  const method = path.split('/').pop() ?? '';
-  const isMethod = Object.keys(METHODS).includes(method);
 
-  useEffect(() => {
-    if (!isMethod) {
-      router.replace(`/client/${Object.keys(METHODS)[0]}`);
-    } else {
-      setValue('method', method as keyof typeof METHODS); // eslint-disable-line @typescript-eslint/consistent-type-assertions
+  const onMethodChange = (
+    v: string,
+    field: { value: string; onChange: (val: keyof typeof METHODS) => void },
+  ): void => {
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    const methodKey = (Object.keys(METHODS) as Array<keyof typeof METHODS>).find(
+      key => METHODS[key] === v,
+    );
+
+    if (methodKey) {
+      field.onChange(methodKey);
+      onChangeMethod(methodKey);
     }
-  }, [isMethod, router]);
-
+  };
   return (
     <div className={styles.wrapper}>
       <Controller
@@ -42,10 +42,10 @@ export default function MethodUrlSelector({
         render={({ field }) => (
           <Select
             labelValuePairs={METHODS}
-            value={isMethod ? method : ''}
+            value={field.value}
             onChange={v => {
-              field.onChange(v);
-              router.push(`/client/${v}`);
+              onMethodChange(v, field);
+              sessionStorage.removeItem('clientResponse');
             }}
           />
         )}
@@ -61,7 +61,6 @@ export default function MethodUrlSelector({
             value={field.value}
             onChange={v => {
               field.onChange(v);
-              setValue('url', v);
             }}
             required={required}
           />
