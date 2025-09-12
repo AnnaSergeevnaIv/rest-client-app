@@ -1,5 +1,20 @@
 {
   "Test": {
     "test": "тест"
+  },
+  "MethodUrlSelector": {
+    "urlPlaceholder": "Введите URL"
+  },
+  "HeadersEditor": {
+    "headerKeyPlaceholder": "Введите ключ заголовка",
+    "headerValuePlaceholder": "Введите значение заголовка",
+    "addHeader": "Добавить заголовок",
+    "removeHeader": "Удалить заголовок"
+  },
+  "Client": {
+    "submit": "Отправить"
+  },
+  "ResponseSection": {
+    "response": "Ответ сервера"
   }
 }

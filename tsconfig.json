@@ -30,7 +30,8 @@
       "@constants/*": ["./src/common/constants/*"],
       "@i18n/*": ["./src/i18n/*"],
       "@pages/*": ["./src/components/pages/*"]
-    }
+    },
+    "typeRoots": ["./node_modules/@types", "./src/types"]
   },
   "include": [
     "**/*.ts",

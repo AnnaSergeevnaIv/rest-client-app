@@ -1,5 +1,20 @@
 {
   "Test": {
     "test": "test"
+  },
+  "MethodUrlSelector": {
+    "urlPlaceholder": "Enter URL"
+  },
+  "HeadersEditor": {
+    "headerKeyPlaceholder": "Enter Header Key",
+    "headerValuePlaceholder": "Enter Header Value",
+    "addHeader": "Add Header",
+    "removeHeader": "Remove Header"
+  },
+  "Client": {
+    "submit": "Submit"
+  },
+  "ResponseSection": {
+    "response": "Response"
   }
 }

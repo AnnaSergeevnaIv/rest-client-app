@@ -1,0 +1,19 @@
+.wrapper {
+  max-width: 600px;
+  margin: auto;
+  padding: 20px;
+  border: var(--border-style);
+  border-radius: var(--border-radius);
+
+  background-color: var(--color-bg);
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+}
+
+.heading {
+  @extend %section-heading;
+}
