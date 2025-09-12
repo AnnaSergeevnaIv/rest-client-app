@@ -13,6 +13,7 @@ export type UseCustomSearchParamsResult<P extends Record<string, unknown>> = {
   deleteParams: (...keys: (keyof P | Options)[]) => void;
   hasParams: (...keys: (keyof P)[]) => boolean;
   clearParams: (opts?: Options) => void;
+  createParamsWithEncodedData: (props: P, path: string, opts?: Options) => void;
 };
 
 type Options = {
@@ -44,6 +45,14 @@ export const useCustomSearchParams = <
       const action = opts?.replace ? 'replace' : 'push';
       const params = new URLSearchParams(mapObjectValues(props, stringify));
       router[action](`${pathname}?${params.toString()}`);
+    },
+    [router, pathname],
+  );
+  const createParamsWithEncodedData = useCallback(
+    (props: P, path: string, opts?: Options): void => {
+      const action = opts?.replace ? 'replace' : 'push';
+      const params = new URLSearchParams(mapObjectValues(props, stringify));
+      router[action](`${path}?${params.toString()}`);
     },
     [router, pathname],
   );
@@ -105,5 +114,6 @@ export const useCustomSearchParams = <
     hasParams,
     clearParams,
     getQueryParams,
+    createParamsWithEncodedData,
   };
 };
