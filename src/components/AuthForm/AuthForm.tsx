@@ -1,9 +1,9 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
 import { RoutePath } from '@/common/constants/index.ts';
 import { redirectAsync, showErrorToast } from '@/common/utils/index.ts';
+import { type User } from 'firebase/auth';
 import { useLocale } from 'next-intl';
 import { useCallback, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
@@ -17,6 +17,7 @@ import style from './AuthForm.module.scss';
 import { validator } from './AuthForm.utils.ts';
 
 const LSKEY_FORM_DATA = 'form-data-gft31h';
+const ANON_USER = 'anonymous';
 
 type AuthFormProps = {
   login?: boolean;
@@ -50,20 +51,6 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
     exclude: ['confirmPassword'],
   });
 
-  const onSubmit = handleSubmit(data => {
-    const action = login ? signin : signup;
-    action(data)
-      .then(creds => {
-        reset();
-        toast.success(`Welcome, ${creds.user.email!}`);
-        void redirectAsync({ href: RoutePath.Home, locale });
-      })
-      .catch((error: unknown) => {
-        console.debug(error);
-        showErrorToast(error);
-      });
-  });
-
   const clearInput = useCallback(
     (inputName: keyof AuthFormInputs): void => {
       setValue(inputName, '');
@@ -71,6 +58,27 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
     },
     [setValue, trigger],
   );
+
+  const redirectOnSuccess = useCallback(
+    (user: User, href: string) => {
+      reset();
+      toast.success(`Welcome, ${user.email ?? ANON_USER}`);
+      void redirectAsync({ href, locale });
+    },
+    [locale, reset],
+  );
+
+  const onSubmit = handleSubmit(data => {
+    const action = login ? signin : signup;
+    action(data)
+      .then(creds => {
+        redirectOnSuccess(creds.user, RoutePath.Home);
+      })
+      .catch((error: unknown) => {
+        console.debug(error);
+        showErrorToast(error);
+      });
+  });
 
   return (
     <form className={style.form} onSubmit={onSubmit}>

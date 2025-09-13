@@ -1,5 +1,7 @@
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 'use client';
 
+import { useTranslations } from 'next-intl';
 import {
   type Control,
   Controller,
@@ -11,7 +13,6 @@ import { type ClientFormType } from '../pages/Client/Client.types';
 import { Button } from '../UI/Button/Button';
 import { Input } from '../UI/Input/Input';
 import styles from './HeadersEditor.module.scss';
-import { useTranslations } from 'next-intl';
 type HeadersEditorProps = {
   control: Control<ClientFormType>;
   append: UseFieldArrayAppend<ClientFormType, 'headers'>;
@@ -41,7 +42,7 @@ export default function HeadersEditor({
         return (
           <div key={`header-${String(index)}`} className={styles.header}>
             <Controller
-              name={`headers.${index}.key`} // eslint-disable-line @typescript-eslint/restrict-template-expressions
+              name={`headers.${index}.key`}
               key={`header-key-${String(index)}`}
               control={control}
               render={({ field }) => (
@@ -53,7 +54,7 @@ export default function HeadersEditor({
               )}
             />
             <Controller
-              name={`headers.${index}.value`} // eslint-disable-line @typescript-eslint/restrict-template-expressions
+              name={`headers.${index}.value`}
               key={`header-value-${String(index)}`}
               control={control}
               render={({ field }) => (

@@ -1,3 +1,7 @@
+export const MS_PER_SEC = 1000;
+export const MS_PER_MIN = 60 * MS_PER_SEC;
+export const ERR_SOMETHING_WRONG = 'Something went wrong';
+
 export const RoutePath = {
   Home: '/',
   Signin: '/signin',
@@ -22,9 +26,8 @@ export const HttpStatus = {
 export const AppLocales = {
   EN: 'en',
   RU: 'ru',
+  Default: 'en',
 } as const;
-
-export const ERR_SOMETHING_WRONG = 'Something went wrong';
 
 export const KeyboardEventKey = {
   Escape: 'Escape',
