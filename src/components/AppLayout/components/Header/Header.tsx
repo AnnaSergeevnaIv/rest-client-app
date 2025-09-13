@@ -2,10 +2,11 @@
 
 import { IconLogout } from '@/common/constants/icons.ts';
 import { RoutePath } from '@/common/constants/index.ts';
+import { redirectAsync } from '@/common/utils/index.ts';
 import { LangSwitcher } from '@/components/LangSwitcher/LangSwitcher.tsx';
 import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { Button } from '@/components/UI/Button/Button.tsx';
-import { Link, redirect, usePathname } from '@i18n/navigation.ts';
+import { Link, usePathname } from '@i18n/navigation.ts';
 import { useLocale } from 'next-intl';
 import Image from 'next/image';
 import { useCallback, type ReactNode } from 'react';
@@ -18,6 +19,9 @@ const LinkText = {
   Signup: 'Sign up',
   Logout: 'Logout',
   Home: 'Home',
+  History: 'History',
+  Variables: 'Variables',
+  Client: 'Client',
 } as const;
 
 export const Header = (): ReactNode => {
@@ -26,7 +30,7 @@ export const Header = (): ReactNode => {
   const locale = useLocale();
 
   const handleLogout = useCallback((): void => {
-    void signout().then(() => redirect({ href: RoutePath.Signin, locale }));
+    void signout().then(() => redirectAsync({ href: RoutePath.Signin, locale }));
   }, [locale, signout]);
 
   return (
@@ -43,31 +47,54 @@ export const Header = (): ReactNode => {
       </Link>
       <div className={styles.group}>
         {!isAuth && (
-          <Link
-            className={styles.link}
-            href={RoutePath.Signin}
-            data-disable={!RoutePath.Signin.localeCompare(pathname)}
-          >
-            {LinkText.Signin}
-          </Link>
-        )}
-        {!isAuth && (
-          <Link
-            className={styles.link}
-            href={RoutePath.Signup}
-            data-disable={!RoutePath.Signup.localeCompare(pathname)}
-          >
-            {LinkText.Signup}
-          </Link>
+          <>
+            <Link
+              className={styles.link}
+              href={RoutePath.Signin}
+              data-disable={pathname.includes(RoutePath.Signin)}
+            >
+              {LinkText.Signin}
+            </Link>
+            <Link
+              className={styles.link}
+              href={RoutePath.Signup}
+              data-disable={pathname.includes(RoutePath.Signup)}
+            >
+              {LinkText.Signup}
+            </Link>
+          </>
         )}
         {isAuth && (
-          <Link
-            className={styles.link}
-            href={RoutePath.Home}
-            data-disable={!RoutePath.Home.localeCompare(pathname)}
-          >
-            {LinkText.Home}
-          </Link>
+          <>
+            <Link
+              className={styles.link}
+              href={RoutePath.Client}
+              data-disable={pathname.includes(RoutePath.Client)}
+            >
+              {LinkText.Client}
+            </Link>
+            <Link
+              className={styles.link}
+              href={RoutePath.Variables}
+              data-disable={pathname.includes(RoutePath.Variables)}
+            >
+              {LinkText.Variables}
+            </Link>
+            <Link
+              className={styles.link}
+              href={RoutePath.History}
+              data-disable={pathname.includes(RoutePath.History)}
+            >
+              {LinkText.History}
+            </Link>
+            <Link
+              className={styles.link}
+              href={RoutePath.Home}
+              data-disable={pathname === RoutePath.Home}
+            >
+              {LinkText.Home}
+            </Link>
+          </>
         )}
         <LangSwitcher />
         {isAuth && (

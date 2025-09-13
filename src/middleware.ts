@@ -1,65 +1,45 @@
 import createMiddleware from 'next-intl/middleware';
-// import type { NextRequest } from 'next/server';
-// import { RoutePath } from './common/constants/index.ts';
+import { NextResponse, type NextRequest } from 'next/server';
+import { AppLocales, RoutePath } from './common/constants/index.ts';
 import { routing } from './i18n/routing';
-// import { authClient } from './services/firebase/auth.ts';
+import { TokenCookieHelper } from './services/firebase/utils/token-helper.ts';
 
-export default createMiddleware(routing);
+const i18nMiddleware = createMiddleware(routing);
 
-// const publicRoutes = [RoutePath.Signin, RoutePath.Signup] as string[];
+const publicRoutes: string[] = [];
+const authRoutes: string[] = [RoutePath.Signin, RoutePath.Signup];
+const privateRoutes: string[] = [RoutePath.History, RoutePath.Variables, RoutePath.Client];
 
-// export default async function middleware(
-//   req: NextRequest,
-// ): Promise<((req: NextRequest) => NextResponse) | NextResponse> {
-//   console.error('s');
+function authMiddleware(request: NextRequest, response: NextResponse): NextResponse | undefined {
+  const token = request.cookies.get(TokenCookieHelper.name)?.value ?? '';
 
-//   const path = req.nextUrl.pathname;
-//   const isPublicRoute = publicRoutes.includes(path);
-//   const currentUser = await authClient.getCurrentUser();
+  const { pathname } = request.nextUrl;
+  const [, locale = AppLocales.Default, ...rest] = pathname.split('/');
+  const pathnameWithoutLocale = `/${rest.join('/')}`;
 
-//   // if (!isPublicRoute && !currentUser) {
-//   //   return NextResponse.redirect(new URL(RoutePath.Signin, req.nextUrl));
-//   // }
+  const isRoot = pathnameWithoutLocale === '/';
+  const isPublicRoute = publicRoutes.some(s => pathnameWithoutLocale.includes(s));
+  const isPrivateRoute = privateRoutes.some(s => pathnameWithoutLocale.includes(s));
+  const isAuthRoute = authRoutes.some(s => pathnameWithoutLocale.includes(s));
 
-//   return intlMiddleware(req);
-// }
+  if (isRoot || isPublicRoute) {
+    return response;
+  }
+  if ((!token && isPrivateRoute) || (token && isAuthRoute)) {
+    return NextResponse.redirect(new URL(`/${locale}${RoutePath.Home}`, request.url));
+  }
+  return response;
+}
 
-// import { withAuth } from 'next-auth/middleware';
-
-// // Initialize next-intl middleware
-// const intlMiddleware = createMiddleware(routing);
-
-// export default withAuth(
-//   function middleware(request: NextRequest) {
-//     return intlMiddleware(request);
-//   },
-//   {
-//     callbacks: {
-//       authorized: async ({ token, req }) => {
-//         const user = await authClient.getCurrentUser();
-//         const { pathname } = req.nextUrl;
-
-//         // Public routes that don't require authentication
-//         const publicPaths = [RoutePath.Signin, RoutePath.Signup];
-
-//         // console.debug('Sss');
-
-//         // Check if current path is public
-//         const isPublicPath = publicPaths.some(
-//           path => pathname === path || pathname.startsWith(`${path}/`),
-//         );
-
-//         // Allow public routes and authenticated users
-//         return isPublicPath || !!user;
-//       },
-//     },
-//     pages: {
-//       signIn: RoutePath.Signin,
-//       error: RoutePath.Signin,
-//     },
-//   },
-// );
+export default function middleware(request: NextRequest): NextResponse | undefined {
+  const response = i18nMiddleware(request);
+  if (!response.ok) {
+    return response;
+  }
+  return authMiddleware(request, response);
+}
 
 export const config = {
   matcher: '/((?!api|trpc|_next|_vercel|.*\\..*).*)',
+  runtime: 'nodejs',
 };

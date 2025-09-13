@@ -1,10 +1,12 @@
+/* eslint-disable react-compiler/react-compiler */
+/* eslint-disable react-hooks/exhaustive-deps */
+import type { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';
 import type { ClientFormType } from '@/components/pages/Client/Client.types';
 import { encodeUrlBody, headersArrayToObject } from '@/components/pages/Client/Client.utils';
-import { useCustomSearchParams } from './useCustomSearchParams';
+import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 import { type Control, useWatch } from 'react-hook-form';
-import { usePathname } from 'next/navigation';
-import type { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';
+import { useCustomSearchParams } from './useCustomSearchParams';
 
 export function useUpdateUrlWithFormData(control: Control<ClientFormType>): () => void {
   const watchedFields = useWatch({
