@@ -1,23 +1,26 @@
 'use client';
 
-import dynamic from 'next/dynamic';
 import type { PropsWithChildren, ReactNode } from 'react';
+import type { ToastContainerProps } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
+import AuthProvider from './AuthProvider/AuthProvider.tsx';
 import { AppErrorBoundary } from './ErrorBoundary/AppErrorBoundary.tsx';
 
 type ProvidersProps = PropsWithChildren & {
   locale?: string;
 };
 
-const AuthProvider = dynamic(async () => await import('./AuthProvider/AuthProvider.tsx'), {
-  ssr: false,
-});
+const ToastOptions: ToastContainerProps = {
+  autoClose: 1500,
+  position: 'top-center',
+  hideProgressBar: true,
+};
 
-export default function ProvidersWrapper({ children }: ProvidersProps): ReactNode {
+export default function ProvidersWrapper({ children, locale }: ProvidersProps): ReactNode {
   return (
     <AppErrorBoundary>
-      <AuthProvider>{children}</AuthProvider>
-      <ToastContainer autoClose={1500} position='top-center' hideProgressBar={true} />
+      <AuthProvider locale={locale}>{children}</AuthProvider>
+      <ToastContainer {...ToastOptions} />
     </AppErrorBoundary>
   );
 }

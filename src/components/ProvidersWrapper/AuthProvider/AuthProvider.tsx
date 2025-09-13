@@ -1,54 +1,46 @@
-import type { FirebaseAuthSubscribeHandler } from '@/services/firebase/auth.ts';
-import { authClient } from '@/services/firebase/auth.ts';
-import type { User } from 'firebase/auth';
-import { useCallback, useEffect, useState, type PropsWithChildren, type ReactNode } from 'react';
+'use client';
+
+import { AuthClient } from '@/services/firebase/client/auth-client.ts';
+import { useCallback, useState, type PropsWithChildren, type ReactNode } from 'react';
 import { AuthContext } from './AuthContext.tsx';
+import { useAuthHelper } from './AuthProvider.utils.tsx';
 
-export default function AuthProvider({ children }: PropsWithChildren): ReactNode {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isAuth, setIsAuth] = useState(false);
+export default function AuthProvider({
+  children,
+  locale,
+}: PropsWithChildren & {
+  locale?: string;
+}): ReactNode {
   const [loading, setLoading] = useState(false);
+  const { isAuth, currentUser } = useAuthHelper({ signout: () => signout(), locale });
 
-  const handler: FirebaseAuthSubscribeHandler = useCallback(
-    (user: User | null) => {
-      setIsAuth(Boolean(user));
-      setCurrentUser(user);
-    },
-    [setIsAuth],
-  );
-
-  useEffect(() => {
-    authClient.subscribe(handler);
-    return (): void => {
-      authClient.unsubscribe(handler);
-    };
-  }, [handler]);
-
-  const signin: typeof authClient.signin = async creds => {
+  const signin: typeof AuthClient.signin = useCallback(async creds => {
     setLoading(true);
     try {
-      return await authClient.signin(creds);
+      return await AuthClient.signin(creds);
     } finally {
       setLoading(false);
     }
-  };
-  const signup: typeof authClient.signup = async creds => {
+  }, []);
+
+  const signup: typeof AuthClient.signup = useCallback(async creds => {
     setLoading(true);
     try {
-      return await authClient.signup(creds);
+      return await AuthClient.signup(creds);
     } finally {
       setLoading(false);
     }
-  };
-  const signout: typeof authClient.signout = async () => {
+  }, []);
+
+  const signout: typeof AuthClient.signout = useCallback(async () => {
     setLoading(true);
     try {
-      await authClient.signout();
+      await AuthClient.signout();
       return;
     } finally {
       setLoading(false);
     }
-  };
+  }, []);
 
   return (
     <AuthContext
