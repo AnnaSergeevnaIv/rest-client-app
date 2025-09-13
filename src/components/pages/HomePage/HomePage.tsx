@@ -41,6 +41,11 @@ export default function HomePage(): ReactNode {
           </nav>
         </div>
       )}
+      <nav className={styles.about}>
+        <Link href={RoutePath.AboutUs} className={styles.link}>
+          About developers
+        </Link>
+      </nav>
     </section>
   );
 }
