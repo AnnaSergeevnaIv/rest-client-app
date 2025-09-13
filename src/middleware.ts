@@ -5,9 +5,10 @@ import { routing } from './i18n/routing';
 import { TokenCookieHelper } from './services/firebase/utils/token-helper.ts';
 
 const i18nMiddleware = createMiddleware(routing);
+
+const publicRoutes: string[] = [];
 const authRoutes: string[] = [RoutePath.Signin, RoutePath.Signup];
-const publicRoutes: string[] = [RoutePath.Home];
-const privateRoutes: string[] = [RoutePath.History, RoutePath.Variables];
+const privateRoutes: string[] = [RoutePath.History, RoutePath.Variables, RoutePath.Client];
 
 function authMiddleware(request: NextRequest, response: NextResponse): NextResponse | undefined {
   const token = request.cookies.get(TokenCookieHelper.name)?.value ?? '';
@@ -16,13 +17,12 @@ function authMiddleware(request: NextRequest, response: NextResponse): NextRespo
   const [, locale = AppLocales.Default, ...rest] = pathname.split('/');
   const pathnameWithoutLocale = `/${rest.join('/')}`;
 
-  const isPublicRoute = publicRoutes.includes(pathnameWithoutLocale);
-  const isPrivateRoute = privateRoutes.includes(pathnameWithoutLocale);
-  const isAuthRoute = authRoutes.some(
-    path => path.toLocaleLowerCase().localeCompare(pathnameWithoutLocale) === 0,
-  );
+  const isRoot = pathnameWithoutLocale === '/';
+  const isPublicRoute = publicRoutes.some(s => pathnameWithoutLocale.includes(s));
+  const isPrivateRoute = privateRoutes.some(s => pathnameWithoutLocale.includes(s));
+  const isAuthRoute = authRoutes.some(s => pathnameWithoutLocale.includes(s));
 
-  if (isPublicRoute) {
+  if (isRoot || isPublicRoute) {
     return response;
   }
   if ((!token && isPrivateRoute) || (token && isAuthRoute)) {
