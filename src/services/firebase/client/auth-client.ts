@@ -5,7 +5,8 @@ import {
   signInWithEmailAndPassword,
   signOut,
 } from 'firebase/auth';
-import { FirebaseAuthError, getErrorMessage, initFirebaseApp } from './utils.ts';
+import { throwFirebaseAuthError } from '../utils/index.ts';
+import { getFirebaseClient } from './config.ts';
 
 type EmailAndPassword = {
   email: string;
@@ -16,18 +17,16 @@ export type FirebaseAuthSubscribeHandler = NextOrObserver<User>;
 
 class FirebaseAuth {
   private static instance: FirebaseAuth | undefined;
-  private _currentUser: User | null = null;
   private subscribers = new Map<FirebaseAuthSubscribeHandler, Unsubscribe>();
   private auth;
 
   private constructor() {
-    const { auth } = initFirebaseApp();
+    const { auth } = getFirebaseClient();
     this.auth = auth;
-    onAuthStateChanged(auth, user => (this._currentUser = user));
   }
 
   public get currentUser(): User | null {
-    return this._currentUser;
+    return this.auth.currentUser;
   }
 
   public static getInstance(): FirebaseAuth {
@@ -60,7 +59,7 @@ class FirebaseAuth {
     try {
       return await createUserWithEmailAndPassword(this.auth, email, password);
     } catch (error) {
-      throw new FirebaseAuthError(getErrorMessage(error));
+      throwFirebaseAuthError(error);
     }
   }
 
@@ -68,7 +67,7 @@ class FirebaseAuth {
     try {
       return await signInWithEmailAndPassword(this.auth, email, password);
     } catch (error) {
-      throw new FirebaseAuthError(getErrorMessage(error));
+      throwFirebaseAuthError(error);
     }
   }
 
@@ -77,4 +76,4 @@ class FirebaseAuth {
   }
 }
 
-export const authClient = FirebaseAuth.getInstance();
+export const AuthClient = FirebaseAuth.getInstance();

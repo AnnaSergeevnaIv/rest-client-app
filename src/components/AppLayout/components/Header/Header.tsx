@@ -18,6 +18,8 @@ const LinkText = {
   Signup: 'Sign up',
   Logout: 'Logout',
   Home: 'Home',
+  History: 'History',
+  Variables: 'Variables',
 } as const;
 
 export const Header = (): ReactNode => {
@@ -43,31 +45,47 @@ export const Header = (): ReactNode => {
       </Link>
       <div className={styles.group}>
         {!isAuth && (
-          <Link
-            className={styles.link}
-            href={RoutePath.Signin}
-            data-disable={!RoutePath.Signin.localeCompare(pathname)}
-          >
-            {LinkText.Signin}
-          </Link>
-        )}
-        {!isAuth && (
-          <Link
-            className={styles.link}
-            href={RoutePath.Signup}
-            data-disable={!RoutePath.Signup.localeCompare(pathname)}
-          >
-            {LinkText.Signup}
-          </Link>
+          <>
+            <Link
+              className={styles.link}
+              href={RoutePath.Signin}
+              data-disable={!RoutePath.Signin.localeCompare(pathname)}
+            >
+              {LinkText.Signin}
+            </Link>
+            <Link
+              className={styles.link}
+              href={RoutePath.Signup}
+              data-disable={!RoutePath.Signup.localeCompare(pathname)}
+            >
+              {LinkText.Signup}
+            </Link>
+          </>
         )}
         {isAuth && (
-          <Link
-            className={styles.link}
-            href={RoutePath.Home}
-            data-disable={!RoutePath.Home.localeCompare(pathname)}
-          >
-            {LinkText.Home}
-          </Link>
+          <>
+            <Link
+              className={styles.link}
+              href={RoutePath.Variables}
+              data-disable={!RoutePath.Variables.localeCompare(pathname)}
+            >
+              {LinkText.Variables}
+            </Link>
+            <Link
+              className={styles.link}
+              href={RoutePath.History}
+              data-disable={!RoutePath.History.localeCompare(pathname)}
+            >
+              {LinkText.History}
+            </Link>
+            <Link
+              className={styles.link}
+              href={RoutePath.Home}
+              data-disable={!RoutePath.Home.localeCompare(pathname)}
+            >
+              {LinkText.Home}
+            </Link>
+          </>
         )}
         <LangSwitcher />
         {isAuth && (
