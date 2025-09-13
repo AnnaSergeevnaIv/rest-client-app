@@ -5,12 +5,12 @@ import { getAuth } from 'firebase-admin/auth';
 import type { DecodedIdToken } from 'node_modules/firebase-admin/lib/auth/token-verifier';
 import './config.ts';
 
-type DecodedTokenIdExtended = DecodedIdToken & {
+type DecodedIdTokenExtended = DecodedIdToken & {
   hasExpired: boolean;
   minutesLeft: number;
 };
 
-export const verifyIdToken = async (token: string): Promise<DecodedTokenIdExtended | null> => {
+export const verifyIdToken = async (token: string): Promise<DecodedIdTokenExtended | null> => {
   try {
     const decodedId = await getAuth().verifyIdToken(token);
     const minutesLeft = new Date(decodedId.exp * MS_PER_SEC - Date.now()).getMinutes();
