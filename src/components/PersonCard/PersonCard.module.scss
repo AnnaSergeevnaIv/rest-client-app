@@ -1,0 +1,91 @@
+/* PersonCard.module.scss */
+
+.card-wrapper {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  flex-grow: 1;
+  gap: 20px;
+  align-items: center;
+
+  height: 100%;
+  padding: 20px;
+  padding-top: 65px;
+  padding-bottom: 50px;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+
+  background-color: var(--color-bg);
+
+  [data-heading] {
+    font-size: 14px;
+  }
+
+  [data-name] {
+    font-size: 18px;
+    font-weight: bolder;
+    letter-spacing: 0.1px;
+  }
+
+  [data-avatar] {
+    position: absolute;
+    top: -25px;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  [data-role] {
+    color: var(--color-green-gray);
+  }
+
+  [data-github] {
+    display: flex;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+
+    padding: 4px 12px;
+    border: 1px solid var(--color-accent);
+    border-radius: 20px;
+
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--color-accent);
+  }
+
+  [data-bio] {
+    font-size: 13px;
+    text-align: center;
+  }
+}
+
+.thumb {
+  overflow: hidden;
+
+  aspect-ratio: 1;
+  width: 80px;
+  border: 1px solid var(--color-green-gray);
+  border-radius: 50%;
+}
+
+.contribution {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  height: 180px;
+  padding-bottom: 25px;
+  border-bottom: 1px dotted var(--color-green-gray);
+
+  font-size: 14px;
+  line-height: 1.3;
+
+  li {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px;
+    align-items: center;
+    justify-content: center;
+  }
+}
