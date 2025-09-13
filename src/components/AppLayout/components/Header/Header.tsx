@@ -20,6 +20,7 @@ const LinkText = {
   Home: 'Home',
   History: 'History',
   Variables: 'Variables',
+  Client: 'Client',
 } as const;
 
 export const Header = (): ReactNode => {
@@ -64,6 +65,13 @@ export const Header = (): ReactNode => {
         )}
         {isAuth && (
           <>
+            <Link
+              className={styles.link}
+              href={RoutePath.Client}
+              data-disable={!RoutePath.Client.localeCompare(pathname)}
+            >
+              {LinkText.Client}
+            </Link>
             <Link
               className={styles.link}
               href={RoutePath.Variables}
