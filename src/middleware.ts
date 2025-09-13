@@ -20,9 +20,7 @@ function authMiddleware(request: NextRequest, response: NextResponse): NextRespo
   const isRoot = pathnameWithoutLocale === '/';
   const isPublicRoute = publicRoutes.some(s => pathnameWithoutLocale.includes(s));
   const isPrivateRoute = privateRoutes.some(s => pathnameWithoutLocale.includes(s));
-  const isAuthRoute = authRoutes.some(
-    path => path.toLocaleLowerCase().localeCompare(pathnameWithoutLocale) === 0,
-  );
+  const isAuthRoute = authRoutes.some(s => pathnameWithoutLocale.includes(s));
 
   if (isRoot || isPublicRoute) {
     return response;
