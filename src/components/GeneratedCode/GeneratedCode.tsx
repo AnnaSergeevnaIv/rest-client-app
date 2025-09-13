@@ -1,14 +1,15 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 'use client';
 
-import { useEffect, useState } from 'react';
-import { CODE_LANGUAGES } from './GeneratedCode.constants';
-import { Select } from '../UI/Select/Select';
-import type { Header, ClientFormType } from '../pages/Client/Client.types';
-import { generateCode } from './GeneratedCode.utils';
-import { Highlight, themes } from 'prism-react-renderer';
-import styles from './GeneratedCode.module.scss';
 import { getErrorMessage } from '@/common/utils';
+import { Highlight, themes } from 'prism-react-renderer';
+import { useEffect, useState } from 'react';
 import { type Control, useWatch } from 'react-hook-form';
+import { Select } from '../UI/Select/Select';
+import type { ClientFormType, Header } from '../pages/Client/Client.types';
+import { CODE_LANGUAGES } from './GeneratedCode.constants';
+import styles from './GeneratedCode.module.scss';
+import { generateCode } from './GeneratedCode.utils';
 
 export type CodeLanguage = keyof typeof CODE_LANGUAGES;
 type GeneratedCodeProps = {
@@ -21,7 +22,7 @@ export default function GeneratedCode({ control }: GeneratedCodeProps): React.Re
     control,
   });
   const onChangeCodeLanguage = (v: string): void => {
-    setCodeLanguage(v as CodeLanguage); // eslint-disable-line @typescript-eslint/consistent-type-assertions
+    setCodeLanguage(v as CodeLanguage);
   };
 
   useEffect(() => {
@@ -37,6 +38,7 @@ export default function GeneratedCode({ control }: GeneratedCodeProps): React.Re
         setCode('Error generating code: ' + getErrorMessage(error));
       });
   }, [codeLanguage, code, url, method, headers, body]);
+
   return (
     <div className={styles.wrapper}>
       <Select labelValuePairs={CODE_LANGUAGES} onChange={onChangeCodeLanguage} />
