@@ -2,6 +2,7 @@ import AppLayout from '@components/AppLayout/AppLayout';
 import ProvidersWrapper from '@components/ProvidersWrapper/ProvidersWrapper.tsx';
 import { routing } from '@i18n/routing';
 import '@styles/global.scss';
+
 import { hasLocale, NextIntlClientProvider } from 'next-intl';
 import { Open_Sans } from 'next/font/google';
 import { notFound } from 'next/navigation';
@@ -27,12 +28,11 @@ export default async function LocaleLayout({
   if (!hasLocale(routing.locales, locale)) {
     notFound();
   }
-
   return (
     <html lang={locale} className={geist.className} data-scroll-behavior='smooth'>
       <body>
         <div id={ROOT_ID}>
-          <ProvidersWrapper>
+          <ProvidersWrapper locale={locale}>
             <NextIntlClientProvider>
               <AppLayout>{children}</AppLayout>
             </NextIntlClientProvider>
