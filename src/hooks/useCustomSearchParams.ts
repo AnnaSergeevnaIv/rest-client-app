@@ -54,7 +54,7 @@ export const useCustomSearchParams = <
       const params = new URLSearchParams(mapObjectValues(props, stringify));
       router[action](`${path}?${params.toString()}`);
     },
-    [router, pathname],
+    [router],
   );
 
   const setParams = useCallback(
