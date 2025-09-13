@@ -28,11 +28,7 @@ function authMiddleware(request: NextRequest, response: NextResponse): NextRespo
   if ((!token && isPrivateRoute) || (token && isAuthRoute)) {
     return NextResponse.redirect(new URL(`/${locale}${RoutePath.Home}`, request.url));
   }
-  if (isAuthRoute) {
-    return response;
-  }
-  NextResponse.error();
-  return;
+  return response;
 }
 
 export default function middleware(request: NextRequest): NextResponse | undefined {
