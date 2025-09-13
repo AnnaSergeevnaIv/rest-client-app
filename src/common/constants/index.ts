@@ -9,6 +9,7 @@ export const RoutePath = {
   History: '/history',
   Variables: '/variables',
   Client: '/client',
+  AboutUs: '/about-us',
   Any: '*',
 } as const;
 
