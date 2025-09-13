@@ -1,0 +1,13 @@
+.wrapper {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  width: 100%;
+}
+
+.code {
+  overflow-x: auto;
+  min-height: 150px;
+  padding: 20px;
+  word-break: break-all;
+}
