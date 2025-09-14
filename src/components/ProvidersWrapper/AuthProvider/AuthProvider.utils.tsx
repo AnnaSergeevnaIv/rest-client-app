@@ -1,19 +1,16 @@
 'use client';
 
-import { AppLocales, MS_PER_MIN, RoutePath } from '@/common/constants/index.ts';
+import { AppLocales, MS_PER_SEC, RoutePath } from '@/common/constants/index.ts';
 import { redirect } from '@/i18n/navigation.ts';
 import { verifyIdToken } from '@/services/firebase/admin/utils.ts';
 import {
   AuthClient,
   type FirebaseAuthSubscribeHandler,
 } from '@/services/firebase/client/auth-client';
-import { TokenCookieHelper } from '@/services/firebase/utils/token-helper';
+import { TokenCookieHelper } from '@/services/firebase/utils/token-helper-client';
 import type { User } from 'firebase/auth';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-const EXPIRED_LAG_MINS = 2;
-const EXPIRED_LAG_MS = EXPIRED_LAG_MINS * MS_PER_MIN;
 
 type UseAuthHelperProps = {
   signout: () => Promise<void>;
@@ -61,12 +58,9 @@ export const useAuthHelper = ({
             return;
           }
           TokenCookieHelper.set(token, {
-            maxAgeMinutes: decodedIdToken.minutesLeft,
+            maxAgeSeconds: decodedIdToken.millisecsLeft / MS_PER_SEC,
           });
-          timerRef.current = window.setTimeout(
-            logout,
-            decodedIdToken.minutesLeft * MS_PER_MIN - EXPIRED_LAG_MS,
-          );
+          timerRef.current = window.setTimeout(logout, decodedIdToken.millisecsLeft);
         })
         .catch((error: unknown) => {
           console.debug('getIdToken failed: ', error);

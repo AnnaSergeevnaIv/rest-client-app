@@ -2,7 +2,7 @@ import createMiddleware from 'next-intl/middleware';
 import { NextResponse, type NextRequest } from 'next/server';
 import { AppLocales, RoutePath } from './common/constants/index.ts';
 import { routing } from './i18n/routing';
-import { TokenCookieHelper } from './services/firebase/utils/token-helper.ts';
+import { TokenCookieHelper } from './services/firebase/utils/token-helper-client.ts';
 
 const i18nMiddleware = createMiddleware(routing);
 

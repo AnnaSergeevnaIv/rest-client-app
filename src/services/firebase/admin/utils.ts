@@ -1,13 +1,13 @@
 'use server';
 
-import { MS_PER_MIN, MS_PER_SEC } from '@/common/constants/index.ts';
+import { MS_PER_SEC } from '@/common/constants/index.ts';
 import { getAuth } from 'firebase-admin/auth';
 import type { DecodedIdToken } from 'node_modules/firebase-admin/lib/auth/token-verifier';
 import './config.ts';
 
 type DecodedIdTokenExtended = DecodedIdToken & {
   hasExpired: boolean;
-  minutesLeft: number;
+  millisecsLeft: number;
 };
 
 type VerificationResult =
@@ -22,12 +22,12 @@ type VerificationResult =
 
 export const verifyIdToken = async (token: string): Promise<Expand<VerificationResult>> => {
   try {
-    const decodedId = await getAuth().verifyIdToken(token);
-    const minutesLeft = Math.round((decodedId.exp * MS_PER_SEC - Date.now()) / MS_PER_MIN);
+    const decodedId = await getAuth().verifyIdToken(token, true);
+    const millisecsLeft = decodedId.exp * MS_PER_SEC - Date.now();
     const decodedIdToken = {
       ...decodedId,
-      minutesLeft,
-      hasExpired: minutesLeft <= 0,
+      millisecsLeft,
+      hasExpired: millisecsLeft <= 0,
     };
     return {
       success: true,
