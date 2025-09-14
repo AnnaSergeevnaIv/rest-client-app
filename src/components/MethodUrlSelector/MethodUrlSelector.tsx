@@ -58,6 +58,7 @@ export default function MethodUrlSelector({
           <Input
             type='url'
             width='100%'
+            autoComplete='on'
             placeholder={t('urlPlaceholder')}
             className={styles.input}
             value={field.value}

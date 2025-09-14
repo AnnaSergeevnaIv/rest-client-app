@@ -34,22 +34,30 @@ export const useRefHack = <T extends HTMLElement>({
   };
 };
 
-type UseShowClearOnMountResult = UseRefHackResult<HTMLInputElement> & {
+type UseShowClearOnFocusResult = UseRefHackResult<HTMLInputElement> & {
   showClear: boolean;
   setShowClear: Dispatch<SetStateAction<boolean>>;
 };
 
-export const useShowClearOnMount = ({
+export const useShowClearOnFocus = ({
   ref,
-}: PropsWithRef<HTMLInputElement>): UseShowClearOnMountResult => {
+}: PropsWithRef<HTMLInputElement>): UseShowClearOnFocusResult => {
   const [showClear, setShowClear] = useState(false);
   const { refObject, refCallback } = useRefHack<HTMLInputElement>({ ref });
 
+  const handleFocus = useCallback((): void => {
+    setShowClear(!!refObject.current?.value.length);
+  }, [refObject, setShowClear]);
+
   useEffect(() => {
-    if (refObject.current) {
-      setShowClear(refObject.current.value.length > 0);
-    }
-  }, [refObject]);
+    const node = refObject.current;
+    setShowClear(!!node?.value.length);
+    node?.addEventListener('focus', handleFocus);
+
+    return (): void => {
+      node?.removeEventListener('focus', handleFocus);
+    };
+  }, [refObject, handleFocus, setShowClear]);
 
   return {
     refCallback,

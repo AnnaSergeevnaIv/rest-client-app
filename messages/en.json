@@ -15,6 +15,7 @@
     "submit": "Submit"
   },
   "ResponseSection": {
-    "response": "Response"
+    "response": "Response",
+    "responseError": "Response error"
   }
 }
