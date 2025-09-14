@@ -1,8 +1,8 @@
-import styles from './ResponseSection.module.scss';
 import Editor from '@monaco-editor/react';
+import styles from './ResponseSection.module.scss';
 
-import { Loader } from '../Loader/Loader';
 import { useTranslations } from 'next-intl';
+import { Loader } from '../Loader/Loader';
 
 import type { ResponseData } from '../pages/Client/Client';
 type ResponseSectionProps = {

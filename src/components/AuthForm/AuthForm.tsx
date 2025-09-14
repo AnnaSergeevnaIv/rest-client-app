@@ -71,8 +71,8 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
   const onSubmit = handleSubmit(data => {
     const action = login ? signin : signup;
     action(data)
-      .then(creds => {
-        redirectOnSuccess(creds.user, RoutePath.Home);
+      .then(({ user }) => {
+        redirectOnSuccess(user, RoutePath.Home);
       })
       .catch((error: unknown) => {
         console.debug(error);

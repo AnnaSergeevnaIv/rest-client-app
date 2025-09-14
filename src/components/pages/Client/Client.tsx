@@ -1,20 +1,21 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 'use client';
-import MethodUrlSelector from '@/components/MethodUrlSelector/MethodUrlSelector';
-import { type SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
-import type { ClientFormType } from './Client.types';
-import HeadersEditor from '@/components/HeadersEditor/HeadersEditor';
-import { useTranslations } from 'next-intl';
-import GeneratedCode from '@/components/GeneratedCode/GeneratedCode';
-import BodyEditor from '@/components/BodyEditor/BodyEditor';
-import styles from './Client.module.scss';
-import { Button } from '@/components/UI/Button/Button';
-import { useEffect, useState } from 'react';
-import ResponseSection from '@/components/ResponseSection/ResponseSection';
-import { DEFAULT_FORM_DATA } from './Client.constants';
-import { getData } from '@/network/getData';
 import { getErrorMessage } from '@/common/utils';
-import { useUpdateUrlWithFormData } from '@/hooks/useUpdateUrlWithFormData';
+import BodyEditor from '@/components/BodyEditor/BodyEditor';
+import GeneratedCode from '@/components/GeneratedCode/GeneratedCode';
+import HeadersEditor from '@/components/HeadersEditor/HeadersEditor';
+import MethodUrlSelector from '@/components/MethodUrlSelector/MethodUrlSelector';
+import ResponseSection from '@/components/ResponseSection/ResponseSection';
+import { Button } from '@/components/UI/Button/Button';
 import { useClientFormSync } from '@/hooks/useClientFormSync';
+import { useUpdateUrlWithFormData } from '@/hooks/useUpdateUrlWithFormData';
+import { getData } from '@/network/getData';
+import { useTranslations } from 'next-intl';
+import { useEffect, useState } from 'react';
+import { type SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { DEFAULT_FORM_DATA } from './Client.constants';
+import styles from './Client.module.scss';
+import type { ClientFormType } from './Client.types';
 import { parseStoredResponse } from './Client.utils';
 export type ResponseData = {
   status: number;
@@ -65,7 +66,11 @@ export default function Client(): React.ReactNode {
         headers: data.headers,
         body: data.body,
       });
-      const newResponse = { data: result.data, error: result.error, loading: false };
+      const newResponse = {
+        data: result.data as ResponseData,
+        error: result.error,
+        loading: false,
+      };
       setResponse(newResponse);
       sessionStorage.setItem('clientResponse', JSON.stringify(newResponse));
       updateUrlWithFormData();

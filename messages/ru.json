@@ -9,7 +9,7 @@
     "headerKeyPlaceholder": "Введите ключ заголовка",
     "headerValuePlaceholder": "Введите значение заголовка",
     "addHeader": "Добавить заголовок",
-    "removeHeader": "Удалить заголовок"
+    "removeHeader": "Удалить"
   },
   "Client": {
     "submit": "Отправить"
