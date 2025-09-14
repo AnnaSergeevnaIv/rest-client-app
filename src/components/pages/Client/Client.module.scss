@@ -1,11 +1,5 @@
 .wrapper {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-  border: var(--border-style);
-  border-radius: var(--border-radius);
-
-  background-color: var(--color-bg);
+  @extend %article;
 }
 
 .form {

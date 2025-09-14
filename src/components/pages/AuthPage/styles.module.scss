@@ -1,17 +1,11 @@
-$padding: 32px;
-
 .heading {
   @extend %section-heading;
 }
 
 .wrapper {
-  width: fit-content;
-  margin: auto;
-  padding: $padding;
-  border: var(--border-style);
-  border-radius: var(--border-radius);
+  @extend %article;
 
-  background-color: var(--color-bg);
+  max-width: 400px;
 }
 
 .hint {
@@ -20,5 +14,5 @@ $padding: 32px;
   align-items: center;
   justify-content: center;
 
-  margin-top: $padding;
+  margin-top: 32px;
 }

@@ -47,6 +47,7 @@ export default function HeadersEditor({
               control={control}
               render={({ field }) => (
                 <Input
+                  width='100%'
                   placeholder={t('headerKeyPlaceholder')}
                   value={field.value}
                   onChange={field.onChange}
@@ -59,6 +60,7 @@ export default function HeadersEditor({
               control={control}
               render={({ field }) => (
                 <Input
+                  width='100%'
                   placeholder={t('headerValuePlaceholder')}
                   value={field.value}
                   onChange={field.onChange}
@@ -71,7 +73,7 @@ export default function HeadersEditor({
               onClick={() => {
                 removeHeader(index);
               }}
-            />
+            ></Button>
           </div>
         );
       })}

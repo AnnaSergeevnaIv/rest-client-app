@@ -14,7 +14,7 @@ export default function HomePage(): ReactNode {
       {!isAuth ? (
         <div className={styles.guest}>
           <h1 className={styles.heading}>Welcome!</h1>
-          <div className={styles.actions}>
+          <div className={styles.nav}>
             <Link href={RoutePath.Signin} className={styles.link}>
               Sign In
             </Link>
@@ -26,7 +26,8 @@ export default function HomePage(): ReactNode {
       ) : (
         <div className={styles.user}>
           <h1 className={styles.heading}>
-            Welcome back, {currentUser?.displayName ?? currentUser?.email}!
+            Welcome back,{' '}
+            <span className={styles.email}>{currentUser?.displayName ?? currentUser?.email}</span>
           </h1>
           <nav className={styles.nav}>
             <Link href={RoutePath.Client} className={styles.link}>
@@ -41,11 +42,9 @@ export default function HomePage(): ReactNode {
           </nav>
         </div>
       )}
-      <nav className={styles.about}>
-        <Link href={RoutePath.AboutUs} className={styles.link}>
-          About developers
-        </Link>
-      </nav>
+      <Link href={RoutePath.AboutUs} className={styles.about}>
+        About Us
+      </Link>
     </section>
   );
 }
