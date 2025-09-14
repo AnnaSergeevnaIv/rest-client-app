@@ -1,11 +1,11 @@
 'use client';
+import { useTranslations } from 'next-intl';
+import { type Control, Controller } from 'react-hook-form';
+import { type ClientFormType } from '../pages/Client/Client.types';
 import { Input } from '../UI/Input/Input';
 import { Select } from '../UI/Select/Select';
 import { METHODS } from './MethodUrlSelector.constants';
-import { useTranslations } from 'next-intl';
 import styles from './MethodUrlSelector.module.scss';
-import { type Control, Controller } from 'react-hook-form';
-import { type ClientFormType } from '../pages/Client/Client.types';
 
 type MethodUrlSelectorProps = {
   control: Control<ClientFormType>;
@@ -59,9 +59,8 @@ export default function MethodUrlSelector({
             placeholder={t('urlPlaceholder')}
             className={styles.input}
             value={field.value}
-            onChange={v => {
-              field.onChange(v);
-            }}
+            onClear={field.onChange}
+            onChange={field.onChange}
             required={required}
           />
         )}

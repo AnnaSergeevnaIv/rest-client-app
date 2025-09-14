@@ -51,6 +51,7 @@ export default function HeadersEditor({
                   placeholder={t('headerKeyPlaceholder')}
                   value={field.value}
                   onChange={field.onChange}
+                  onClear={field.onChange}
                 />
               )}
             />
@@ -64,6 +65,7 @@ export default function HeadersEditor({
                   placeholder={t('headerValuePlaceholder')}
                   value={field.value}
                   onChange={field.onChange}
+                  onClear={field.onChange}
                 />
               )}
             />
