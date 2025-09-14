@@ -50,7 +50,10 @@
 }
 
 .down-arrow {
+  pointer-events: none;
+
   left: 8px;
+
   display: flex;
   align-items: center;
   justify-content: center;

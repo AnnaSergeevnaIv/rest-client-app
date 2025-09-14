@@ -2,20 +2,22 @@
 import type { Dispatch, Ref, RefCallback, RefObject, SetStateAction } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
 
-type PropsWithRef<P = unknown> = P & {
-  ref?: Ref<HTMLInputElement>;
+type PropsWithRef<RefType extends HTMLElement, P = unknown> = P & {
+  ref?: Ref<RefType>;
 };
 
-type UseRefHackResult = {
-  refCallback: RefCallback<HTMLInputElement>;
-  refObject: RefObject<HTMLInputElement | null>;
+type UseRefHackResult<T extends HTMLElement> = {
+  refCallback: RefCallback<T>;
+  refObject: RefObject<T | null>;
 };
 
-const useRefHack = ({ ref }: PropsWithRef): UseRefHackResult => {
-  const refObject = useRef<HTMLInputElement>(null);
+export const useRefHack = <T extends HTMLElement>({
+  ref,
+}: PropsWithRef<T>): UseRefHackResult<T> => {
+  const refObject = useRef<T>(null);
 
-  const refCallback: RefCallback<HTMLInputElement> = useCallback(
-    (node: HTMLInputElement) => {
+  const refCallback: RefCallback<T> = useCallback(
+    (node: T) => {
       refObject.current = node;
       if (typeof ref === 'function') {
         ref(node);
@@ -32,14 +34,16 @@ const useRefHack = ({ ref }: PropsWithRef): UseRefHackResult => {
   };
 };
 
-type UseShowClearOnMountResult = UseRefHackResult & {
+type UseShowClearOnMountResult = UseRefHackResult<HTMLInputElement> & {
   showClear: boolean;
   setShowClear: Dispatch<SetStateAction<boolean>>;
 };
 
-export const useShowClearOnMount = ({ ref }: PropsWithRef): UseShowClearOnMountResult => {
+export const useShowClearOnMount = ({
+  ref,
+}: PropsWithRef<HTMLInputElement>): UseShowClearOnMountResult => {
   const [showClear, setShowClear] = useState(false);
-  const { refObject, refCallback } = useRefHack({ ref });
+  const { refObject, refCallback } = useRefHack<HTMLInputElement>({ ref });
 
   useEffect(() => {
     if (refObject.current) {
