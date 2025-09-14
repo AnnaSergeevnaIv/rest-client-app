@@ -31,8 +31,8 @@ export const useAuthHelper = ({
   signout,
   locale = AppLocales.Default,
 }: UseAuthHelperProps): UseAuthHelperResult => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isAuth, setIsAuth] = useState(false);
+  const [currentUser, setCurrentUser] = useState(AuthClient.currentUser);
+  const [isAuth, setIsAuth] = useState(!!AuthClient.currentUser);
   const timerRef = useRef<number>(0);
 
   const logout = useCallback(() => {
@@ -44,7 +44,7 @@ export const useAuthHelper = ({
 
   const handleIdTokenChange: FirebaseAuthSubscribeHandler = useCallback(
     (user: User | null) => {
-      clearTimeout(timerRef.current);
+      window.clearTimeout(timerRef.current);
       setIsAuth(Boolean(user));
       setCurrentUser(user);
 
@@ -55,18 +55,23 @@ export const useAuthHelper = ({
       void user
         .getIdToken()
         .then(async token => {
-          const decodedId = await verifyIdToken(token);
-          if (!decodedId || decodedId.hasExpired) {
+          const { success, decodedIdToken } = await verifyIdToken(token);
+          if (!success || decodedIdToken.hasExpired) {
             logout();
             return;
           }
-          TokenCookieHelper.set(token);
+          TokenCookieHelper.set(token, {
+            maxAgeMinutes: decodedIdToken.minutesLeft,
+          });
           timerRef.current = window.setTimeout(
             logout,
-            decodedId.minutesLeft * MS_PER_MIN - EXPIRED_LAG_MS,
+            decodedIdToken.minutesLeft * MS_PER_MIN - EXPIRED_LAG_MS,
           );
         })
-        .catch(TokenCookieHelper.remove);
+        .catch((error: unknown) => {
+          console.debug('getIdToken failed: ', error);
+          TokenCookieHelper.remove();
+        });
     },
     [logout],
   );
@@ -88,7 +93,7 @@ export const useAuthHelper = ({
     AuthClient.subscribe(handleIdTokenChange);
 
     return (): void => {
-      clearTimeout(timerRef.current);
+      window.clearTimeout(timerRef.current);
       cookieStore.removeEventListener('change', handleTokenCookieRemove);
       AuthClient.unsubscribe(handleIdTokenChange);
     };

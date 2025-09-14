@@ -1,26 +1,26 @@
-const USER_ID_NAME = 'fb-userId-Qf0Hr3Y9';
-const DEFAULT_MAX_DAYS = 5;
+const USER_ID_NAME = 'fb-idToken-Qf0Hr3Y9';
+const DEFAULT_MAX_AGE = 60 * 24 * 5;
 const DEFAULT_PATH = '/';
 
 type TokenCookieOptions = Partial<{
   httpOnly: boolean;
   secure: boolean;
-  maxDays: number;
+  maxAgeMinutes: number;
   path: string;
 }>;
 
 const setToken = (token: string, options?: TokenCookieOptions): void => {
   const {
-    maxDays = DEFAULT_MAX_DAYS,
+    maxAgeMinutes = DEFAULT_MAX_AGE,
     path = DEFAULT_PATH,
     httpOnly = false,
     secure = true,
   } = options ?? {};
 
-  const maxAge = 60 * 60 * 24 * maxDays;
+  const maxAgeSeconds = 60 * maxAgeMinutes;
   const params = [
     `${USER_ID_NAME}=${encodeURIComponent(token)}`,
-    `max-age=${maxAge.toString()}`,
+    `max-age=${maxAgeSeconds.toString()}`,
     `path=${path}`,
     `samesite=lax`,
     httpOnly ? 'httpOnly' : '',
