@@ -13,7 +13,7 @@ import {
 import { type ClientFormType } from '../pages/Client/Client.types';
 import { Button } from '../UI/Button/Button';
 import { Datalist } from '../UI/Datalist/Datalist.tsx';
-import { Input } from '../UI/Input/Input';
+import { CLEAR_BTN_TEXT, Input } from '../UI/Input/Input';
 import styles from './HeadersEditor.module.scss';
 type HeadersEditorProps = {
   control: Control<ClientFormType>;
@@ -76,7 +76,7 @@ export default function HeadersEditor({
             <Button
               className={styles.btn}
               variant='default'
-              label='✕'
+              label={CLEAR_BTN_TEXT}
               style={{ fontSize: 20 }}
               onClick={() => {
                 removeHeader(index);

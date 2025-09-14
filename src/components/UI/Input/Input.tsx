@@ -10,7 +10,7 @@ import { useShowClearOnFocus } from './Input.utils.ts';
 export const ARROW_SIZE = 16;
 const EYE_SIZE = 16;
 const SHOW_PASSWORD_BTN_TITLE = 'Show password';
-const CLEAR_BTN_TEXT = '✕';
+export const CLEAR_BTN_TEXT = '✕';
 const CLEAR_BTN_TITLE = 'Clear';
 
 export type InputBaseProps = InputHTMLAttributes<HTMLInputElement> & {
@@ -59,6 +59,7 @@ export const Input = ({
     onClear?.();
   }, [onClear, setShowClear]);
 
+  const isNotSearch = type !== 'search';
   const securely = type === 'password';
   const inputType = securely ? (showPassword ? 'text' : 'password') : type;
   const EyeIcon = showPassword ? IconEyeInvisible : IconEye;
@@ -80,7 +81,7 @@ export const Input = ({
           <IconArrowDown size={ARROW_SIZE} />
         </span>
       )}
-      {type !== 'search' && (
+      {isNotSearch && (
         <span
           className={styles['clear-btn']}
           onClick={handleClear}
