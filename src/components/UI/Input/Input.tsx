@@ -59,7 +59,7 @@ export const Input = ({
     onClear?.();
   }, [onClear, setShowClear]);
 
-  const isNotSearch = type !== 'search';
+  const isNotSearchType = type !== 'search';
   const securely = type === 'password';
   const inputType = securely ? (showPassword ? 'text' : 'password') : type;
   const EyeIcon = showPassword ? IconEyeInvisible : IconEye;
@@ -81,7 +81,7 @@ export const Input = ({
           <IconArrowDown size={ARROW_SIZE} />
         </span>
       )}
-      {isNotSearch && (
+      {isNotSearchType && (
         <span
           className={styles['clear-btn']}
           onClick={handleClear}
