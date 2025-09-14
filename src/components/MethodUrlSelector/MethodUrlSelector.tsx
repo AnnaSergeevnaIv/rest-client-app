@@ -41,6 +41,7 @@ export default function MethodUrlSelector({
         control={control}
         render={({ field }) => (
           <Select
+            className={styles.method}
             labelValuePairs={METHODS}
             value={field.value}
             onChange={v => {
@@ -56,6 +57,8 @@ export default function MethodUrlSelector({
         render={({ field }) => (
           <Input
             type='url'
+            width='100%'
+            autoComplete='on'
             placeholder={t('urlPlaceholder')}
             className={styles.input}
             value={field.value}

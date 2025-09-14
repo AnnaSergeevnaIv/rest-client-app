@@ -74,12 +74,14 @@ export default function HeadersEditor({
               )}
             />
             <Button
-              type='button'
-              label={t('removeHeader')}
+              className={styles.btn}
+              variant='default'
+              label='✕'
+              style={{ fontSize: 20 }}
               onClick={() => {
                 removeHeader(index);
               }}
-            ></Button>
+            />
           </div>
         );
       })}

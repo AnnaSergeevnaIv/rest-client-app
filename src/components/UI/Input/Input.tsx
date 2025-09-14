@@ -5,7 +5,7 @@ import clsx from 'clsx';
 import type { ChangeEvent, Ref } from 'react';
 import { useCallback, useState, type InputHTMLAttributes, type ReactNode } from 'react';
 import styles from './Input.module.scss';
-import { useShowClearOnMount } from './Input.utils.ts';
+import { useShowClearOnFocus } from './Input.utils.ts';
 
 export const ARROW_SIZE = 16;
 const EYE_SIZE = 16;
@@ -40,7 +40,7 @@ export const Input = ({
   ...rest
 }: InputProps): ReactNode => {
   const [showPassword, setShowPassword] = useState(false);
-  const { refCallback, showClear, setShowClear } = useShowClearOnMount({ ref });
+  const { refCallback, showClear, setShowClear } = useShowClearOnFocus({ ref });
 
   const handleShowPasswordClick = useCallback((): void => {
     setShowPassword(p => !p);

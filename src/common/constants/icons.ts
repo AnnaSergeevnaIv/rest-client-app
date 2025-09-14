@@ -3,6 +3,7 @@ import { IoLanguageOutline } from 'react-icons/io5';
 import { LiaDownloadSolid } from 'react-icons/lia';
 import { MdOutlineKeyboardArrowDown } from 'react-icons/md';
 import { RiLogoutCircleRLine } from 'react-icons/ri';
+import { MdDeleteForever } from 'react-icons/md';
 
 export const IconArrowDown = MdOutlineKeyboardArrowDown;
 export const IconEye = AiOutlineEye;
@@ -11,3 +12,4 @@ export const IconDownload = LiaDownloadSolid;
 export const IconLang = IoLanguageOutline;
 export const IconLogout = RiLogoutCircleRLine;
 export const IconGithub = AiFillGithub;
+export const IconDelete = MdDeleteForever;

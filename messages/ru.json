@@ -15,6 +15,7 @@
     "submit": "Отправить"
   },
   "ResponseSection": {
-    "response": "Ответ сервера"
+    "response": "Ответ сервера",
+    "responseError": "Ошибка запроса"
   }
 }

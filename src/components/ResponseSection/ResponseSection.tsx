@@ -23,8 +23,9 @@ export default function ResponseSection({ response }: ResponseSectionProps): Rea
       )}
       {error && (
         <div className={styles.error}>
-          <p>Ошибка запроса:</p>
-          <p>{response.error}</p>
+          <p>
+            {t('responseError')}: {response.error}
+          </p>
         </div>
       )}
       {!loading && !error && (
