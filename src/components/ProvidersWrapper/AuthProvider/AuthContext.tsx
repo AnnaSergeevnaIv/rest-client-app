@@ -7,7 +7,6 @@ const ERR_USE_OUTSIDE_CONTEXT = 'useAuth() can only be used within an AuthContex
 
 export type UseAuthReturn = Pick<typeof AuthClient, 'signin' | 'signout' | 'signup'> & {
   currentUser: User | null;
-  isAuth: boolean;
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
 };

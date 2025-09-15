@@ -10,33 +10,16 @@ type DecodedIdTokenExtended = DecodedIdToken & {
   millisecsLeft: number;
 };
 
-type VerificationResult =
-  | {
-      success: true;
-      decodedIdToken: DecodedIdTokenExtended;
-    }
-  | {
-      success: false;
-      decodedIdToken: null;
-    };
-
-export const verifyIdToken = async (token: string): Promise<Expand<VerificationResult>> => {
+export const verifyIdToken = async (token: string): Promise<DecodedIdTokenExtended | null> => {
   try {
     const decodedId = await getAuth().verifyIdToken(token, true);
     const millisecsLeft = decodedId.exp * MS_PER_SEC - Date.now();
-    const decodedIdToken = {
+    return {
       ...decodedId,
       millisecsLeft,
       hasExpired: millisecsLeft <= 0,
     };
-    return {
-      success: true,
-      decodedIdToken,
-    };
   } catch {
-    return {
-      success: false,
-      decodedIdToken: null,
-    };
+    return null;
   }
 };
