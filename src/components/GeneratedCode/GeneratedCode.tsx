@@ -34,7 +34,6 @@ export default function GeneratedCode({ control }: GeneratedCodeProps): React.Re
         setCode(c);
       })
       .catch((error: unknown) => {
-        console.error('Code generation error:', getErrorMessage(error));
         setCode('Error generating code: ' + getErrorMessage(error));
       });
   }, [codeLanguage, code, url, method, headers, body]);
