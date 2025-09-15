@@ -5,6 +5,7 @@ import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext'
 import { Link } from '@i18n/navigation';
 import { type ReactNode } from 'react';
 import styles from './HomePage.module.scss';
+import AboutUsPage from '../AboutUsPage/AboutUsPage';
 
 export default function HomePage(): ReactNode {
   const { currentUser } = useAuth();
@@ -43,9 +44,7 @@ export default function HomePage(): ReactNode {
           </nav>
         </div>
       )}
-      <Link href={RoutePath.AboutUs} className={styles.about}>
-        About Us
-      </Link>
+      <AboutUsPage />
     </section>
   );
 }
