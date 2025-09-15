@@ -7,17 +7,17 @@ import './config.ts';
 
 type DecodedIdTokenExtended = DecodedIdToken & {
   hasExpired: boolean;
-  minutesLeft: number;
+  millisecsLeft: number;
 };
 
 export const verifyIdToken = async (token: string): Promise<DecodedIdTokenExtended | null> => {
   try {
-    const decodedId = await getAuth().verifyIdToken(token);
-    const minutesLeft = new Date(decodedId.exp * MS_PER_SEC - Date.now()).getMinutes();
+    const decodedId = await getAuth().verifyIdToken(token, true);
+    const millisecsLeft = decodedId.exp * MS_PER_SEC - Date.now();
     return {
       ...decodedId,
-      minutesLeft,
-      hasExpired: minutesLeft <= 0,
+      millisecsLeft,
+      hasExpired: millisecsLeft <= 0,
     };
   } catch {
     return null;

@@ -1,5 +1,3 @@
-'use client';
-
 import { RoutePath } from '@/common/constants/index.ts';
 import { AuthForm } from '@/components/AuthForm/AuthForm.tsx';
 import { Link } from '@/i18n/navigation.ts';

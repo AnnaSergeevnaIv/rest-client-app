@@ -25,7 +25,7 @@
 
 .clear-btn,
 .show-password {
-  @extend %btn-primary;
+  @extend %btn;
 
   padding: 4px;
   border: unset;
@@ -50,7 +50,10 @@
 }
 
 .down-arrow {
+  pointer-events: none;
+
   left: 8px;
+
   display: flex;
   align-items: center;
   justify-content: center;

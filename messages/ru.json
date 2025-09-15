@@ -9,12 +9,13 @@
     "headerKeyPlaceholder": "Введите ключ заголовка",
     "headerValuePlaceholder": "Введите значение заголовка",
     "addHeader": "Добавить заголовок",
-    "removeHeader": "Удалить заголовок"
+    "removeHeader": "Удалить"
   },
   "Client": {
     "submit": "Отправить"
   },
   "ResponseSection": {
-    "response": "Ответ сервера"
+    "response": "Ответ сервера",
+    "responseError": "Ошибка запроса"
   }
 }

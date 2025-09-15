@@ -5,12 +5,12 @@ import clsx from 'clsx';
 import type { ChangeEvent, Ref } from 'react';
 import { useCallback, useState, type InputHTMLAttributes, type ReactNode } from 'react';
 import styles from './Input.module.scss';
-import { useShowClearOnMount } from './Input.utils.ts';
+import { useShowClearOnFocus } from './Input.utils.ts';
 
 export const ARROW_SIZE = 16;
 const EYE_SIZE = 16;
 const SHOW_PASSWORD_BTN_TITLE = 'Show password';
-const CLEAR_BTN_TEXT = '✕';
+export const CLEAR_BTN_TEXT = '✕';
 const CLEAR_BTN_TITLE = 'Clear';
 
 export type InputBaseProps = InputHTMLAttributes<HTMLInputElement> & {
@@ -40,7 +40,7 @@ export const Input = ({
   ...rest
 }: InputProps): ReactNode => {
   const [showPassword, setShowPassword] = useState(false);
-  const { refCallback, showClear, setShowClear } = useShowClearOnMount({ ref });
+  const { refCallback, showClear, setShowClear } = useShowClearOnFocus({ ref });
 
   const handleShowPasswordClick = useCallback((): void => {
     setShowPassword(p => !p);
@@ -59,6 +59,7 @@ export const Input = ({
     onClear?.();
   }, [onClear, setShowClear]);
 
+  const isNotSearchType = type !== 'search';
   const securely = type === 'password';
   const inputType = securely ? (showPassword ? 'text' : 'password') : type;
   const EyeIcon = showPassword ? IconEyeInvisible : IconEye;
@@ -80,7 +81,7 @@ export const Input = ({
           <IconArrowDown size={ARROW_SIZE} />
         </span>
       )}
-      {type !== 'search' && (
+      {isNotSearchType && (
         <span
           className={styles['clear-btn']}
           onClick={handleClear}

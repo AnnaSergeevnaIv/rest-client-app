@@ -1,19 +1,16 @@
 'use client';
 
-import { AppLocales, MS_PER_MIN, RoutePath } from '@/common/constants/index.ts';
-import { redirect } from '@/i18n/navigation.ts';
+import { AppLocales, MS_PER_SEC, RoutePath } from '@/common/constants/index.ts';
+import { redirectAsync } from '@/common/utils/index.ts';
 import { verifyIdToken } from '@/services/firebase/admin/utils.ts';
 import {
   AuthClient,
   type FirebaseAuthSubscribeHandler,
 } from '@/services/firebase/client/auth-client';
-import { TokenCookieHelper } from '@/services/firebase/utils/token-helper';
+import { TokenCookieHelper } from '@/services/firebase/utils/token-helper-client';
 import type { User } from 'firebase/auth';
 import type { Dispatch, SetStateAction } from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-
-const EXPIRED_LAG_MINS = 2;
-const EXPIRED_LAG_MS = EXPIRED_LAG_MINS * MS_PER_MIN;
 
 type UseAuthHelperProps = {
   signout: () => Promise<void>;
@@ -22,51 +19,52 @@ type UseAuthHelperProps = {
 
 type UseAuthHelperResult = {
   currentUser: User | null;
-  isAuth: boolean;
   setCurrentUser: Dispatch<SetStateAction<User | null>>;
-  setIsAuth: Dispatch<SetStateAction<boolean>>;
 };
 
 export const useAuthHelper = ({
   signout,
   locale = AppLocales.Default,
 }: UseAuthHelperProps): UseAuthHelperResult => {
-  const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isAuth, setIsAuth] = useState(false);
+  const [currentUser, setCurrentUser] = useState(AuthClient.currentUser);
   const timerRef = useRef<number>(0);
 
   const logout = useCallback(() => {
     void signout().then(() => {
-      TokenCookieHelper.remove();
-      redirect({ href: RoutePath.Home, locale });
+      void redirectAsync({ href: RoutePath.Home, locale }).then(() => {
+        TokenCookieHelper.remove();
+        setCurrentUser(null);
+      });
     });
   }, [signout, locale]);
 
   const handleIdTokenChange: FirebaseAuthSubscribeHandler = useCallback(
     (user: User | null) => {
-      clearTimeout(timerRef.current);
-      setIsAuth(Boolean(user));
-      setCurrentUser(user);
+      window.clearTimeout(timerRef.current);
 
       if (!user) {
         TokenCookieHelper.remove();
+        setCurrentUser(null);
         return;
       }
       void user
         .getIdToken()
         .then(async token => {
-          const decodedId = await verifyIdToken(token);
-          if (!decodedId || decodedId.hasExpired) {
+          const decodedIdToken = await verifyIdToken(token);
+          if (!decodedIdToken || decodedIdToken.hasExpired) {
             logout();
             return;
           }
-          TokenCookieHelper.set(token);
-          timerRef.current = window.setTimeout(
-            logout,
-            decodedId.minutesLeft * MS_PER_MIN - EXPIRED_LAG_MS,
-          );
+          TokenCookieHelper.set(token, {
+            maxAgeSeconds: decodedIdToken.millisecsLeft / MS_PER_SEC,
+          });
+          timerRef.current = window.setTimeout(logout, decodedIdToken.millisecsLeft);
+          setCurrentUser(user);
         })
-        .catch(TokenCookieHelper.remove);
+        .catch((error: unknown) => {
+          console.debug('getIdToken failed: ', error);
+          logout();
+        });
     },
     [logout],
   );
@@ -88,7 +86,7 @@ export const useAuthHelper = ({
     AuthClient.subscribe(handleIdTokenChange);
 
     return (): void => {
-      clearTimeout(timerRef.current);
+      window.clearTimeout(timerRef.current);
       cookieStore.removeEventListener('change', handleTokenCookieRemove);
       AuthClient.unsubscribe(handleIdTokenChange);
     };
@@ -96,8 +94,6 @@ export const useAuthHelper = ({
 
   return {
     currentUser,
-    isAuth,
     setCurrentUser,
-    setIsAuth,
   };
 };

@@ -1,4 +1,4 @@
-import type { NextOrObserver, Unsubscribe, User, UserCredential } from 'firebase/auth';
+import type { NextFn, User, UserCredential } from 'firebase/auth';
 import {
   createUserWithEmailAndPassword,
   onAuthStateChanged,
@@ -13,45 +13,49 @@ type EmailAndPassword = {
   password: string;
 };
 
-export type FirebaseAuthSubscribeHandler = NextOrObserver<User>;
+export type FirebaseAuthSubscribeHandler = NextFn<User | null>;
 
-class FirebaseAuth {
-  private static instance: FirebaseAuth | undefined;
-  private subscribers = new Map<FirebaseAuthSubscribeHandler, Unsubscribe>();
+class FirebaseAuthClient {
+  private static instance: FirebaseAuthClient | undefined;
+  private subscribers = new Set<FirebaseAuthSubscribeHandler>();
+  private _currentUser: User | null = null;
   private auth;
 
   private constructor() {
     const { auth } = getFirebaseClient();
     this.auth = auth;
+    onAuthStateChanged(auth, this.reducedObserver);
   }
+
+  private reducedObserver = (user: User | null): void => {
+    if (user?.uid !== this._currentUser?.uid) {
+      this._currentUser = user;
+      this.subscribers.values().forEach(handler => {
+        handler(user);
+      });
+    }
+  };
 
   public get currentUser(): User | null {
-    return this.auth.currentUser;
+    return this._currentUser;
   }
 
-  public static getInstance(): FirebaseAuth {
-    if (!FirebaseAuth.instance) {
-      FirebaseAuth.instance = new FirebaseAuth();
+  public static getInstance(): FirebaseAuthClient {
+    if (!FirebaseAuthClient.instance) {
+      FirebaseAuthClient.instance = new FirebaseAuthClient();
     }
-    return FirebaseAuth.instance;
+    return FirebaseAuthClient.instance;
   }
 
   public subscribe(handler: FirebaseAuthSubscribeHandler): void {
-    const unsubscribe = onAuthStateChanged(this.auth, handler);
-    this.subscribers.set(handler, unsubscribe);
+    this.subscribers.add(handler);
   }
 
   public unsubscribe(handler: FirebaseAuthSubscribeHandler): void {
-    if (this.subscribers.has(handler)) {
-      this.subscribers.get(handler)?.();
-      this.subscribers.delete(handler);
-    }
+    this.subscribers.delete(handler);
   }
 
   public unsubscribeAll(): void {
-    this.subscribers.entries().forEach(([_, unsubscribe]) => {
-      unsubscribe();
-    });
     this.subscribers.clear();
   }
 
@@ -76,4 +80,4 @@ class FirebaseAuth {
   }
 }
 
-export const AuthClient = FirebaseAuth.getInstance();
+export const AuthClient = FirebaseAuthClient.getInstance();

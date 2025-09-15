@@ -21,16 +21,17 @@ const LinkText = {
   Home: 'Home',
   History: 'History',
   Variables: 'Variables',
-  Client: 'Client',
+  Client: 'REST client',
 } as const;
 
 export const Header = (): ReactNode => {
-  const { isAuth, signout } = useAuth();
+  const { currentUser, signout } = useAuth();
+  const isAuth = Boolean(currentUser);
   const pathname = usePathname();
   const locale = useLocale();
 
   const handleLogout = useCallback((): void => {
-    void signout().then(() => redirectAsync({ href: RoutePath.Signin, locale }));
+    void signout().then(() => redirectAsync({ href: RoutePath.Home, locale }));
   }, [locale, signout]);
 
   return (

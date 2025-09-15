@@ -9,12 +9,13 @@
     "headerKeyPlaceholder": "Enter Header Key",
     "headerValuePlaceholder": "Enter Header Value",
     "addHeader": "Add Header",
-    "removeHeader": "Remove Header"
+    "removeHeader": "Remove"
   },
   "Client": {
     "submit": "Submit"
   },
   "ResponseSection": {
-    "response": "Response"
+    "response": "Response",
+    "responseError": "Response error"
   }
 }

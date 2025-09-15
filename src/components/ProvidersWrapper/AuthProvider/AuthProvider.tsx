@@ -12,7 +12,7 @@ export default function AuthProvider({
   locale?: string;
 }): ReactNode {
   const [loading, setLoading] = useState(false);
-  const { isAuth, currentUser } = useAuthHelper({ signout: () => signout(), locale });
+  const { currentUser } = useAuthHelper({ signout: () => signout(), locale });
 
   const signin: typeof AuthClient.signin = useCallback(async creds => {
     setLoading(true);
@@ -45,7 +45,6 @@ export default function AuthProvider({
   return (
     <AuthContext
       value={{
-        isAuth,
         signin,
         signup,
         signout,

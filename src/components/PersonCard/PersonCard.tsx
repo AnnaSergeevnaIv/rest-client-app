@@ -1,10 +1,14 @@
+import { IconGithub } from '@/common/constants/icons.ts';
+import { LinkProps } from '@/common/constants/index.ts';
 import clsx from 'clsx';
-import type { JSX } from 'react';
-import type { PersonData } from '../../../data/team-data';
-import styles from './PersonCard.module.scss';
 import Image from 'next/image';
+import type { JSX } from 'react';
+import type { PersonData } from '../../data/team-data';
+import styles from './PersonCard.module.scss';
 
-type PersonCardProps = PersonData & { className?: string };
+type PersonCardProps = PersonData & {
+  className?: string;
+};
 
 const BULLET = '▪';
 const BULLET_STYLE = {
@@ -25,33 +29,34 @@ export const PersonCard = ({
 
   return (
     <div className={clsx(styles['card-wrapper'], className)}>
-      <div data-avatar>
+      <div className={styles.avatar}>
         <div className={styles.thumb}>
           <Image
             src={avatar}
             alt={`${name}'s avatar`}
-            width={78}
-            height={78}
-            className={styles.thumb}
+            width={0}
+            height={0}
+            sizes='100vw'
+            style={{ width: '100%', height: 'auto' }}
           />
         </div>
       </div>
-      <span data-name>{name}</span>
-      <span data-role>{role}</span>
-      <a data-github href={github} rel='noreferrer noopener nofollow' target='_blank'>
-        <Image src='/github-logo.png' alt='GitHub logo' width={16} height={16} />
+      <span className={styles.name}>{name}</span>
+      <span className={styles.role}>{role}</span>
+      <a className={styles.github} href={github} {...LinkProps}>
+        <IconGithub size={20} />
         {githubName}
       </a>
-      <b data-heading>Contribution:</b>
+      <b>Contribution:</b>
       <ul className={styles.contribution}>
         {contribution.map(item => (
-          <li key={item}>
+          <li className={styles['list-item']} key={item}>
             <span style={BULLET_STYLE}>{BULLET}</span> {item}
           </li>
         ))}
       </ul>
-      <b data-heading>About:</b>
-      <p data-bio>{brief}</p>
+      <b>About:</b>
+      <p className={styles.bio}>{brief}</p>
     </div>
   );
 };

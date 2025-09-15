@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 'use client';
 
+import { HttpRequestHeadersArray } from '@/data/headers-list.ts';
 import { useTranslations } from 'next-intl';
 import {
   type Control,
@@ -11,7 +12,8 @@ import {
 } from 'react-hook-form';
 import { type ClientFormType } from '../pages/Client/Client.types';
 import { Button } from '../UI/Button/Button';
-import { Input } from '../UI/Input/Input';
+import { Datalist } from '../UI/Datalist/Datalist.tsx';
+import { CLEAR_BTN_TEXT, Input } from '../UI/Input/Input';
 import styles from './HeadersEditor.module.scss';
 type HeadersEditorProps = {
   control: Control<ClientFormType>;
@@ -46,10 +48,14 @@ export default function HeadersEditor({
               key={`header-key-${String(index)}`}
               control={control}
               render={({ field }) => (
-                <Input
+                <Datalist
+                  items={HttpRequestHeadersArray}
+                  listId={`header-key-${String(index)}`}
+                  width='100%'
                   placeholder={t('headerKeyPlaceholder')}
                   value={field.value}
                   onChange={field.onChange}
+                  onClear={field.onChange}
                 />
               )}
             />
@@ -59,15 +65,19 @@ export default function HeadersEditor({
               control={control}
               render={({ field }) => (
                 <Input
+                  width='100%'
                   placeholder={t('headerValuePlaceholder')}
                   value={field.value}
                   onChange={field.onChange}
+                  onClear={field.onChange}
                 />
               )}
             />
             <Button
-              type='button'
-              label={t('removeHeader')}
+              className={styles.btn}
+              variant='default'
+              label={CLEAR_BTN_TEXT}
+              style={{ fontSize: 20 }}
               onClick={() => {
                 removeHeader(index);
               }}
