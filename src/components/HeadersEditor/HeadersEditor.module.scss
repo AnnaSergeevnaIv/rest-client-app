@@ -1,0 +1,22 @@
+@use '../../styles//utils//mixins' as mix;
+
+.headers {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  width: 100%;
+}
+
+.header {
+  display: flex;
+  flex-direction: row;
+  gap: 18px;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.btn {
+  @include mix.focused {
+    color: var(--color-accent);
+  }
+}

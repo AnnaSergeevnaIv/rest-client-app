@@ -1,0 +1,23 @@
+@use './utils/reset';
+
+body {
+  overflow-y: scroll;
+
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--color-text);
+
+  background-color: var(--color-body-bg);
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+
+  width: 100%;
+  min-width: var(--min-width);
+  max-width: var(--max-width);
+  min-height: 100vh;
+  margin: 0 auto;
+  padding: 0 16px;
+}

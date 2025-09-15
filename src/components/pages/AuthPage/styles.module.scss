@@ -1,0 +1,18 @@
+.heading {
+  @extend %section-heading;
+}
+
+.wrapper {
+  @extend %article;
+
+  max-width: 400px;
+}
+
+.hint {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  justify-content: center;
+
+  margin-top: 32px;
+}

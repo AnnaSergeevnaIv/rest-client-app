@@ -1,0 +1,22 @@
+.wrapper {
+  display: flex;
+  row-gap: 20px;
+  justify-content: center;
+  width: 100%;
+}
+
+.smth {
+  width: 100% !important;
+}
+
+.input {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+.method {
+  width: fit-content;
+  border-right: unset;
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}

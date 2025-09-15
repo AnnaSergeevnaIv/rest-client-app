@@ -1,0 +1,79 @@
+.wrapper {
+  width: 100%;
+}
+
+.heading {
+  @extend %section-heading;
+
+  margin-bottom: 60px;
+}
+
+.cards {
+  display: flex;
+  gap: 40px;
+  justify-content: space-between;
+  width: 100%;
+
+  @media (width <= 970px) {
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}
+
+.card {
+  width: 32%;
+
+  @media (width <= 970px) {
+    width: 45%;
+  }
+  @media (width <= 680px) {
+    width: 100%;
+  }
+}
+
+.collab-wrapper {
+  position: relative;
+
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  align-items: center;
+  justify-content: center;
+
+  width: 70%;
+  margin: 60px auto 0;
+  padding: 30px 30px 60px;
+  border-radius: 16px;
+
+  font-family: inherit;
+  text-align: center;
+  white-space: pre-wrap;
+
+  background-color: white;
+
+  h2 {
+    margin: 0;
+    color: inherit;
+  }
+
+  @media (width <= 680px) {
+    width: 100%;
+  }
+}
+
+.collab-desc {
+  font-family: inherit;
+  text-align: center;
+  white-space: pre-wrap;
+  background-color: white;
+}
+
+.rss-logo {
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translate(-50%, 50%);
+
+  aspect-ratio: 1;
+  width: 80px;
+}

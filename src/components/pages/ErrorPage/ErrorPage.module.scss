@@ -1,0 +1,10 @@
+.wrapper {
+  @extend %article;
+
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: center;
+
+  width: 400px;
+}
