@@ -25,7 +25,8 @@ const LinkText = {
 } as const;
 
 export const Header = (): ReactNode => {
-  const { isAuth, signout } = useAuth();
+  const { currentUser, signout } = useAuth();
+  const isAuth = Boolean(currentUser);
   const pathname = usePathname();
   const locale = useLocale();
 

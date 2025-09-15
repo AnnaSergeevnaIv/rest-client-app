@@ -7,7 +7,8 @@ import { type ReactNode } from 'react';
 import styles from './HomePage.module.scss';
 
 export default function HomePage(): ReactNode {
-  const { isAuth, currentUser } = useAuth();
+  const { currentUser } = useAuth();
+  const isAuth = Boolean(currentUser);
 
   return (
     <section className={styles.main}>

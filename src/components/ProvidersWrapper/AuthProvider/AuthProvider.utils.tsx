@@ -1,7 +1,7 @@
 'use client';
 
 import { AppLocales, MS_PER_SEC, RoutePath } from '@/common/constants/index.ts';
-import { redirect } from '@/i18n/navigation.ts';
+import { redirectAsync } from '@/common/utils/index.ts';
 import { verifyIdToken } from '@/services/firebase/admin/utils.ts';
 import {
   AuthClient,
@@ -19,9 +19,7 @@ type UseAuthHelperProps = {
 
 type UseAuthHelperResult = {
   currentUser: User | null;
-  isAuth: boolean;
   setCurrentUser: Dispatch<SetStateAction<User | null>>;
-  setIsAuth: Dispatch<SetStateAction<boolean>>;
 };
 
 export const useAuthHelper = ({
@@ -29,31 +27,31 @@ export const useAuthHelper = ({
   locale = AppLocales.Default,
 }: UseAuthHelperProps): UseAuthHelperResult => {
   const [currentUser, setCurrentUser] = useState(AuthClient.currentUser);
-  const [isAuth, setIsAuth] = useState(!!AuthClient.currentUser);
   const timerRef = useRef<number>(0);
 
   const logout = useCallback(() => {
     void signout().then(() => {
-      TokenCookieHelper.remove();
-      redirect({ href: RoutePath.Home, locale });
+      void redirectAsync({ href: RoutePath.Home, locale }).then(() => {
+        TokenCookieHelper.remove();
+        setCurrentUser(null);
+      });
     });
   }, [signout, locale]);
 
   const handleIdTokenChange: FirebaseAuthSubscribeHandler = useCallback(
     (user: User | null) => {
       window.clearTimeout(timerRef.current);
-      setIsAuth(Boolean(user));
-      setCurrentUser(user);
 
       if (!user) {
         TokenCookieHelper.remove();
+        setCurrentUser(null);
         return;
       }
       void user
         .getIdToken()
         .then(async token => {
-          const { success, decodedIdToken } = await verifyIdToken(token);
-          if (!success || decodedIdToken.hasExpired) {
+          const decodedIdToken = await verifyIdToken(token);
+          if (!decodedIdToken || decodedIdToken.hasExpired) {
             logout();
             return;
           }
@@ -61,10 +59,11 @@ export const useAuthHelper = ({
             maxAgeSeconds: decodedIdToken.millisecsLeft / MS_PER_SEC,
           });
           timerRef.current = window.setTimeout(logout, decodedIdToken.millisecsLeft);
+          setCurrentUser(user);
         })
         .catch((error: unknown) => {
           console.debug('getIdToken failed: ', error);
-          TokenCookieHelper.remove();
+          logout();
         });
     },
     [logout],
@@ -95,8 +94,6 @@ export const useAuthHelper = ({
 
   return {
     currentUser,
-    isAuth,
     setCurrentUser,
-    setIsAuth,
   };
 };
