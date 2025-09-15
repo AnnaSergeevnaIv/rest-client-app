@@ -21,7 +21,7 @@ export type ResponseData = {
   status: number;
   statusText: string;
   headers: Record<string, string>;
-  body: string;
+  body: unknown;
 };
 export default function Client(): React.ReactNode {
   const t = useTranslations('Client');

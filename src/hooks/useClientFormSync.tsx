@@ -9,6 +9,7 @@ import { usePathname, useRouter } from 'next/navigation';
 import type { UseFormSetValue } from 'react-hook-form';
 import { useCustomSearchParams } from './useCustomSearchParams';
 import { useEffect } from 'react';
+import { showErrorToast } from '@/common/utils';
 
 export function useClientFormSync(setValue: UseFormSetValue<ClientFormType>): void {
   const path = usePathname();
@@ -25,15 +26,23 @@ export function useClientFormSync(setValue: UseFormSetValue<ClientFormType>): vo
       router.replace(`/client/${Object.keys(METHODS)[0]}`);
       return;
     }
-
+    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
+    setValue('method', method as keyof typeof METHODS);
     if (!hasEncodedUrlBody) {
+      console.log('hasEncodedUrlBody', hasEncodedUrlBody);
       sessionStorage.removeItem('clientResponse');
       return;
     }
+    let decodedUrlBody;
+    try {
+      decodedUrlBody = decodeUrlBody(encodedUrlBody);
+    } catch {
+      decodedUrlBody = { url: '', body: undefined };
+      showErrorToast('Invalid URL body');
+    }
 
-    const decodedUrlBody = decodeUrlBody(encodedUrlBody);
     // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    setValue('method', method as keyof typeof METHODS);
+
     setValue('url', decodedUrlBody.url ?? '');
     setValue('body', decodedUrlBody.body ?? '');
 
