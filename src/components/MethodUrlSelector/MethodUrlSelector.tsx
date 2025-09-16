@@ -10,13 +10,11 @@ import styles from './MethodUrlSelector.module.scss';
 type MethodUrlSelectorProps = {
   control: Control<ClientFormType>;
   required: boolean;
-  onChangeMethod: (v: keyof typeof METHODS) => void;
 };
 
 export default function MethodUrlSelector({
   control,
   required,
-  onChangeMethod,
 }: MethodUrlSelectorProps): React.ReactNode {
   const t = useTranslations('MethodUrlSelector');
 
@@ -31,7 +29,6 @@ export default function MethodUrlSelector({
 
     if (methodKey) {
       field.onChange(methodKey);
-      onChangeMethod(methodKey);
     }
   };
   return (

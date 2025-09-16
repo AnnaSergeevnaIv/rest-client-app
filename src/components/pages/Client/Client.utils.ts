@@ -1,15 +1,15 @@
 import { type ResponseData } from './Client';
-import { type ClientFormType, type Header } from './Client.types';
+import { type Header } from './Client.types';
+import { VarsHelper } from '@/components/VarsForm/VarsForm.utils';
 
-export function encodeUrlBody({ url, body }: Partial<ClientFormType>): string {
-  const encodedUrl = btoa(JSON.stringify({ url, body }));
-  return encodedUrl;
+export function encodeUrlBody(string: string): string {
+  return btoa(string);
 }
 
 export function headersArrayToObject(headers?: Header[]): Record<string, string> {
   return (
     headers?.reduce((acc, header) => {
-      return { ...acc, [header.key]: header.value };
+      return { ...acc, [header.key]: VarsHelper.apply(header.value) };
     }, {}) ?? {}
   );
 }
@@ -18,33 +18,25 @@ export function queryParamsToHeaders(queryParams: Record<string, string>): Heade
   return Object.entries(queryParams).map(([key, value]) => ({ key, value }));
 }
 
-export function decodeUrlBody(encodedUrlBody?: string): Partial<ClientFormType> {
-  if (!encodedUrlBody) return { url: '', body: undefined };
-  const decodedUrl: string = atob(encodedUrlBody);
-  const parsed: unknown = JSON.parse(decodedUrl);
-  if (typeof parsed === 'object' && parsed !== null) {
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-    const obj = parsed as Record<string, unknown>;
-    return {
-      url: typeof obj.url === 'string' ? obj.url : '',
-      // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
-      body: obj.body as string | undefined,
-    };
-  }
-  return { url: '', body: undefined };
+export function decodeUrlBody(encodedUrlBody?: string): string {
+  if (!encodedUrlBody) return '';
+  return atob(encodedUrlBody);
 }
 
-export function parseClientPath(path: string): { method: string; encodedUrlBody: string } {
+export function parseClientPath(path: string): {
+  method: string;
+  encodedUrl: string;
+  encodedBody: string;
+} {
   const pathParts = path.split('/');
   const clientIndex = pathParts.indexOf('client');
 
   if (clientIndex === -1) {
-    return { method: '', encodedUrlBody: '' };
+    return { method: '', encodedUrl: '', encodedBody: '' };
   }
 
-  const [method, encodedUrlBody] = pathParts.slice(clientIndex + 1);
-  console.log('method', method);
-  return { method, encodedUrlBody };
+  const [method, encodedUrl, encodedBody] = pathParts.slice(clientIndex + 1);
+  return { method, encodedUrl, encodedBody };
 }
 
 export function parseStoredResponse(

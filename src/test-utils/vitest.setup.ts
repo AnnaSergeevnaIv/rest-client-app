@@ -1,6 +1,7 @@
 import '@testing-library/dom';
 import { cleanup } from '@testing-library/react';
 import { afterAll, afterEach, beforeAll, beforeEach, vi } from 'vitest';
+import '@testing-library/jest-dom';
 
 beforeAll(() => {
   vi.stubGlobal('console', {
