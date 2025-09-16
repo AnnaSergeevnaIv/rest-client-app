@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 'use client';
 
-import { RoutePath } from '@/common/constants/index.ts';
+import { RoutePath, StorageKey } from '@/common/constants/index.ts';
 import { redirectAsync, showErrorToast } from '@/common/utils/index.ts';
 import { type User } from 'firebase/auth';
 import { useLocale } from 'next-intl';
@@ -16,7 +16,6 @@ import { InputPlaceholder } from './AuthForm.constants.ts';
 import style from './AuthForm.module.scss';
 import { validator } from './AuthForm.utils.ts';
 
-const LSKEY_FORM_DATA = 'form-data-gft31h';
 const ANON_USER = 'anonymous';
 
 type AuthFormProps = {
@@ -45,7 +44,7 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
     mode: 'all',
   });
 
-  useFormPersist(LSKEY_FORM_DATA, {
+  useFormPersist(StorageKey.AuthFormData, {
     watch,
     setValue,
     exclude: ['confirmPassword'],

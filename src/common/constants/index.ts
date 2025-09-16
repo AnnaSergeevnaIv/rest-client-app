@@ -34,3 +34,9 @@ export const KeyboardEventKey = {
   Enter: 'Enter',
   Tab: 'Tab',
 } as const;
+
+export const StorageKey = {
+  Vars: 'vars-e0abef6048ae',
+  IdToken: 'id-token-e0abef6048ae',
+  AuthFormData: 'auth-form-e0abef6048ae',
+} as const;

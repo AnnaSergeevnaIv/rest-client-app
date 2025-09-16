@@ -114,3 +114,11 @@ export const redirectAsync = async ({
 export function sleep(ms: number): Promise<void> {
   return new Promise(resolve => setTimeout(resolve, ms));
 }
+
+export function JSONParse(data: string | null): unknown {
+  try {
+    return JSON.parse(data ?? '');
+  } catch {
+    return;
+  }
+}

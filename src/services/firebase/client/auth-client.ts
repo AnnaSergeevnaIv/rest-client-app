@@ -28,12 +28,12 @@ class FirebaseAuthClient {
   }
 
   private reducedObserver = (user: User | null): void => {
-    if (user?.uid !== this._currentUser?.uid) {
-      this._currentUser = user;
-      this.subscribers.values().forEach(handler => {
-        handler(user);
-      });
-    }
+    // if (user?.uid !== this._currentUser?.uid) {
+    this._currentUser = user;
+    this.subscribers.values().forEach(handler => {
+      handler(user);
+    });
+    // }
   };
 
   public get currentUser(): User | null {
