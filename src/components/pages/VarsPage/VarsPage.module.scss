@@ -1,0 +1,7 @@
+.wrapper {
+  @extend %article;
+}
+
+.heading {
+  @extend %section-heading;
+}
