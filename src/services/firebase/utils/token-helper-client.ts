@@ -1,4 +1,5 @@
-export const USER_ID_TOKEN_NAME = 'fb-idToken-Qf0Hr3Y9';
+import { StorageKey } from '@/common/constants/index.ts';
+
 const DEFAULT_MAX_AGE = 3600 * 24 * 5;
 const DEFAULT_PATH = '/';
 
@@ -18,7 +19,7 @@ const setToken = (token: string, options?: TokenCookieOptions): void => {
   } = options ?? {};
 
   const params = [
-    `${USER_ID_TOKEN_NAME}=${encodeURIComponent(token)}`,
+    `${StorageKey.IdToken}=${encodeURIComponent(token)}`,
     `max-age=${Math.round(maxAgeSeconds).toString()}`,
     `path=${path}`,
     `samesite=lax`,
@@ -29,14 +30,16 @@ const setToken = (token: string, options?: TokenCookieOptions): void => {
 };
 
 const getToken = (): string => {
-  const token = document.cookie.match(RegExp(`${USER_ID_TOKEN_NAME}=([^;]+)`))?.[1] ?? '';
+  const token = document.cookie.match(RegExp(`${StorageKey.IdToken}=([^;]+)`))?.[1] ?? '';
   return decodeURIComponent(token);
 };
 
 const removeToken = (): void => {
-  if (RegExp(`${USER_ID_TOKEN_NAME}=`).test(document.cookie)) {
+  if (RegExp(`${StorageKey.IdToken}=`).test(document.cookie)) {
+    console.debug('remive cookie token');
+
     document.cookie = [
-      `${USER_ID_TOKEN_NAME}=`,
+      `${StorageKey.IdToken}=`,
       `expires=${new Date(0).toUTCString()}`,
       `max-age=-1`,
     ].join(';');
@@ -44,7 +47,7 @@ const removeToken = (): void => {
 };
 
 export const TokenCookieHelper = {
-  name: USER_ID_TOKEN_NAME,
+  name: StorageKey.IdToken,
   set: setToken,
   get: getToken,
   remove: removeToken,

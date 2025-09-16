@@ -1,8 +1,8 @@
 'use server';
 
+import { StorageKey } from '@/common/constants/index.ts';
 import type { ResponseCookie } from 'next/dist/compiled/@edge-runtime/cookies';
 import { cookies } from 'next/headers';
-import { USER_ID_TOKEN_NAME } from './token-helper-client.ts';
 
 async function setCookie(
   name: string,
@@ -33,13 +33,13 @@ export const setTokenCookie = async (
     secure: true,
     ...options,
   };
-  await setCookie(USER_ID_TOKEN_NAME, token, opts);
+  await setCookie(StorageKey.IdToken, token, opts);
 };
 
 export const removeTokenCookie = async (): Promise<void> => {
-  await removeCookie(USER_ID_TOKEN_NAME);
+  await removeCookie(StorageKey.IdToken);
 };
 
 export const getTokenCookie = async (): Promise<string> => {
-  return await getCookie(USER_ID_TOKEN_NAME);
+  return await getCookie(StorageKey.IdToken);
 };
