@@ -62,6 +62,13 @@ export default function VarsForm(): ReactNode {
     }
   }, [reset, handleClearClick]);
 
+  const handleRemoveClick = useCallback(
+    (idx: number): void => {
+      remove(idx);
+    },
+    [remove],
+  );
+
   return (
     <form className={styles.form}>
       <div className={styles.group}>
@@ -96,8 +103,9 @@ export default function VarsForm(): ReactNode {
               variant='default'
               label={CLEAR_BTN_TEXT}
               style={{ fontSize: 20 }}
+              disabled={fields.length === 1}
               onClick={() => {
-                remove(idx);
+                handleRemoveClick(idx);
               }}
             />
           </div>
