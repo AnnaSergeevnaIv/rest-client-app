@@ -1,5 +1,6 @@
 import { type ResponseData } from './Client';
 import { type Header } from './Client.types';
+import { VarsHelper } from '@/components/VarsForm/VarsForm.utils';
 
 export function encodeUrlBody(string: string): string {
   return btoa(string);
@@ -8,7 +9,7 @@ export function encodeUrlBody(string: string): string {
 export function headersArrayToObject(headers?: Header[]): Record<string, string> {
   return (
     headers?.reduce((acc, header) => {
-      return { ...acc, [header.key]: header.value };
+      return { ...acc, [header.key]: VarsHelper.apply(header.value) };
     }, {}) ?? {}
   );
 }
