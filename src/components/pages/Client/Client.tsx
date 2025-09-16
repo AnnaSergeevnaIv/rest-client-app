@@ -36,8 +36,6 @@ export default function Client(): React.ReactNode {
   const { formData } = useClientFormSync(setValue, getValues, setIsSubmitting, setIsInitializing);
   useEffect(() => {
     const subscription = watch(() => {
-      console.log('isInitializing', isInitializing);
-      console.log('isSubmitting', isSubmitting);
       if (!isInitializing) {
         setIsSubmitting(false);
         setIsInitializing(true);
