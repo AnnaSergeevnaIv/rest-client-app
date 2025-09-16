@@ -20,8 +20,9 @@ export function useUpdateUrlWithFormData(control: Control<ClientFormType>): () =
   return useCallback(
     (v?: keyof typeof METHODS) => {
       const [url, method, headers, body] = watchedFields;
-      const encodedUrlBody = encodeUrlBody({ url, body });
-      const basePath = `/client/${v ?? method}/${encodedUrlBody}`;
+      const encodedUrl = encodeUrlBody(url);
+      const encodedBody = encodeUrlBody(body ?? '');
+      const basePath = `/client/${v ?? method}/${encodedUrl}/${encodedBody}`;
       const headersObject = headersArrayToObject(headers);
       createParamsWithEncodedData(headersObject, basePath);
     },

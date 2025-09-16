@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
-import type { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';
+import { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';
 import type { ClientFormType } from '@/components/pages/Client/Client.types';
 import {
   decodeUrlBody,
@@ -23,30 +23,38 @@ export function useClientFormSync(
   const { getQueryParams } = useCustomSearchParams();
 
   useEffect(() => {
-    const pathParts = path.split('/');
-    const { method, encodedUrlBody } = parseClientPath(path);
-    const hasEncodedUrlBody = pathParts.length > 4;
+    const { method, encodedUrl, encodedBody } = parseClientPath(path);
 
     if (!method) {
-      // setIsInitializing(false);
+      return;
+    }
+    if (!Object.values(METHODS).includes(method as keyof typeof METHODS)) {
+      router.replace(`/client`);
       return;
     }
     setValue('method', method as keyof typeof METHODS);
-    if (!hasEncodedUrlBody) {
+    if (!encodedUrl) {
       setIsInitializing(false);
       return;
     }
     setIsSubmitting(true);
-    let decodedUrlBody;
+    let decodedUrl;
+    let decodedBody;
+
     try {
-      decodedUrlBody = decodeUrlBody(encodedUrlBody);
+      decodedUrl = decodeUrlBody(encodedUrl);
+      if (!decodedUrl.includes('http') && !decodedUrl.includes('://')) {
+        throw Error('Invalid encoded URL or body');
+      }
+      decodedBody = decodeUrlBody(encodedBody);
     } catch {
-      decodedUrlBody = { url: '', body: undefined };
-      showErrorToast('Invalid URL body');
+      decodedUrl = '';
+      decodedBody = undefined;
+      showErrorToast('Invalid encoded URL or body');
       router.replace(`/client/${method}`);
     }
-    setValue('url', decodedUrlBody.url ?? '');
-    setValue('body', decodedUrlBody.body ?? '');
+    setValue('url', decodedUrl);
+    setValue('body', decodedBody);
 
     const queryParams = getQueryParams();
     const headers = queryParamsToHeaders(queryParams);
