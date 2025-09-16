@@ -12,13 +12,6 @@ vi.mock('react-hook-form', () => ({
   useFieldArray: vi.fn(),
 }));
 
-// vi.mock('next/navigation', () => ({
-//   useRouter: () => ({
-//     push: vi.fn(),
-//     replace: vi.fn(),
-//   }),
-//   usePathname: () => '/',
-// }));
 vi.mock('next-intl/navigation', () => ({
   createNavigation: () => ({
     Link: 'a',
@@ -31,8 +24,6 @@ vi.mock('next-intl/navigation', () => ({
     getPathname: () => '/',
   }),
 }));
-
-const mockUseTranslations = vi.hoisted(() => vi.fn(() => (key: string) => key));
 
 vi.mock('next-intl', () => ({
   useTranslations: () => (key: string) => {
@@ -47,7 +38,6 @@ vi.mock('next-intl', () => ({
 
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import HeadersEditor from './HeadersEditor';
-import { useFieldArray, useWatch } from 'react-hook-form';
 import { CLEAR_BTN_TEXT } from '../UI/Input/Input';
 
 describe('HeadersEditor', () => {
