@@ -15,9 +15,9 @@
   @content;
 }
 
-@mixin main-transition($props: 'all') {
+@mixin main-transition($props: 'all', $dur: var(--transition-duration)) {
   transition-timing-function: var(--transition-func);
-  transition-duration: var(--transition-duration);
+  transition-duration: $dur;
   transition-property: #{$props};
 }
 

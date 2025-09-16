@@ -39,6 +39,7 @@ vi.mock('@i18n/navigation', () => ({
     className?: string;
   }): React.ReactElement => React.createElement('a', { href, className }, children),
 }));
+import '@testing-library/jest-dom';
 
 beforeAll(() => {
   vi.stubGlobal('console', {

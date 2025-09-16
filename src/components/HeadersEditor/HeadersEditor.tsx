@@ -40,17 +40,17 @@ export default function HeadersEditor({
   return (
     <div className={styles.headers}>
       <Button type='button' label={t('addHeader')} onClick={addHeader} />
-      {fields.map((_, index) => {
+      {fields.map((arrayField, index) => {
         return (
-          <div key={`header-${String(index)}`} className={styles.header}>
+          <div key={arrayField.id} className={styles.header}>
             <Controller
               name={`headers.${index}.key`}
-              key={`header-key-${String(index)}`}
+              key={`controller-key-${arrayField.id}`}
               control={control}
               render={({ field }) => (
                 <Datalist
                   items={HttpRequestHeadersArray}
-                  listId={`header-key-${String(index)}`}
+                  listId={`header-key-${arrayField.id}`}
                   width='100%'
                   placeholder={t('headerKeyPlaceholder')}
                   value={field.value}
@@ -61,7 +61,7 @@ export default function HeadersEditor({
             />
             <Controller
               name={`headers.${index}.value`}
-              key={`header-value-${String(index)}`}
+              key={`controller-value-${arrayField.id}`}
               control={control}
               render={({ field }) => (
                 <Input

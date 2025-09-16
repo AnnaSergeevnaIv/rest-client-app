@@ -8,8 +8,6 @@ import { Open_Sans } from 'next/font/google';
 import { notFound } from 'next/navigation';
 import type { ReactNode } from 'react';
 
-const ROOT_ID = 'root';
-
 const geist = Open_Sans({
   subsets: ['latin'],
 });
@@ -31,13 +29,11 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={geist.className} data-scroll-behavior='smooth'>
       <body>
-        <div id={ROOT_ID}>
-          <ProvidersWrapper locale={locale}>
-            <NextIntlClientProvider>
-              <AppLayout>{children}</AppLayout>
-            </NextIntlClientProvider>
-          </ProvidersWrapper>
-        </div>
+        <ProvidersWrapper locale={locale}>
+          <NextIntlClientProvider>
+            <AppLayout>{children}</AppLayout>
+          </NextIntlClientProvider>
+        </ProvidersWrapper>
       </body>
     </html>
   );

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';
 import type { ClientFormType } from '@/components/pages/Client/Client.types';
 import {
@@ -6,36 +7,54 @@ import {
   queryParamsToHeaders,
 } from '@/components/pages/Client/Client.utils';
 import { usePathname, useRouter } from 'next/navigation';
-import type { UseFormSetValue } from 'react-hook-form';
+import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 import { useCustomSearchParams } from './useCustomSearchParams';
 import { useEffect } from 'react';
+import { showErrorToast } from '@/common/utils';
 
-export function useClientFormSync(setValue: UseFormSetValue<ClientFormType>): void {
+export function useClientFormSync(
+  setValue: UseFormSetValue<ClientFormType>,
+  getValues: UseFormGetValues<ClientFormType>,
+  setIsSubmitting: (isSubmitting: boolean) => void,
+  setIsInitializing: (isInitializing: boolean) => void,
+): { formData: ClientFormType } {
   const path = usePathname();
   const router = useRouter();
   const { getQueryParams } = useCustomSearchParams();
 
   useEffect(() => {
-    const pathParts = path.split('/');
-    const { method, encodedUrlBody } = parseClientPath(path);
-    const hasEncodedUrlBody = pathParts.length > 4;
+    const { method, encodedUrl, encodedBody } = parseClientPath(path);
 
     if (!method) {
-      sessionStorage.removeItem('clientResponse');
-      router.replace(`/client/${Object.keys(METHODS)[0]}`);
       return;
     }
-
-    if (!hasEncodedUrlBody) {
-      sessionStorage.removeItem('clientResponse');
+    if (!Object.values(METHODS).includes(method as keyof typeof METHODS)) {
+      router.replace(`/client`);
       return;
     }
-
-    const decodedUrlBody = decodeUrlBody(encodedUrlBody);
-    // eslint-disable-next-line @typescript-eslint/consistent-type-assertions
     setValue('method', method as keyof typeof METHODS);
-    setValue('url', decodedUrlBody.url ?? '');
-    setValue('body', decodedUrlBody.body ?? '');
+    if (!encodedUrl) {
+      setIsInitializing(false);
+      return;
+    }
+    setIsSubmitting(true);
+    let decodedUrl;
+    let decodedBody;
+
+    try {
+      decodedUrl = decodeUrlBody(encodedUrl);
+      if (!decodedUrl.includes('http') && !decodedUrl.includes('://')) {
+        throw Error('Invalid encoded URL or body');
+      }
+      decodedBody = decodeUrlBody(encodedBody);
+    } catch {
+      decodedUrl = '';
+      decodedBody = undefined;
+      showErrorToast('Invalid encoded URL or body');
+      router.replace(`/client/${method}`);
+    }
+    setValue('url', decodedUrl);
+    setValue('body', decodedBody);
 
     const queryParams = getQueryParams();
     const headers = queryParamsToHeaders(queryParams);
@@ -43,5 +62,7 @@ export function useClientFormSync(setValue: UseFormSetValue<ClientFormType>): vo
     if (headers.length > 0) {
       setValue('headers', headers);
     }
+    setIsInitializing(false);
   }, [path, setValue, getQueryParams, router]);
+  return { formData: getValues() };
 }

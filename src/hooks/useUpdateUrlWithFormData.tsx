@@ -7,6 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 import { type Control, useWatch } from 'react-hook-form';
 import { useCustomSearchParams } from './useCustomSearchParams';
+import { VarsHelper } from '@/components/VarsForm/VarsForm.utils';
 
 export function useUpdateUrlWithFormData(control: Control<ClientFormType>): () => void {
   const watchedFields = useWatch({
@@ -20,8 +21,9 @@ export function useUpdateUrlWithFormData(control: Control<ClientFormType>): () =
   return useCallback(
     (v?: keyof typeof METHODS) => {
       const [url, method, headers, body] = watchedFields;
-      const encodedUrlBody = encodeUrlBody({ url, body });
-      const basePath = `/client/${v ?? method}/${encodedUrlBody}`;
+      const encodedUrl = encodeUrlBody(VarsHelper.apply(url));
+      const encodedBody = encodeUrlBody(VarsHelper.apply(body ?? ''));
+      const basePath = `/client/${v ?? method}/${encodedUrl}/${encodedBody}`;
       const headersObject = headersArrayToObject(headers);
       createParamsWithEncodedData(headersObject, basePath);
     },

@@ -1,8 +1,8 @@
-import { PageLoader } from '@/components/Loader/PageLoader';
+import { Loader } from '@/components/Loader/Loader';
 import dynamic from 'next/dynamic';
 
 const DynamicClient = dynamic(() => import('@/components/pages/Client/Client'), {
-  loading: () => <PageLoader />,
+  loading: () => <Loader />,
 });
 export default function ClientPage(): React.ReactNode {
   return <DynamicClient />;

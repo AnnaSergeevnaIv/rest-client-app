@@ -149,8 +149,8 @@ $control-height: 40px;
 %article {
   @extend %bottom-line;
 
-  max-width: 700px;
-  margin: auto;
+  max-width: 800px;
+  margin: 0 auto;
   padding: 36px;
   padding-bottom: 42px;
   border: var(--border-style);

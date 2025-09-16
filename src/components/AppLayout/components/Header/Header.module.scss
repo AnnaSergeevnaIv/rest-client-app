@@ -1,30 +1,50 @@
 @use '../../../../styles/utils/mixins' as mix;
 
 .header {
+  --gap: 40px;
+
+  margin-bottom: 40px;
+  border-bottom: 1px solid var(--color-border);
+
+  @include mix.main-transition('background-color', 150ms);
+  @media (width <= 820px) {
+    --gap: 20px;
+  }
+}
+
+.wrapper {
+  @extend %wrapper;
+
   display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
+  gap: var(--gap);
   align-items: center;
   justify-content: space-between;
 
-  height: 80px;
-  margin-bottom: 40px;
-  border-bottom: 1px solid var(--color-border);
+  padding: 0 20px;
 }
 
-.group {
+.nav {
   display: flex;
-  gap: 28px;
+  gap: var(--gap);
   align-items: center;
 }
 
+.nav-group {
+  display: flex;
+  gap: var(--gap);
+  align-items: center;
+  @media (width <= 820px) {
+    display: none;
+  }
+}
+
 .image {
-  width: auto;
-  height: 20px;
+  min-width: 160px;
+  height: fit-content;
 }
 
 .link {
-  padding: 8px;
+  padding: 28px 0;
 
   &[data-disable='true'] {
     @include mix.non-interactive;
@@ -35,4 +55,20 @@
 
 .logout {
   height: 38px;
+}
+
+.sticky {
+  position: sticky;
+  z-index: 100;
+  top: 0;
+
+  width: 100%;
+  border: unset;
+
+  background-color: var(--color-bg);
+  box-shadow: var(--box-shadow);
+
+  .link {
+    padding: 16px 0;
+  }
 }

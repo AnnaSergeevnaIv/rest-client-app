@@ -1,6 +1,10 @@
-import VariablesPage from '@/components/pages/VariablesPage/VariablesPage.tsx';
+import { Loader } from '@/components/Loader/Loader.tsx';
+import dynamic from 'next/dynamic';
 import { type ReactNode } from 'react';
 
-export default function Variables(): ReactNode {
-  return <VariablesPage />;
+const VarsPage = dynamic(() => import('@/components/pages/VarsPage/VarsPage'), {
+  loading: () => <Loader />,
+});
+export default function Vars(): ReactNode {
+  return <VarsPage />;
 }
