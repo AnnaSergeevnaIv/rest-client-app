@@ -10,16 +10,9 @@ type PersonCardProps = PersonData & {
   className?: string;
 };
 
-const BULLET = '▪';
-const BULLET_STYLE = {
-  color: 'var(--color-accent)',
-  fontSize: '18px',
-};
-
 export const PersonCard = ({
   name,
   role,
-  contribution,
   avatar,
   github,
   className,
@@ -47,14 +40,6 @@ export const PersonCard = ({
         <IconGithub size={20} />
         {githubName}
       </a>
-      <b>Contribution:</b>
-      <ul className={styles.contribution}>
-        {contribution.map(item => (
-          <li className={styles['list-item']} key={item}>
-            <span style={BULLET_STYLE}>{BULLET}</span> {item}
-          </li>
-        ))}
-      </ul>
       <b>About:</b>
       <p className={styles.bio}>{brief}</p>
     </div>
