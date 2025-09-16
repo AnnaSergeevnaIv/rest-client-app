@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { StorageKey } from '@/common/constants/index.ts';
-import { hasOwnKeys, JSONParse } from '@/common/utils/index.ts';
+import { hasOwnKeys, JSONParse, omit } from '@/common/utils/index.ts';
 import type { VarField, VarsFormData } from './VarsForm.tsx';
 
 const DEFAULT_FIELDS_COUNT = 1;
@@ -7,14 +8,16 @@ export const DEFAULT_FORMDATA_VALUES: VarsFormData = {
   vars: Array.from<VarField>({ length: DEFAULT_FIELDS_COUNT }).fill({ key: '', value: '' }),
 };
 
+type PersistedFormData = VarsFormData<unknown>;
+
+type PersistedField = VarField<unknown>;
+
 type ParsedVars = {
   plainObject: Record<string, string>;
   array: VarField[];
 };
-type PersistedFormData = VarsFormData<unknown>;
-type PersistedField = VarField<unknown>;
 
-const isLikePersistedFormData = (obj: unknown): obj is PersistedFormData => {
+const isLikePersistedVarsFormData = (obj: unknown): obj is PersistedFormData => {
   return (
     hasOwnKeys<PersistedFormData>(obj, 'vars') &&
     Array.isArray(obj.vars) &&
@@ -23,33 +26,42 @@ const isLikePersistedFormData = (obj: unknown): obj is PersistedFormData => {
 };
 
 const parseVarFieldsArray = (vars: unknown[]): ParsedVars | null => {
-  const plainObject = vars.reduce<Record<string, string>>((result, item) => {
+  const varsCopy = [...vars].reverse();
+  const obj = Object.create(null) as Record<string, string>;
+
+  const plainObject = varsCopy.reduce<Record<string, string>>((result, item) => {
     if (hasOwnKeys<PersistedField>(item, 'key', 'value') && item.key) {
-      result[item.key] = String(item.value);
+      const { key, value } = item;
+
+      if (key in result) {
+        result = omit(result, key);
+      }
+      result[key] = String(value);
     }
     return result;
-  }, {});
+  }, obj);
+
   const array = Object.entries(plainObject).map(([key, value]) => ({ key, value }));
   if (!array.length) {
     return null;
   }
   return {
     plainObject,
-    array,
+    array: array.reverse(),
   };
 };
 
 const getNormalizedPersistedVars = (): ParsedVars | null => {
   const persistedVars = JSONParse(localStorage.getItem(StorageKey.Vars));
-  return isLikePersistedFormData(persistedVars)
-    ? parseVarFieldsArray(persistedVars.vars.reverse())
+  return isLikePersistedVarsFormData(persistedVars)
+    ? parseVarFieldsArray(persistedVars.vars)
     : null;
 };
 
 export const normalizePersistedVars = (): void => {
   const parsedVars = getNormalizedPersistedVars();
   const persistedFormData: PersistedFormData = {
-    vars: parsedVars?.array.reverse() ?? [],
+    vars: parsedVars?.array ?? [],
   };
   localStorage.setItem(StorageKey.Vars, JSON.stringify(persistedFormData));
 };
@@ -68,7 +80,7 @@ export const getPersistedFormData = (): VarsFormData => {
   const parsed = getNormalizedPersistedVars();
   return parsed
     ? {
-        vars: parsed.array.reverse(),
+        vars: parsed.array,
       }
     : DEFAULT_FORMDATA_VALUES;
 };

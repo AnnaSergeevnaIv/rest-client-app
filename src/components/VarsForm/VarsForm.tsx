@@ -23,6 +23,7 @@ export type VarsFormData<T = VarField> = {
 };
 
 export default function VarsForm(): ReactNode {
+  const defaultValues = getPersistedFormData();
   const {
     control,
     register,
@@ -30,9 +31,7 @@ export default function VarsForm(): ReactNode {
     setValue,
     reset,
     formState: { errors },
-  } = useForm<VarsFormData>({
-    defaultValues: getPersistedFormData(),
-  });
+  } = useForm<VarsFormData>({ defaultValues });
 
   const { fields, prepend, remove } = useFieldArray<VarsFormData, 'vars'>({
     control,
