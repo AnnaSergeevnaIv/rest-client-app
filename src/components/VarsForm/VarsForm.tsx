@@ -4,11 +4,11 @@
 import { StorageKey } from '@/common/constants/index.ts';
 import { useCallback, type ReactNode } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import useFormPersist from 'react-hook-form-persist';
 import { Button } from '../UI/Button/Button.tsx';
 import { CLEAR_BTN_TEXT, Input } from '../UI/Input/Input.tsx';
 import styles from './VarsForm.module.scss';
-import { DEFAULT_FORMDATA_VALUES, getPersistedFormData, VarsHelper } from './VarsForm.utils.ts';
+import { DEFAULT_FORMDATA_VALUES, VarsHelper } from './VarsForm.utils.ts';
+import { useVarsFormPersist } from './useVarsFormPersist.ts';
 
 const ADD_BTN_TEXT = 'Add';
 const CLEAR_ALL_BTN_TEXT = 'Clear';
@@ -23,7 +23,7 @@ export type VarsFormData<T = VarField> = {
 };
 
 export default function VarsForm(): ReactNode {
-  const defaultValues = getPersistedFormData();
+  const defaultValues = DEFAULT_FORMDATA_VALUES; //getPersistedFormData();
   const {
     control,
     register,
@@ -38,10 +38,9 @@ export default function VarsForm(): ReactNode {
     name: 'vars',
   });
 
-  useFormPersist(StorageKey.Vars, {
+  useVarsFormPersist(StorageKey.Vars, {
     watch,
     setValue,
-    storage: localStorage,
   });
 
   const handleAddClick = useCallback((): void => {

@@ -1,8 +1,7 @@
 import createMiddleware from 'next-intl/middleware';
 import { NextResponse, type NextRequest } from 'next/server';
-import { AppLocales, RoutePath } from './common/constants/index.ts';
+import { AppLocales, RoutePath, StorageKey } from './common/constants/index.ts';
 import { routing } from './i18n/routing';
-import { TokenCookieHelper } from './services/firebase/utils/token-helper-client.ts';
 
 const i18nMiddleware = createMiddleware(routing);
 
@@ -10,7 +9,7 @@ const authRoutes: string[] = [RoutePath.Signin, RoutePath.Signup];
 const privateRoutes: string[] = [RoutePath.History, RoutePath.Variables, RoutePath.Client];
 
 function authMiddleware(request: NextRequest, response: NextResponse): NextResponse {
-  const token = request.cookies.get(TokenCookieHelper.name)?.value ?? '';
+  const token = request.cookies.get(StorageKey.IdToken)?.value ?? '';
 
   const { pathname } = request.nextUrl;
   const [, locale = AppLocales.Default, ...rest] = pathname.split('/');
