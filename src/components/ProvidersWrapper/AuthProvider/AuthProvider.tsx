@@ -25,7 +25,11 @@ import { getCurrentUserFromIdToken } from './AuthProvider.utils.tsx';
 
 type AuthAction = Extract<keyof typeof AuthClient, 'signin' | 'signup'>;
 
-export default function AuthProvider({ children }: PropsWithChildren): ReactNode {
+type AuthProviderProps = PropsWithChildren & {
+  locale?: string;
+};
+
+export default function AuthProvider({ children }: AuthProviderProps): ReactNode {
   const [loading, setLoading] = useState(false);
   const possibleCurrentUser = getCurrentUserFromIdToken() ?? AuthClient.currentUser;
   const [currentUser, setCurrentUser] = useState<UserPartial | null>(possibleCurrentUser);
@@ -89,12 +93,14 @@ export default function AuthProvider({ children }: PropsWithChildren): ReactNode
     AuthClient.subscribe(handleAuthStateChange);
 
     void getTokenCookie().then(async token => {
+      if (!token) {
+        return;
+      }
       const decodedId = await verifyIdToken(token);
       if (!decodedId || decodedId.hasExpired) {
-        void signout().then(() => {
-          void removeTokenCookie();
-          setCurrentUser(null);
-        });
+        await signout();
+        void removeTokenCookie();
+        setCurrentUser(null);
       } else {
         setCurrentUser({
           email: decodedId.email!,

@@ -2,7 +2,8 @@
 'use client';
 
 import { RoutePath, StorageKey } from '@/common/constants/index.ts';
-import { redirectAsync, showErrorToast } from '@/common/utils/index.ts';
+import { showErrorToast } from '@/common/utils/index.ts';
+import { useRouter } from '@/i18n/navigation.ts';
 import { type User } from 'firebase/auth';
 import { useLocale } from 'next-intl';
 import { useCallback, type ReactNode } from 'react';
@@ -32,6 +33,7 @@ type AuthFormInputs = {
 export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
   const { signin, signup, loading } = useAuth();
   const locale = useLocale();
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -59,12 +61,12 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
   );
 
   const redirectOnSuccess = useCallback(
-    (user: User, href: string) => {
+    (user: User, pathname: string) => {
       reset();
       toast.success(`Welcome, ${user.email ?? ANON_USER}`);
-      void redirectAsync({ href, locale });
+      router.replace({ pathname }, { locale });
     },
-    [locale, reset],
+    [locale, reset, router],
   );
 
   const onSubmit = handleSubmit(data => {
