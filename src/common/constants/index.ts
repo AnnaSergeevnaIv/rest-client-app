@@ -38,5 +38,5 @@ export const KeyboardEventKey = {
 export const StorageKey = {
   Vars: 'vars-e0abef6048ae',
   IdToken: 'id-token-e0abef6048ae',
-  AuthFormData: 'auth-form-e0abef6048ae',
+  AuthForm: 'auth-form-e0abef6048ae',
 } as const;

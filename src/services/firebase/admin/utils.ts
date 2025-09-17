@@ -23,3 +23,7 @@ export const verifyIdToken = async (token: string): Promise<DecodedIdTokenExtend
     return null;
   }
 };
+
+export const createCustomToken = async (uid: string, claims?: object): Promise<string> => {
+  return await getAuth().createCustomToken(uid, claims);
+};
