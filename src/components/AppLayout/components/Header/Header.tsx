@@ -9,8 +9,9 @@ import { Link, usePathname } from '@i18n/navigation.ts';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { type ReactNode } from 'react';
-import { useLogoutButton, useStickyHeader } from './Header.hooks.ts';
 import styles from './Header.module.scss';
+import { useLogoutButton } from './hooks/useLogoutButton.ts';
+import { useStickyHeader } from './hooks/useStickyHeader.ts';
 
 const LOGO_PROPS = { src: '/logo.png', alt: 'app logo' };
 const ICON_SIZE = 16;
