@@ -9,9 +9,25 @@ export const RSS_URL = 'https://rs.school/courses/reactjs';
 export const RSS_LOGO_SRC = '/rss-logo.svg';
 const RSS_LOGO_ALT = 'RSS logo';
 
+const AUTHORS = [
+  { name: 'Andrew', url: 'https://github.com/dusixx' },
+  { name: 'Nataliya', url: 'https://github.com/nataliyamoon' },
+  { name: 'Anna', url: 'https://github.com/AnnaSergeevnaIv' },
+];
+
 export const Footer = (): JSX.Element => {
   return (
     <footer className={styles.footer}>
+      <div className={styles.authors}>
+        {AUTHORS.map((author, i) => (
+          <span key={author.name}>
+            <a href={author.url} target='_blank' rel='noopener noreferrer'>
+              {author.name}
+            </a>
+            {i < AUTHORS.length - 1 && ' | '}
+          </span>
+        ))}
+      </div>
       <Link className={styles.link} href={RSS_URL} {...LinkProps}>
         <Image
           className={styles.logo}
