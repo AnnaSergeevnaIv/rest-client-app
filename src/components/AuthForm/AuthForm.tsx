@@ -40,13 +40,12 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
     setValue,
     trigger,
     watch,
-    reset,
     formState: { errors },
   } = useForm<AuthFormInputs>({
     mode: 'all',
   });
 
-  useFormPersist(StorageKey.AuthForm, {
+  const { clear: clearForm } = useFormPersist(StorageKey.AuthForm, {
     watch,
     setValue,
     exclude: ['confirmPassword'],
@@ -62,11 +61,11 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
 
   const redirectOnSuccess = useCallback(
     (user: User, pathname: string) => {
-      reset();
+      clearForm();
       toast.success(`Welcome, ${user.email ?? ANON_USER}`);
       router.replace({ pathname }, { locale });
     },
-    [locale, reset, router],
+    [locale, clearForm, router],
   );
 
   const onSubmit = handleSubmit(data => {
