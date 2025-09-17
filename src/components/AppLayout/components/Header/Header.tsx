@@ -2,17 +2,16 @@
 
 import { IconLogout } from '@/common/constants/icons.ts';
 import { RoutePath } from '@/common/constants/index.ts';
-import { redirectAsync } from '@/common/utils/index.ts';
+
 import { LangSwitcher } from '@/components/LangSwitcher/LangSwitcher.tsx';
-import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { Button } from '@/components/UI/Button/Button.tsx';
 import { Link, usePathname } from '@i18n/navigation.ts';
 import clsx from 'clsx';
-import { useLocale } from 'next-intl';
 import Image from 'next/image';
-import { useCallback, type ReactNode } from 'react';
+import { type ReactNode } from 'react';
 import styles from './Header.module.scss';
-import { useStickyHeader } from './Header.utils.ts';
+import { useLogoutButton } from './hooks/useLogoutButton.ts';
+import { useStickyHeader } from './hooks/useStickyHeader.ts';
 
 const LOGO_PROPS = { src: '/logo.png', alt: 'app logo' };
 const ICON_SIZE = 16;
@@ -27,18 +26,12 @@ const LinkText = {
 } as const;
 
 export const Header = (): ReactNode => {
-  const { currentUser, signout } = useAuth();
-  const { sticky } = useStickyHeader(70);
-  const isAuth = Boolean(currentUser);
+  const { logout, isAuth, loggingOut, currentUser } = useLogoutButton();
+  const { isSticky } = useStickyHeader({ scrollThreshold: 70 });
   const pathname = usePathname();
-  const locale = useLocale();
-
-  const handleLogout = useCallback((): void => {
-    void signout().then(() => redirectAsync({ href: RoutePath.Home, locale }));
-  }, [locale, signout]);
 
   return (
-    <header className={clsx(styles.header, sticky && styles.sticky)}>
+    <header className={clsx(styles.header, isSticky && styles.sticky)}>
       <div className={styles.wrapper}>
         <Link href={RoutePath.Home}>
           <Image
@@ -105,7 +98,13 @@ export const Header = (): ReactNode => {
           )}
           <LangSwitcher />
           {isAuth && (
-            <Button className={styles.logout} label={LinkText.Logout} onClick={handleLogout}>
+            <Button
+              className={styles.logout}
+              label={LinkText.Logout}
+              title={currentUser?.email ?? ''}
+              onClick={logout}
+              loading={loggingOut}
+            >
               <IconLogout size={ICON_SIZE} />
             </Button>
           )}

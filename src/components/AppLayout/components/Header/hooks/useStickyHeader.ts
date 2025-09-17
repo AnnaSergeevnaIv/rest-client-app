@@ -1,20 +1,22 @@
 import { useCallback, useEffect, useState } from 'react';
 
-const SCROLL_THRESHOLD = 150;
+const DEFAULT_SCROLL_THRESHOLD = 150;
 
-export const useStickyHeader = (
-  scrollThreshold: number = SCROLL_THRESHOLD,
-): {
-  sticky: boolean;
+export const useStickyHeader = ({
+  scrollThreshold = DEFAULT_SCROLL_THRESHOLD,
+}: {
+  scrollThreshold: number;
+}): {
+  isSticky: boolean;
 } => {
-  const [sticky, setSticky] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
 
   const handleScroll = useCallback(() => {
     const shouldBeSticky = window.scrollY > scrollThreshold;
-    if (shouldBeSticky !== sticky) {
-      setSticky(shouldBeSticky);
+    if (shouldBeSticky !== isSticky) {
+      setIsSticky(shouldBeSticky);
     }
-  }, [sticky, scrollThreshold]);
+  }, [isSticky, scrollThreshold]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -23,5 +25,5 @@ export const useStickyHeader = (
     };
   }, [handleScroll]);
 
-  return { sticky };
+  return { isSticky };
 };
