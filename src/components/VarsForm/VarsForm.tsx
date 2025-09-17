@@ -5,9 +5,9 @@ import { useCallback, type ReactNode } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Button } from '../UI/Button/Button.tsx';
 import { CLEAR_BTN_TEXT, Input } from '../UI/Input/Input.tsx';
-import { useCurrentUserVarsForm } from './VarsForm.hooks.ts';
 import styles from './VarsForm.module.scss';
 import { DEFAULT_FORMDATA_VALUES } from './VarsForm.utils.ts';
+import { useCurrentUserVarsForm } from './hooks/useCurrentUserVarsForm.ts';
 
 const ADD_BTN_TEXT = 'Add';
 const CLEAR_ALL_BTN_TEXT = 'Clear';

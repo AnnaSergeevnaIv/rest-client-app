@@ -2,38 +2,11 @@ import { RoutePath } from '@/common/constants/index.ts';
 import type { UserPartial } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { useCustomSearchParams } from '@/hooks/useCustomSearchParams.ts';
-import { useRouter } from '@i18n/navigation.ts';
+import { useRouter } from '@/i18n/navigation.ts';
 import { useLocale } from 'next-intl';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 
-const DEFAULT_SCROLL_THRESHOLD = 150;
 const LOGOUT_ID = 'cba032f3fbe1';
-
-export const useStickyHeader = ({
-  scrollThreshold = DEFAULT_SCROLL_THRESHOLD,
-}: {
-  scrollThreshold: number;
-}): {
-  isSticky: boolean;
-} => {
-  const [isSticky, setIsSticky] = useState(false);
-
-  const handleScroll = useCallback(() => {
-    const shouldBeSticky = window.scrollY > scrollThreshold;
-    if (shouldBeSticky !== isSticky) {
-      setIsSticky(shouldBeSticky);
-    }
-  }, [isSticky, scrollThreshold]);
-
-  useEffect(() => {
-    window.addEventListener('scroll', handleScroll);
-    return (): void => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, [handleScroll]);
-
-  return { isSticky };
-};
 
 export const useLogoutButton = (): {
   logout: () => void;

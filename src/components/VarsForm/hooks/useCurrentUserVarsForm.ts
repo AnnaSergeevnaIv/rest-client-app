@@ -1,54 +1,11 @@
 import { StorageKey } from '@/common/constants/index.ts';
 import { isObject, JSONParse } from '@/common/utils/index.ts';
-import { usePathname } from '@/i18n/navigation.ts';
+import { usePathname } from 'next/navigation';
 import { useCallback, useEffect } from 'react';
 import type { UseFormGetValues, UseFormReset } from 'react-hook-form';
-import type { UserPartial } from '../ProvidersWrapper/AuthProvider/AuthContext.tsx';
-import { useAuth } from '../ProvidersWrapper/AuthProvider/AuthContext.tsx';
-import type { VarsFormData } from './VarsForm.tsx';
-import type { ParsedVars } from './VarsForm.utils.ts';
-import { isLikePersistedVarsFormData, parseVarFieldsArray } from './VarsForm.utils.ts';
-
-type UseCurrentUserVarsResult = {
-  getFromLocalStorage: () => ParsedVars | null;
-  apply: (s: string) => string;
-  currentUser: UserPartial | null;
-};
-
-export const useCurrentUserVars = (): UseCurrentUserVarsResult => {
-  const { currentUser } = useAuth();
-
-  const getFromLocalStorage = useCallback((): ParsedVars | null => {
-    if (!currentUser?.email) {
-      return null;
-    }
-    const allVars = JSONParse(localStorage.getItem(StorageKey.Vars));
-    if (!isObject(allVars)) {
-      return null;
-    }
-    const userVars = allVars[currentUser.email];
-    return isLikePersistedVarsFormData(userVars) ? parseVarFieldsArray(userVars.vars) : null;
-  }, [currentUser?.email]);
-
-  const apply = useCallback(
-    (source: string): string => {
-      const persistedVars = getFromLocalStorage()?.plainObject;
-      if (!persistedVars) {
-        return source;
-      }
-      return Object.entries(persistedVars).reduce((result, [key, value]) => {
-        return result.replaceAll(`{{${key}}}`, value);
-      }, source);
-    },
-    [getFromLocalStorage],
-  );
-
-  return {
-    currentUser,
-    getFromLocalStorage,
-    apply,
-  };
-};
+import type { VarsFormData } from '../VarsForm.tsx';
+import { parseVarFieldsArray } from '../VarsForm.utils.ts';
+import { useCurrentUserVars, type UseCurrentUserVarsResult } from './useCurrentUserVars.ts';
 
 type UseCurrentUserFormProps = {
   getValues: UseFormGetValues<VarsFormData>;
