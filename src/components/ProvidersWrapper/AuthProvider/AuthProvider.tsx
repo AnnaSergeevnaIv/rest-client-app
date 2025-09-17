@@ -21,7 +21,7 @@ import {
 } from 'react';
 import type { UserPartial } from './AuthContext.tsx';
 import { AuthContext } from './AuthContext.tsx';
-import { getCurrentUserFromIdToken } from './AuthProvider.utils.tsx';
+import { getCurrentUserFromIdTokenCookie } from './AuthProvider.utils.tsx';
 
 type AuthAction = Extract<keyof typeof AuthClient, 'signin' | 'signup'>;
 
@@ -31,7 +31,7 @@ type AuthProviderProps = PropsWithChildren & {
 
 export default function AuthProvider({ children }: AuthProviderProps): ReactNode {
   const [loading, setLoading] = useState(false);
-  const possibleCurrentUser = getCurrentUserFromIdToken() ?? AuthClient.currentUser;
+  const possibleCurrentUser = getCurrentUserFromIdTokenCookie() ?? AuthClient.currentUser;
   const [currentUser, setCurrentUser] = useState<UserPartial | null>(possibleCurrentUser);
   const timerRef = useRef<number>(0);
 

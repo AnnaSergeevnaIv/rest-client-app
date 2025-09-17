@@ -1,4 +1,5 @@
 import { RoutePath } from '@/common/constants/index.ts';
+import type { UserPartial } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { useCustomSearchParams } from '@/hooks/useCustomSearchParams.ts';
 import { useRouter } from '@i18n/navigation.ts';
@@ -13,16 +14,16 @@ export const useStickyHeader = ({
 }: {
   scrollThreshold: number;
 }): {
-  sticky: boolean;
+  isSticky: boolean;
 } => {
-  const [sticky, setSticky] = useState(false);
+  const [isSticky, setIsSticky] = useState(false);
 
   const handleScroll = useCallback(() => {
     const shouldBeSticky = window.scrollY > scrollThreshold;
-    if (shouldBeSticky !== sticky) {
-      setSticky(shouldBeSticky);
+    if (shouldBeSticky !== isSticky) {
+      setIsSticky(shouldBeSticky);
     }
-  }, [sticky, scrollThreshold]);
+  }, [isSticky, scrollThreshold]);
 
   useEffect(() => {
     window.addEventListener('scroll', handleScroll);
@@ -31,13 +32,14 @@ export const useStickyHeader = ({
     };
   }, [handleScroll]);
 
-  return { sticky };
+  return { isSticky };
 };
 
 export const useLogoutButton = (): {
   logout: () => void;
   isAuth: boolean;
   loggingOut: boolean;
+  currentUser: UserPartial | null;
 } => {
   const { currentUser, signout } = useAuth();
   const [loggingOut, setLogginOut] = useState(false);
@@ -65,6 +67,7 @@ export const useLogoutButton = (): {
 
   return {
     loggingOut,
+    currentUser,
     logout,
     isAuth,
   };

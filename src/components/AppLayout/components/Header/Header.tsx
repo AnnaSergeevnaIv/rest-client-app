@@ -9,8 +9,8 @@ import { Link, usePathname } from '@i18n/navigation.ts';
 import clsx from 'clsx';
 import Image from 'next/image';
 import { type ReactNode } from 'react';
+import { useLogoutButton, useStickyHeader } from './Header.hooks.ts';
 import styles from './Header.module.scss';
-import { useLogoutButton, useStickyHeader } from './Header.utils.ts';
 
 const LOGO_PROPS = { src: '/logo.png', alt: 'app logo' };
 const ICON_SIZE = 16;
@@ -25,12 +25,12 @@ const LinkText = {
 } as const;
 
 export const Header = (): ReactNode => {
-  const { sticky } = useStickyHeader({ scrollThreshold: 70 });
+  const { logout, isAuth, loggingOut, currentUser } = useLogoutButton();
+  const { isSticky } = useStickyHeader({ scrollThreshold: 70 });
   const pathname = usePathname();
-  const { logout, isAuth, loggingOut } = useLogoutButton();
 
   return (
-    <header className={clsx(styles.header, sticky && styles.sticky)}>
+    <header className={clsx(styles.header, isSticky && styles.sticky)}>
       <div className={styles.wrapper}>
         <Link href={RoutePath.Home}>
           <Image
@@ -100,6 +100,7 @@ export const Header = (): ReactNode => {
             <Button
               className={styles.logout}
               label={LinkText.Logout}
+              title={currentUser?.email ?? ''}
               onClick={logout}
               loading={loggingOut}
             >

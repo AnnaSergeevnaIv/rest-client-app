@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 'use client';
 import BodyEditor from '@/components/BodyEditor/BodyEditor';
 import GeneratedCode from '@/components/GeneratedCode/GeneratedCode';

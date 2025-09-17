@@ -8,7 +8,7 @@ type JwtDecodedToken = {
   user_id: string;
 } | null;
 
-export const getCurrentUserFromIdToken = (): UserPartial | null => {
+export const getCurrentUserFromIdTokenCookie = (): UserPartial | null => {
   const token = TokenCookieHelper.get();
   const decodedId = jwt.decode(token) as JwtDecodedToken;
   return (
