@@ -19,10 +19,10 @@ const AuthProvider = dynamic(
   async () => await import('@components/ProvidersWrapper/AuthProvider/AuthProvider.tsx'),
   { ssr: false },
 );
-export default function ProvidersWrapper({ children }: ProvidersProps): ReactNode {
+export default function ProvidersWrapper({ children, locale }: ProvidersProps): ReactNode {
   return (
     <AppErrorBoundary>
-      <AuthProvider>{children}</AuthProvider>
+      <AuthProvider locale={locale}>{children}</AuthProvider>
       <ToastContainer {...ToastOptions} />
     </AppErrorBoundary>
   );
