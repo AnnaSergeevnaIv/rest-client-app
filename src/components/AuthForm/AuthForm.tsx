@@ -44,7 +44,7 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
     mode: 'all',
   });
 
-  useFormPersist(StorageKey.AuthFormData, {
+  useFormPersist(StorageKey.AuthForm, {
     watch,
     setValue,
     exclude: ['confirmPassword'],

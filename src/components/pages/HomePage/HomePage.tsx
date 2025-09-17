@@ -28,8 +28,7 @@ export default function HomePage(): ReactNode {
       ) : (
         <div className={styles.user}>
           <h1 className={styles.heading}>
-            Welcome back,{' '}
-            <span className={styles.email}>{currentUser?.displayName ?? currentUser?.email}</span>
+            Welcome back, {currentUser?.displayName || currentUser?.email}
           </h1>
           <nav className={styles.nav}>
             <Link href={RoutePath.Client} className={styles.link}>
