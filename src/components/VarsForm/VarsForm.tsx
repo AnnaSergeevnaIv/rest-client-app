@@ -1,18 +1,16 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 'use client';
 
-import { StorageKey } from '@/common/constants/index.ts';
 import { useCallback, type ReactNode } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
-import useFormPersist from 'react-hook-form-persist';
 import { Button } from '../UI/Button/Button.tsx';
 import { CLEAR_BTN_TEXT, Input } from '../UI/Input/Input.tsx';
 import styles from './VarsForm.module.scss';
-import { DEFAULT_FORMDATA_VALUES, getPersistedFormData, VarsHelper } from './VarsForm.utils.ts';
+import { DEFAULT_FORMDATA_VALUES } from './VarsForm.utils.ts';
+import { useCurrentUserVarsForm } from './hooks/useCurrentUserVarsForm.ts';
 
 const ADD_BTN_TEXT = 'Add';
 const CLEAR_ALL_BTN_TEXT = 'Clear';
-const NORMALIZE_BTN_TEXT = 'Normalize';
 
 export type VarField<T = string> = {
   key: string;
@@ -23,25 +21,20 @@ export type VarsFormData<T = VarField> = {
 };
 
 export default function VarsForm(): ReactNode {
-  const defaultValues = getPersistedFormData();
   const {
     control,
     register,
-    watch,
     setValue,
     reset,
+    getValues,
     formState: { errors },
-  } = useForm<VarsFormData>({ defaultValues });
+  } = useForm<VarsFormData>({ defaultValues: DEFAULT_FORMDATA_VALUES });
+
+  useCurrentUserVarsForm({ getValues, reset });
 
   const { fields, prepend, remove } = useFieldArray<VarsFormData, 'vars'>({
     control,
     name: 'vars',
-  });
-
-  useFormPersist(StorageKey.Vars, {
-    watch,
-    setValue,
-    storage: localStorage,
   });
 
   const handleAddClick = useCallback((): void => {
@@ -51,15 +44,6 @@ export default function VarsForm(): ReactNode {
   const handleClearClick = useCallback((): void => {
     reset(DEFAULT_FORMDATA_VALUES);
   }, [reset]);
-
-  const handleNormalizeClick = useCallback((): void => {
-    const normalized = VarsHelper.getPersisted();
-    if (normalized) {
-      reset({ vars: normalized.array });
-    } else {
-      handleClearClick();
-    }
-  }, [reset, handleClearClick]);
 
   const handleRemoveClick = useCallback(
     (idx: number): void => {
@@ -72,7 +56,6 @@ export default function VarsForm(): ReactNode {
     <form className={styles.form}>
       <div className={styles.group}>
         <Button className={styles.add} label={ADD_BTN_TEXT} onClick={handleAddClick} />
-        <Button className={styles.btn} label={NORMALIZE_BTN_TEXT} onClick={handleNormalizeClick} />
         <Button className={styles.btn} label={CLEAR_ALL_BTN_TEXT} onClick={handleClearClick} />
       </div>
       <div className={styles.fields}>

@@ -1,9 +1,9 @@
 'use client';
 
+import dynamic from 'next/dynamic';
 import type { PropsWithChildren, ReactNode } from 'react';
 import type { ToastContainerProps } from 'react-toastify';
 import { ToastContainer } from 'react-toastify';
-import AuthProvider from './AuthProvider/AuthProvider.tsx';
 import { AppErrorBoundary } from './ErrorBoundary/AppErrorBoundary.tsx';
 
 type ProvidersProps = PropsWithChildren & {
@@ -15,7 +15,10 @@ const ToastOptions: ToastContainerProps = {
   position: 'top-center',
   hideProgressBar: true,
 };
-
+const AuthProvider = dynamic(
+  async () => await import('@components/ProvidersWrapper/AuthProvider/AuthProvider.tsx'),
+  { ssr: false },
+);
 export default function ProvidersWrapper({ children, locale }: ProvidersProps): ReactNode {
   return (
     <AppErrorBoundary>

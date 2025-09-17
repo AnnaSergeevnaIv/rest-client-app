@@ -5,8 +5,10 @@ import { createContext, useContext } from 'react';
 
 const ERR_USE_OUTSIDE_CONTEXT = 'useAuth() can only be used within an AuthContext';
 
+export type UserPartial = PartialWithRequired<User, 'email' | 'uid'>;
+
 export type UseAuthReturn = Pick<typeof AuthClient, 'signin' | 'signout' | 'signup'> & {
-  currentUser: User | null;
+  currentUser: UserPartial | null;
   loading: boolean;
   setLoading: Dispatch<SetStateAction<boolean>>;
 };

@@ -43,7 +43,6 @@ export default function MethodUrlSelector({
             value={field.value}
             onChange={v => {
               onMethodChange(v, field);
-              sessionStorage.removeItem('clientResponse');
             }}
           />
         )}

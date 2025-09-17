@@ -29,11 +29,11 @@ export default async function LocaleLayout({
   return (
     <html lang={locale} className={geist.className} data-scroll-behavior='smooth'>
       <body>
-        <ProvidersWrapper locale={locale}>
-          <NextIntlClientProvider>
+        <NextIntlClientProvider>
+          <ProvidersWrapper locale={locale}>
             <AppLayout>{children}</AppLayout>
-          </NextIntlClientProvider>
-        </ProvidersWrapper>
+          </ProvidersWrapper>
+        </NextIntlClientProvider>
       </body>
     </html>
   );
