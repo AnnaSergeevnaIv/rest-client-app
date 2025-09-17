@@ -10,9 +10,9 @@ export const RSS_LOGO_SRC = '/rss-logo.svg';
 const RSS_LOGO_ALT = 'RSS logo';
 
 const AUTHORS = [
-  { name: 'Andrew', url: 'https://github.com/dusixx' },
   { name: 'Nataliya', url: 'https://github.com/nataliyamoon' },
   { name: 'Anna', url: 'https://github.com/AnnaSergeevnaIv' },
+  { name: 'Andrew', url: 'https://github.com/dusixx' },
 ];
 
 export const Footer = (): JSX.Element => {
