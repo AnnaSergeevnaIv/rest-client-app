@@ -1,3 +1,4 @@
+/* eslint-disable max-lines-per-function */
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
 'use client';
 
@@ -57,7 +58,7 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
         return;
       }
       void user
-        .getIdToken()
+        .getIdToken(false)
         .then(async token => {
           const decodedIdToken = await verifyIdToken(token);
           if (!decodedIdToken || decodedIdToken.hasExpired) {
@@ -88,32 +89,37 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
     [signout],
   );
 
-  useEffect(() => {
-    cookieStore.addEventListener('change', handleTokenCookieRemove);
-    AuthClient.subscribe(handleAuthStateChange);
-
+  const verifyIdTokenCookie = useCallback((): void => {
     void getTokenCookie().then(async token => {
       if (!token) {
         return;
       }
-      const decodedId = await verifyIdToken(token);
-      if (!decodedId || decodedId.hasExpired) {
+      const decodedIdToken = await verifyIdToken(token);
+      if (!decodedIdToken || decodedIdToken.hasExpired) {
         await signout();
         void removeTokenCookie();
         setCurrentUser(null);
       } else {
         setCurrentUser({
-          email: decodedId.email!,
-          uid: decodedId.uid,
+          email: decodedIdToken.email!,
+          uid: decodedIdToken.uid,
         });
       }
-      return (): void => {
-        window.clearTimeout(timerRef.current);
-        cookieStore.removeEventListener('change', handleTokenCookieRemove);
-        AuthClient.unsubscribe(handleAuthStateChange);
-      };
     });
-  }, [signout, handleAuthStateChange, handleTokenCookieRemove]);
+  }, [signout]);
+
+  useEffect(() => {
+    cookieStore.addEventListener('change', handleTokenCookieRemove);
+    AuthClient.subscribe(handleAuthStateChange);
+
+    verifyIdTokenCookie();
+
+    return (): void => {
+      window.clearTimeout(timerRef.current);
+      cookieStore.removeEventListener('change', handleTokenCookieRemove);
+      AuthClient.unsubscribe(handleAuthStateChange);
+    };
+  }, [signout, handleAuthStateChange, handleTokenCookieRemove, verifyIdTokenCookie]);
 
   const authenticate = useCallback(async (creds: EmailAndPassword, action: AuthAction) => {
     setLoading(true);
