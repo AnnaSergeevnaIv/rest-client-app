@@ -10,7 +10,7 @@ const EXPIRED_LAG_MINUTES = 6;
 export type DecodedIdTokenExtended = DecodedIdToken & {
   hasExpired: boolean;
   millisecsLeft: number;
-  minutesLeft: number;
+  secondsLeft: number;
 };
 
 export const verifyIdToken = async (
@@ -25,7 +25,7 @@ export const verifyIdToken = async (
       ...decodedId,
       millisecsLeft,
       hasExpired: millisecsLeft <= 0,
-      minutesLeft: millisecsLeft / MS_PER_MIN,
+      secondsLeft: millisecsLeft / MS_PER_SEC,
     };
   } catch {
     return null;

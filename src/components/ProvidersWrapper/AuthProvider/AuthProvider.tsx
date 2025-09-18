@@ -1,13 +1,10 @@
-/* eslint-disable max-lines-per-function */
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 'use client';
 
-import { MS_PER_SEC, StorageKey } from '@/common/constants/index.ts';
+import { StorageKey } from '@/common/constants/index.ts';
 import { verifyIdToken } from '@/services/firebase/admin/utils.ts';
 import type { EmailAndPassword } from '@/services/firebase/client/auth-client.ts';
 import { AuthClient } from '@/services/firebase/client/auth-client.ts';
 import {
-  getTokenCookie,
   removeTokenCookie,
   setTokenCookie,
 } from '@/services/firebase/utils/token-helper-server.ts';
@@ -65,9 +62,8 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
             void signout();
             return;
           }
-          void setTokenCookie(token, {
-            maxAge: decodedIdToken.millisecsLeft / MS_PER_SEC,
-          });
+          console.debug('decodedIdToken mins left=', decodedIdToken.secondsLeft / 60);
+          void setTokenCookie(token, { maxAge: decodedIdToken.secondsLeft });
           timerRef.current = window.setTimeout(() => void signout(), decodedIdToken.millisecsLeft);
           setCurrentUser(user);
         })
@@ -89,37 +85,16 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
     [signout],
   );
 
-  const verifyIdTokenCookie = useCallback((): void => {
-    void getTokenCookie().then(async token => {
-      if (!token) {
-        return;
-      }
-      const decodedIdToken = await verifyIdToken(token);
-      if (!decodedIdToken || decodedIdToken.hasExpired) {
-        await signout();
-        void removeTokenCookie();
-        setCurrentUser(null);
-      } else {
-        setCurrentUser({
-          email: decodedIdToken.email!,
-          uid: decodedIdToken.uid,
-        });
-      }
-    });
-  }, [signout]);
-
   useEffect(() => {
     cookieStore.addEventListener('change', handleTokenCookieRemove);
     AuthClient.subscribe(handleAuthStateChange);
-
-    verifyIdTokenCookie();
 
     return (): void => {
       window.clearTimeout(timerRef.current);
       cookieStore.removeEventListener('change', handleTokenCookieRemove);
       AuthClient.unsubscribe(handleAuthStateChange);
     };
-  }, [signout, handleAuthStateChange, handleTokenCookieRemove, verifyIdTokenCookie]);
+  }, [signout, handleAuthStateChange, handleTokenCookieRemove]);
 
   const authenticate = useCallback(async (creds: EmailAndPassword, action: AuthAction) => {
     setLoading(true);
