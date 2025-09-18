@@ -1,5 +1,4 @@
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
-import { hasOwnKeys, omit } from '@/common/utils/index.ts';
+import { hasOwnKeys } from '@/common/utils/index.ts';
 import type { VarField, VarsFormData } from './VarsForm.tsx';
 
 const DEFAULT_FIELDS_COUNT = 1;
@@ -14,11 +13,6 @@ type PersistedFormData = VarsFormData<unknown>;
 
 type PersistedField = VarField<unknown>;
 
-export type ParsedVars = {
-  plainObject: Record<string, string>;
-  array: VarField[];
-};
-
 export const isLikePersistedVarsFormData = (obj: unknown): obj is PersistedFormData => {
   return (
     hasOwnKeys<PersistedFormData>(obj, 'vars') &&
@@ -27,34 +21,31 @@ export const isLikePersistedVarsFormData = (obj: unknown): obj is PersistedFormD
   );
 };
 
-export const parseVarFieldsArray = (vars: unknown[], stack?: boolean): ParsedVars | null => {
-  const varsCopy = [...vars];
-  if (stack) {
-    varsCopy.reverse();
-  }
-  const obj = Object.create(null) as Record<string, string>;
+export type ParsedVars = {
+  plainObject: Record<string, string>;
+  normalizedArray: VarField[];
+};
 
-  const plainObject = varsCopy.reduce<Record<string, string>>((result, item) => {
+export const parseVarFieldsArray = (vars: unknown[]): ParsedVars => {
+  const metKeys = new Set<string>();
+  const plainObject: Record<string, string> = {};
+
+  const normalizedArray = vars.reduce<VarField[]>((result, item) => {
     if (hasOwnKeys<PersistedField>(item, 'key', 'value') && item.key) {
       const { key, value } = item;
 
-      if (key in result) {
-        result = omit(result, key);
+      if (!metKeys.has(key)) {
+        const strValue = String(value);
+        result.push({ key, value: strValue });
+        plainObject[key] = strValue;
+        metKeys.add(key);
       }
-      result[key] = String(value);
     }
     return result;
-  }, obj);
+  }, []);
 
-  const array = Object.entries(plainObject).map(([key, value]) => ({ key, value }));
-  if (!array.length) {
-    return null;
-  }
-  if (stack) {
-    array.reverse();
-  }
   return {
+    normalizedArray,
     plainObject,
-    array: array,
   };
 };

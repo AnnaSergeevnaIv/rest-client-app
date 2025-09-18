@@ -5,8 +5,8 @@ import { verifyIdToken } from '@/services/firebase/admin/utils.ts';
 import type { EmailAndPassword } from '@/services/firebase/client/auth-client.ts';
 import { AuthClient } from '@/services/firebase/client/auth-client.ts';
 import {
-  removeTokenCookie,
-  setTokenCookie,
+  removeIdTokenCookie,
+  setIdTokenCookie,
 } from '@/services/firebase/utils/token-helper-server.ts';
 import { type User } from 'firebase/auth';
 import {
@@ -36,7 +36,7 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
     setLoading(true);
     try {
       await AuthClient.signout();
-      void removeTokenCookie();
+      void removeIdTokenCookie();
       setCurrentUser(null);
       return;
     } finally {
@@ -49,7 +49,7 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
       window.clearTimeout(timerRef.current);
 
       if (!user) {
-        void removeTokenCookie();
+        void removeIdTokenCookie();
         setCurrentUser(null);
         return;
       }
@@ -61,7 +61,7 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
             void signout();
             return;
           }
-          void setTokenCookie(token, { maxAge: decodedIdToken.secondsLeft });
+          void setIdTokenCookie(token, { maxAge: decodedIdToken.secondsLeft });
           timerRef.current = window.setTimeout(() => void signout(), decodedIdToken.millisecsLeft);
           setCurrentUser(user);
         })
@@ -86,7 +86,7 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
   const checkCookieIdTokenExpiration = useCallback(() => {
     const decodedIdToken = decodeIdTokenFromCookie();
     if (!decodedIdToken || decodedIdToken.hasExpired) {
-      void removeTokenCookie().then(() => {
+      void removeIdTokenCookie().then(() => {
         void signout().then(() => {
           setCurrentUser(null);
         });
