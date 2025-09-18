@@ -7,7 +7,7 @@ import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 import { type Control, useWatch } from 'react-hook-form';
 import { useCustomSearchParams } from './useCustomSearchParams';
-// import { VarsHelper } from '@/components/VarsForm/VarsForm.utils';
+import { useCurrentUserVars } from '@/components/VarsForm/hooks/useCurrentUserVars';
 
 export function useUpdateUrlWithFormData(control: Control<ClientFormType>): () => void {
   const watchedFields = useWatch({
@@ -17,15 +17,14 @@ export function useUpdateUrlWithFormData(control: Control<ClientFormType>): () =
 
   const { createParamsWithEncodedData } = useCustomSearchParams();
   const path = usePathname();
-
+  const { apply } = useCurrentUserVars();
   return useCallback(
     (v?: keyof typeof METHODS) => {
-      // const [url, method, headers, body] = watchedFields;
-      const [method] = watchedFields;
-      const encodedUrl = encodeUrlBody('' /*VarsHelper.apply(url)*/);
-      const encodedBody = encodeUrlBody('' /*VarsHelper.apply(body ?? '')*/);
+      const [url, method, headers, body] = watchedFields;
+      const encodedUrl = encodeUrlBody(apply(url));
+      const encodedBody = encodeUrlBody(apply(body ?? ''));
       const basePath = `/client/${v ?? method}/${encodedUrl}/${encodedBody}`;
-      const headersObject = headersArrayToObject(/*headers*/);
+      const headersObject = headersArrayToObject(apply, headers);
       createParamsWithEncodedData(headersObject, basePath);
     },
     [watchedFields, createParamsWithEncodedData, path],
