@@ -6,13 +6,16 @@ export function encodeUrlBody(string: string): string {
   return btoa(string);
 }
 
-export function headersArrayToObject(/*headers?: Header[]*/): Record<string, string> {
-  return {};
-  // return (
-  //   headers?.reduce((acc, header) => {
-  //     return { ...acc, [header.key]: VarsHelper.apply(header.value) };
-  //   }, {}) ?? {}
-  // );
+export function headersArrayToObject(
+  apply: (s: string) => string,
+  headers?: Header[],
+): Record<string, string> {
+  // return {};
+  return (
+    headers?.reduce((acc, header) => {
+      return { ...acc, [header.key]: apply(header.value) };
+    }, {}) ?? {}
+  );
 }
 
 export function queryParamsToHeaders(queryParams: Record<string, string>): Header[] {
