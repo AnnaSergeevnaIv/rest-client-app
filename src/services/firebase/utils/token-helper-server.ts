@@ -23,7 +23,7 @@ async function getCookie(name: string): Promise<string> {
   return cookieStore.get(name)?.value ?? '';
 }
 
-export const setTokenCookie = async (
+export const setIdTokenCookie = async (
   token: string,
   options?: Partial<ResponseCookie>,
 ): Promise<void> => {
@@ -36,10 +36,10 @@ export const setTokenCookie = async (
   await setCookie(StorageKey.IdToken, token, opts);
 };
 
-export const removeTokenCookie = async (): Promise<void> => {
+export const removeIdTokenCookie = async (): Promise<void> => {
   await removeCookie(StorageKey.IdToken);
 };
 
-export const getTokenCookie = async (): Promise<string> => {
+export const getIdTokenCookie = async (): Promise<string> => {
   return await getCookie(StorageKey.IdToken);
 };
