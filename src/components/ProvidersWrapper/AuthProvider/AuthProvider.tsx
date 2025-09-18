@@ -19,7 +19,7 @@ import {
 } from 'react';
 import type { UserPartial } from './AuthContext.tsx';
 import { AuthContext } from './AuthContext.tsx';
-import { getCurrentUserFromIdTokenCookie } from './AuthProvider.utils.tsx';
+import { decodeIdTokenFromCookie } from './AuthProvider.utils.tsx';
 
 type AuthAction = Extract<keyof typeof AuthClient, 'signin' | 'signup'>;
 
@@ -29,8 +29,7 @@ type AuthProviderProps = PropsWithChildren & {
 
 export default function AuthProvider({ children }: AuthProviderProps): ReactNode {
   const [loading, setLoading] = useState(false);
-  const possibleCurrentUser = getCurrentUserFromIdTokenCookie() ?? AuthClient.currentUser;
-  const [currentUser, setCurrentUser] = useState<UserPartial | null>(possibleCurrentUser);
+  const [currentUser, setCurrentUser] = useState<UserPartial | null>(AuthClient.currentUser);
   const timerRef = useRef<number>(0);
 
   const signout: typeof AuthClient.signout = useCallback(async () => {
@@ -55,14 +54,13 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
         return;
       }
       void user
-        .getIdToken(false)
+        .getIdToken()
         .then(async token => {
           const decodedIdToken = await verifyIdToken(token);
           if (!decodedIdToken || decodedIdToken.hasExpired) {
             void signout();
             return;
           }
-          console.debug('decodedIdToken mins left=', decodedIdToken.secondsLeft / 60);
           void setTokenCookie(token, { maxAge: decodedIdToken.secondsLeft });
           timerRef.current = window.setTimeout(() => void signout(), decodedIdToken.millisecsLeft);
           setCurrentUser(user);
@@ -85,24 +83,40 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
     [signout],
   );
 
+  const checkCookieIdTokenExpiration = useCallback(() => {
+    const decodedIdToken = decodeIdTokenFromCookie();
+    if (!decodedIdToken || decodedIdToken.hasExpired) {
+      void removeTokenCookie().then(() => {
+        void signout().then(() => {
+          setCurrentUser(null);
+        });
+      });
+    } else {
+      setCurrentUser({
+        email: decodedIdToken.email,
+        uid: decodedIdToken.user_id,
+      });
+    }
+  }, [signout]);
+
   useEffect(() => {
     cookieStore.addEventListener('change', handleTokenCookieRemove);
     AuthClient.subscribe(handleAuthStateChange);
+
+    checkCookieIdTokenExpiration();
 
     return (): void => {
       window.clearTimeout(timerRef.current);
       cookieStore.removeEventListener('change', handleTokenCookieRemove);
       AuthClient.unsubscribe(handleAuthStateChange);
     };
-  }, [signout, handleAuthStateChange, handleTokenCookieRemove]);
+  }, [handleAuthStateChange, handleTokenCookieRemove, checkCookieIdTokenExpiration]);
 
   const authenticate = useCallback(async (creds: EmailAndPassword, action: AuthAction) => {
     setLoading(true);
     try {
       const result = await AuthClient[action](creds);
       setCurrentUser(result.user);
-      const idToken = await result.user.getIdToken();
-      void setTokenCookie(idToken);
       return result;
     } finally {
       setLoading(false);

@@ -1,11 +1,13 @@
 'use server';
 
-import { MS_PER_MIN, MS_PER_SEC } from '@/common/constants/index.ts';
+import { MS_PER_SEC } from '@/common/constants/index.ts';
+import {
+  ID_TOKEN_EXPIRED_LAG_MINUTES,
+  getIdTokenLaggedMillisecsLeft,
+} from '@/components/ProvidersWrapper/AuthProvider/AuthProvider.utils.tsx';
 import { getAuth } from 'firebase-admin/auth';
 import type { DecodedIdToken } from 'node_modules/firebase-admin/lib/auth/token-verifier';
 import './config.ts';
-
-const EXPIRED_LAG_MINUTES = 6;
 
 export type DecodedIdTokenExtended = DecodedIdToken & {
   hasExpired: boolean;
@@ -15,12 +17,11 @@ export type DecodedIdTokenExtended = DecodedIdToken & {
 
 export const verifyIdToken = async (
   token: string,
-  expLagMinutes: number = EXPIRED_LAG_MINUTES,
+  expLagMinutes: number = ID_TOKEN_EXPIRED_LAG_MINUTES,
 ): Promise<DecodedIdTokenExtended | null> => {
-  const lagMs = Math.max(0, expLagMinutes * MS_PER_MIN);
   try {
     const decodedId = await getAuth().verifyIdToken(token, true);
-    const millisecsLeft = decodedId.exp * MS_PER_SEC - Date.now() - lagMs;
+    const millisecsLeft = getIdTokenLaggedMillisecsLeft(decodedId.exp, expLagMinutes);
     return {
       ...decodedId,
       millisecsLeft,

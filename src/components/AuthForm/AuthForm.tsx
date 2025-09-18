@@ -4,7 +4,6 @@
 import { RoutePath, StorageKey } from '@/common/constants/index.ts';
 import { showErrorToast } from '@/common/utils/index.ts';
 import { useRouter } from '@/i18n/navigation.ts';
-import { type User } from 'firebase/auth';
 import { useLocale } from 'next-intl';
 import { useCallback, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
@@ -59,25 +58,17 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
     [setValue, trigger],
   );
 
-  const redirectOnSuccess = useCallback(
-    (user: User, pathname: string) => {
-      clearForm();
-      toast.success(`Welcome, ${user.email ?? ANON_USER}`);
-      router.replace({ pathname }, { locale });
-    },
-    [locale, clearForm, router],
-  );
-
   const onSubmit = handleSubmit(data => {
     const action = login ? signin : signup;
     action(data)
       .then(({ user }) => {
-        redirectOnSuccess(user, RoutePath.Home);
+        toast.success(`Welcome, ${user.email ?? ANON_USER}`);
+        router.replace({ pathname: RoutePath.Home }, { locale });
       })
       .catch((error: unknown) => {
-        console.debug(error);
         showErrorToast(error);
-      });
+      })
+      .finally(clearForm);
   });
 
   return (
