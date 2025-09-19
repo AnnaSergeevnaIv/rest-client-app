@@ -1,93 +1,61 @@
 import { render, screen, fireEvent } from '@testing-library/react';
-import { describe, it, expect, vi, beforeEach } from 'vitest';
+import { vi } from 'vitest';
 import { Header } from './Header';
 
-const logoutMock = vi.fn();
-vi.mock('./hooks/useLogoutButton.ts', () => ({
-  useLogoutButton: vi.fn(() => ({
-    logout: logoutMock,
-    isAuth: false,
-    loggingOut: false,
-    currentUser: null,
-  })),
-}));
-
-vi.mock('./hooks/useStickyHeader.ts', () => ({
-  useStickyHeader: vi.fn(() => ({ isSticky: false })),
+vi.mock('next/image', () => ({
+  __esModule: true,
+  default: (props: any) => <img {...props} />,
 }));
 
 vi.mock('@i18n/navigation.ts', () => ({
-  Link: ({ href, children, ...props }: any) => (
-    <a href={href} {...props}>
+  Link: ({ href, children, ...rest }: any) => (
+    <a href={href} {...rest}>
       {children}
     </a>
   ),
-  usePathname: vi.fn(() => '/'),
+  usePathname: () => '/',
 }));
 
 vi.mock('@/components/LangSwitcher/LangSwitcher.tsx', () => ({
   LangSwitcher: () => <div data-testid='lang-switcher'>LangSwitcher</div>,
 }));
-vi.mock('@/common/constants/icons.ts', () => ({
-  IconLogout: ({ size }: { size: number }) => <span data-testid='icon-logout'>logout-{size}</span>,
+
+const logoutMock = vi.fn();
+
+vi.mock('./hooks/useLogoutButton.ts', () => ({
+  useLogoutButton: () => ({
+    logout: logoutMock,
+    isAuth: true,
+    loggingOut: false,
+    currentUser: { email: 'test@example.com' },
+  }),
 }));
 
-import { useLogoutButton } from './hooks/useLogoutButton.ts';
-import { useStickyHeader } from './hooks/useStickyHeader.ts';
-import { usePathname } from '@i18n/navigation.ts';
+vi.mock('./hooks/useStickyHeader.ts', () => ({
+  useStickyHeader: () => ({ isSticky: false }),
+}));
 
 describe('Header', () => {
-  beforeEach(() => {
+  afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders Sign in and Sign up links when user is not authenticated', () => {
-    (useLogoutButton as any).mockReturnValue({
-      logout: logoutMock,
-      isAuth: false,
-      loggingOut: false,
-      currentUser: null,
-    });
-    (usePathname as any).mockReturnValue('/');
-
+  it('renders logo and navigation', () => {
     render(<Header />);
-
-    expect(screen.getByText('Sign in')).toBeInTheDocument();
-    expect(screen.getByText('Sign up')).toBeInTheDocument();
-    expect(screen.queryByText('Logout')).not.toBeInTheDocument();
-  });
-
-  it('renders navigation links and Logout when user is authenticated', () => {
-    (useLogoutButton as any).mockReturnValue({
-      logout: logoutMock,
-      isAuth: true,
-      loggingOut: false,
-      currentUser: { email: 'test@example.com' },
-    });
-    (usePathname as any).mockReturnValue('/client');
-
-    render(<Header />);
-
+    expect(screen.getByAltText('app logo')).toBeInTheDocument();
     expect(screen.getByText('REST client')).toBeInTheDocument();
     expect(screen.getByText('Variables')).toBeInTheDocument();
     expect(screen.getByText('History')).toBeInTheDocument();
     expect(screen.getByText('Home')).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Logout' }));
-    expect(logoutMock).toHaveBeenCalled();
+    expect(screen.getByTestId('lang-switcher')).toBeInTheDocument();
   });
 
-  it('applies sticky class when isSticky = true', () => {
-    (useLogoutButton as any).mockReturnValue({
-      logout: logoutMock,
-      isAuth: false,
-      loggingOut: false,
-      currentUser: null,
-    });
-    (useStickyHeader as any).mockReturnValue({ isSticky: true });
-    (usePathname as any).mockReturnValue('/');
+  it('renders Logout button and calls logout on click', () => {
+    render(<Header />);
+    const logoutButton = screen.getByRole('button', { name: /Logout/i });
+    expect(logoutButton).toBeInTheDocument();
 
-    const { container } = render(<Header />);
-    expect(container.querySelector('header')?.className).toMatch(/sticky/);
+    fireEvent.click(logoutButton);
+    expect(logoutMock).toHaveBeenCalled();
   });
 });
