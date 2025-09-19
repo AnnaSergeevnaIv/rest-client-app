@@ -83,14 +83,12 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
     [signout],
   );
 
-  const checkCookieIdTokenExpiration = useCallback(() => {
+  const checkCookieIdTokenExpiration = useCallback(async () => {
     const decodedIdToken = decodeIdTokenFromCookie();
     if (!decodedIdToken || decodedIdToken.hasExpired) {
-      void removeIdTokenCookie().then(() => {
-        void signout().then(() => {
-          setCurrentUser(null);
-        });
-      });
+      await removeIdTokenCookie();
+      await signout();
+      setCurrentUser(null);
     } else {
       setCurrentUser({
         email: decodedIdToken.email,
@@ -101,10 +99,10 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
 
   useEffect(() => {
     cookieStore.addEventListener('change', handleTokenCookieRemove);
-    AuthClient.subscribe(handleAuthStateChange);
 
-    checkCookieIdTokenExpiration();
-
+    void checkCookieIdTokenExpiration().then(() => {
+      AuthClient.subscribe(handleAuthStateChange);
+    });
     return (): void => {
       window.clearTimeout(timerRef.current);
       cookieStore.removeEventListener('change', handleTokenCookieRemove);
