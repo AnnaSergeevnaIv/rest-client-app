@@ -11,6 +11,13 @@ vi.mock('next-intl', () => ({
     return translations[key] || key;
   },
 }));
+vi.mock('@/components/ProvidersWrapper/AuthProvider/AuthContext', () => ({
+  useAuth: () => ({
+    currentUser: null,
+    signIn: vi.fn(),
+    signOut: vi.fn(),
+  }),
+}));
 vi.mock('next-intl/navigation', () => ({
   createNavigation: () => ({
     Link: 'a',

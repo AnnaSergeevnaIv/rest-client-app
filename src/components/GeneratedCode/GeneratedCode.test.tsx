@@ -4,6 +4,7 @@ import GeneratedCode from './GeneratedCode';
 import { CODE_LANGUAGES } from './GeneratedCode.constants';
 import { generateCode } from './GeneratedCode.utils';
 import { useWatch } from 'react-hook-form';
+import { useCurrentUserVars } from '../VarsForm/hooks/useCurrentUserVars';
 
 vi.mock('react-hook-form', () => ({
   Controller: ({ render: renderProp }: any) => {
@@ -40,6 +41,9 @@ vi.mock('next-intl/navigation', () => ({
 vi.mock('./GeneratedCode.utils', () => ({
   generateCode: vi.fn().mockResolvedValue(''),
 }));
+vi.mock('../VarsForm/hooks/useCurrentUserVars', () => ({
+  useCurrentUserVars: vi.fn(),
+}));
 
 describe('GeneratedCode', () => {
   beforeEach(() => {
@@ -51,6 +55,11 @@ describe('GeneratedCode', () => {
       headers: [],
       body: '',
     });
+    vi.mocked(useCurrentUserVars).mockReturnValue({
+      apply: vi.fn().mockImplementation((value: string) => value),
+      getFromLocalStorage: vi.fn(),
+      currentUser: null,
+    });
   });
   test('renders correctly', () => {
     const mockControl = {} as any;
@@ -61,6 +70,11 @@ describe('GeneratedCode', () => {
   test('changes language when select value changes', async () => {
     const mockCode = 'Hello';
     vi.mocked(generateCode).mockResolvedValue(mockCode);
+    vi.mocked(useCurrentUserVars).mockReturnValue({
+      apply: vi.fn().mockImplementation((value: string) => value),
+      getFromLocalStorage: vi.fn(),
+      currentUser: null,
+    });
     const mockControl = {} as any;
     render(<GeneratedCode control={mockControl} />);
     const select = screen.getByRole('combobox');
@@ -84,6 +98,11 @@ describe('GeneratedCode', () => {
       headers: [],
       body: undefined,
     }));
+    vi.mocked(useCurrentUserVars).mockReturnValue({
+      apply: vi.fn().mockImplementation((value: string | undefined) => value ?? ''),
+      getFromLocalStorage: vi.fn(),
+      currentUser: null,
+    });
     const mockControl = {} as any;
     render(<GeneratedCode control={mockControl} />);
     expect(generateCode).toHaveBeenCalledWith('cURL', '', '', [], '');
