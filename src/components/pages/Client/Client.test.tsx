@@ -29,6 +29,9 @@ vi.mock('next/navigation', () => ({
     push: vi.fn(),
     replace: vi.fn(),
   }),
+  useSearchParams: () => ({
+    get: vi.fn(),
+  }),
 }));
 
 vi.mock('@/hooks/useCustomSearchParams', () => ({

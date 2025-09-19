@@ -8,22 +8,21 @@ import { Button } from '@/components/UI/Button/Button';
 import { useClientFormSync } from '@/hooks/useClientFormSync';
 import { useUpdateUrlWithFormData } from '@/hooks/useUpdateUrlWithFormData';
 import { useTranslations } from 'next-intl';
-import { useEffect, useState } from 'react';
-import { type SubmitHandler, useFieldArray, useForm } from 'react-hook-form';
+import { useFieldArray, useForm } from 'react-hook-form';
 import { DEFAULT_FORM_DATA } from './Client.constants';
 import styles from './Client.module.scss';
 import type { ClientFormType } from './Client.types';
+
 export type ResponseData = {
   status: number;
   statusText: string;
   headers: Record<string, string>;
   body: unknown;
 };
+
 export default function Client(): React.ReactNode {
   const t = useTranslations('Client');
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isInitializing, setIsInitializing] = useState(true);
-  const { handleSubmit, control, setValue, getValues, watch } = useForm<ClientFormType>({
+  const { handleSubmit, control, setValue, getValues } = useForm<ClientFormType>({
     defaultValues: DEFAULT_FORM_DATA,
   });
 
@@ -31,22 +30,12 @@ export default function Client(): React.ReactNode {
     control,
     name: 'headers',
   });
-  const updateUrlWithFormData = useUpdateUrlWithFormData(control);
-  const { formData } = useClientFormSync(setValue, getValues, setIsSubmitting, setIsInitializing);
-  useEffect(() => {
-    const subscription = watch(() => {
-      if (!isInitializing) {
-        setIsSubmitting(false);
-        setIsInitializing(true);
-      }
-    });
-    return (): void => {
-      subscription.unsubscribe();
-    };
-  }, [watch, isInitializing]);
 
-  const onSubmit: SubmitHandler<ClientFormType> = (): void => {
-    setIsSubmitting(true);
+  const updateUrlWithFormData = useUpdateUrlWithFormData(control);
+
+  const { response, error, loading } = useClientFormSync(setValue, getValues);
+
+  const onSubmit = (): void => {
     updateUrlWithFormData();
   };
 
@@ -66,11 +55,7 @@ export default function Client(): React.ReactNode {
         <GeneratedCode control={control} />
         <Button type='submit' label={t('submit')} />
       </form>
-      <ResponseSection
-        formData={formData}
-        isSubmitting={isSubmitting}
-        isInitializing={isInitializing}
-      />
+      <ResponseSection response={response} error={error} loading={loading} />
     </div>
   );
 }

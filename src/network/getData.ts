@@ -19,10 +19,14 @@ type AnaliticsDataType = {
   method: string;
   requestSize: number;
   responseSize: number;
-  error: string | null;
+  error?: string;
   url: string;
+  link: string;
 };
-export const getData = async (formData: ClientFormType): Promise<GetDataReturnType> => {
+export const getData = async (
+  formData: ClientFormType,
+  link: string,
+): Promise<GetDataReturnType> => {
   const options = transformFormData(formData);
   const axiosConfig: AxiosRequestConfig = {
     url: formData.url,
@@ -38,8 +42,8 @@ export const getData = async (formData: ClientFormType): Promise<GetDataReturnTy
     method: formData.method,
     requestSize: new TextEncoder().encode(JSON.stringify(options.body ?? '')).length,
     responseSize: 0,
-    error: null,
     url: formData.url,
+    link: link,
   };
   const start = Date.now();
   try {
