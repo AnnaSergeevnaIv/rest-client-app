@@ -46,7 +46,8 @@ export const getData = async (
   try {
     const response: AxiosResponse<string> = await axios(axiosConfig);
     analyticsData.durationMs = Date.now() - start;
-    analyticsData.responseSize = new TextEncoder().encode(response.data).length;
+    analyticsData.responseSize = new TextEncoder().encode(JSON.stringify(response.data)).length;
+    console.log('response.data', response.data, analyticsData.responseSize);
     analyticsData.httpStatus = response.status;
     const headers: Record<string, string> = Object.fromEntries(
       Object.entries(response.headers).map(([k, v]) => [k, String(v)]),
