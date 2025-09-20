@@ -10,7 +10,7 @@ import { useRequestHistoryQuery } from '@/services/firebase/admin/request-histor
 import { historyEntryMock } from '@/services/firebase/admin/request-history/utils.ts';
 import { useState, type ReactNode } from 'react';
 
-export default function SignupPage(): ReactNode {
+export default function HistoryPage(): ReactNode {
   const [value, setValue] = useState('');
   const { currentUser } = useAuth();
   const { deleteEntry, queryEntries } = useRequestHistoryQuery({ currentUser });
