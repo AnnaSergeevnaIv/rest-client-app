@@ -1,0 +1,14 @@
+.wrapper {
+  @extend %article;
+}
+
+.heading {
+  @extend %section-heading;
+}
+
+.hint {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+  align-items: center;
+}
