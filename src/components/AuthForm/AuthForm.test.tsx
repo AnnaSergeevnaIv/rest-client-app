@@ -15,6 +15,12 @@ vi.mock('@/common/utils', () => ({
 
 vi.mock('next-intl', () => ({
   useLocale: () => 'en',
+  useTranslations: () => (key: string) => {
+    if (key === 'AuthForm.email') return 'email';
+    if (key === 'AuthForm.password') return 'password';
+    if (key === 'AuthForm.confirmPassword') return 'confirmPassword';
+    return key;
+  },
 }));
 
 vi.mock('@/i18n/navigation.ts', () => ({
@@ -36,54 +42,90 @@ describe('AuthForm', () => {
       signup,
       loading: false,
     });
-    console.debug = vi.fn();
   });
 
-  it('successful submit calls signin and toast', async () => {
-    // const user = { email: 'test@example.com' };
-    // signin.mockResolvedValueOnce({ user });
-    // render(<AuthForm login submitLabel='Sign in' />);
-    // fireEvent.change(screen.getByPlaceholderText(/email/i), {
-    //   target: { value: 'test@example.com' },
-    // });
-    // fireEvent.change(screen.getByPlaceholderText(/password/i), {
-    //   target: { value: 'password123!' },
-    // });
-    // fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
-    // await waitFor(() => {
-    //   expect(signin).toHaveBeenCalledWith({
-    //     email: 'test@example.com',
-    //     password: 'password123!',
-    //   });
-    //   expect(toast.success).toHaveBeenCalledWith('Welcome, test@example.com');
-    // });
+  it('successful signin submit calls signin and shows toast', async () => {
+    const user = { email: 'test@example.com' };
+    signin.mockResolvedValueOnce({ user });
+
+    render(<AuthForm login submitLabel='Sign in' />);
+
+    fireEvent.change(screen.getByPlaceholderText('email'), {
+      target: { value: 'test@example.com' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('password'), {
+      target: { value: 'password123!' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /Sign in/i }));
+
+    await waitFor(() => {
+      expect(signin).toHaveBeenCalledWith({
+        email: 'test@example.com',
+        password: 'password123!',
+      });
+      expect(toast.success).toHaveBeenCalledWith('Welcome, test@example.com');
+    });
   });
 
-  it('error calls showErrorToast', async () => {
-    // const error = new Error('Invalid credentials');
-    // signin.mockRejectedValueOnce(error);
-    // render(<AuthForm login submitLabel='Sign in' />);
-    // fireEvent.change(screen.getByPlaceholderText(/email/i), {
-    //   target: { value: 'fail@example.com' },
-    // });
-    // fireEvent.change(screen.getByPlaceholderText(/password/i), {
-    //   target: { value: 'password123!' },
-    // });
-    // fireEvent.click(screen.getByRole('button', { name: /sign in/i }));
-    // await waitFor(() => {
-    //   expect(showErrorToast).toHaveBeenCalledWith(error);
-    // });
+  it('signup submit calls signup and shows toast', async () => {
+    const user = { email: 'new@example.com' };
+    signup.mockResolvedValueOnce({ user });
+
+    render(<AuthForm submitLabel='Sign up' />);
+
+    fireEvent.change(screen.getByPlaceholderText('email'), {
+      target: { value: 'new@example.com' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('password'), {
+      target: { value: 'password123!' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('confirmPassword'), {
+      target: { value: 'password123!' },
+    });
+
+    fireEvent.click(screen.getByRole('button', { name: /Sign up/i }));
+
+    await waitFor(() => {
+      expect(signup).toHaveBeenCalledWith({
+        email: 'new@example.com',
+        password: 'password123!',
+        confirmPassword: 'password123!',
+      });
+      expect(toast.success).toHaveBeenCalledWith('Welcome, new@example.com');
+    });
   });
 
-  it('email clear works', async () => {
-    // render(<AuthForm login submitLabel='Sign in' />);
-    // const input = screen.getByPlaceholderText(/email/i);
-    // fireEvent.change(input, { target: { value: 'to-clear@example.com' } });
-    // expect(input).toHaveValue('to-clear@example.com');
-    // const clearButton = screen.getAllByTitle('Clear')[0];
-    // fireEvent.click(clearButton);
-    // await waitFor(() => {
-    //   expect(input).toHaveValue('');
-    // });
+  it('error during signin calls showErrorToast', async () => {
+    const error = new Error('Invalid credentials');
+    signin.mockRejectedValueOnce(error);
+
+    render(<AuthForm login submitLabel='Sign in' />);
+
+    fireEvent.change(screen.getByPlaceholderText('email'), {
+      target: { value: 'fail@example.com' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('password'), {
+      target: { value: 'password123!' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /Sign in/i }));
+
+    await waitFor(() => {
+      expect(showErrorToast).toHaveBeenCalledWith(error);
+    });
+  });
+
+  it('clears email input when clear button is clicked', async () => {
+    render(<AuthForm login submitLabel='Sign in' />);
+
+    const input = screen.getByPlaceholderText('email');
+    fireEvent.change(input, { target: { value: 'to-clear@example.com' } });
+    expect(input).toHaveValue('to-clear@example.com');
+
+    const clearButton = screen.getAllByTitle('Clear')[0];
+    fireEvent.click(clearButton);
+
+    await waitFor(() => {
+      expect(input).toHaveValue('');
+    });
   });
 });
