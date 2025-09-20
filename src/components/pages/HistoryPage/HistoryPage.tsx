@@ -1,15 +1,19 @@
+/* eslint-disable max-len */
 'use client';
 
+import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { Button } from '@/components/UI/Button/Button.tsx';
 import { Input } from '@/components/UI/Input/Input.tsx';
 import '@/services/firebase/admin/request-history/actions';
-import { useRequestHistory } from '@/services/firebase/admin/request-history/useRequestHistory.ts';
+import { addRequestHistoryEntry } from '@/services/firebase/admin/request-history/add-entry.ts';
+import { useRequestHistoryQuery } from '@/services/firebase/admin/request-history/useRequestHistoryQuery';
 import { historyEntryMock } from '@/services/firebase/admin/request-history/utils.ts';
 import { useState, type ReactNode } from 'react';
 
 export default function SignupPage(): ReactNode {
   const [value, setValue] = useState('');
-  const { addEntry, deleteEntry, queryEntries } = useRequestHistory();
+  const { currentUser } = useAuth();
+  const { deleteEntry, queryEntries } = useRequestHistoryQuery({ currentUser });
 
   return (
     <section>
@@ -18,7 +22,7 @@ export default function SignupPage(): ReactNode {
       <Button
         label='Add entry'
         onClick={() => {
-          void addEntry(historyEntryMock).then(console.debug);
+          void addRequestHistoryEntry(currentUser, historyEntryMock).then(console.debug);
         }}
       />
       <Button

@@ -1,7 +1,7 @@
+/* eslint-disable max-len */
 import { StorageKey } from '@/common/constants/index.ts';
 import { isObject, JSONParse } from '@/common/utils/index.ts';
-import type { UserPartial } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
-import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
+import type { PropsWithCurrentUser } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { useCallback } from 'react';
 import type { ParsedVars } from '../VarsForm.utils.ts';
 import { isLikePersistedVarsFormData, parseVarFieldsArray } from '../VarsForm.utils.ts';
@@ -9,12 +9,11 @@ import { isLikePersistedVarsFormData, parseVarFieldsArray } from '../VarsForm.ut
 export type UseCurrentUserVarsResult = {
   getFromLocalStorage: () => ParsedVars | null;
   apply: (s: string) => string;
-  currentUser: UserPartial | null;
 };
 
-export const useCurrentUserVars = (): UseCurrentUserVarsResult => {
-  const { currentUser } = useAuth();
-
+export const useCurrentUserVars = ({
+  currentUser,
+}: PropsWithCurrentUser): UseCurrentUserVarsResult => {
   const getFromLocalStorage = useCallback((): ParsedVars | null => {
     if (!currentUser?.email) {
       return null;
@@ -41,7 +40,6 @@ export const useCurrentUserVars = (): UseCurrentUserVarsResult => {
   );
 
   return {
-    currentUser,
     getFromLocalStorage,
     apply,
   };

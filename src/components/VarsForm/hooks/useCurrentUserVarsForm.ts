@@ -1,5 +1,6 @@
 import { StorageKey } from '@/common/constants/index.ts';
 import { isObject, JSONParse } from '@/common/utils/index.ts';
+import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { useCallback, useEffect } from 'react';
 import type { UseFormGetValues, UseFormReset } from 'react-hook-form';
 import type { VarsFormData } from '../VarsForm.tsx';
@@ -19,8 +20,9 @@ export const useCurrentUserVarsForm = ({
   getValues,
   reset,
 }: UseCurrentUserFormProps): UseCurrentUserFormResult => {
-  const result = useCurrentUserVars();
-  const { getFromLocalStorage, currentUser } = result;
+  const { currentUser } = useAuth();
+  const result = useCurrentUserVars({ currentUser });
+  const { getFromLocalStorage } = result;
 
   const saveToLocalStorage = useCallback(() => {
     if (!currentUser?.email) {
