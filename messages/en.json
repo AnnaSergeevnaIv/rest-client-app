@@ -12,10 +12,54 @@
     "removeHeader": "Remove"
   },
   "Client": {
-    "submit": "Submit"
+    "submit": "Submit",
+    "heading": "REST Client"
   },
   "ResponseSection": {
     "response": "Response",
     "responseError": "Response error"
+  },
+  "VariablesPage": {
+    "heading": "Variables",
+    "add": "Add",
+    "clear": "Clear"
+  },
+  "Common": {
+    "signin": "Sign in",
+    "signup": "Sign up",
+    "logout": "Logout",
+    "home": "Home",
+    "history": "History",
+    "variables": "Variables",
+    "client": "REST client",
+    "greeting": "Welcome back,"
+  },
+  "AboutUsPage": {
+    "heading": "Our team",
+    "developer": "Developer",
+    "teamLead": "Team Lead | Developer",
+    "about": "About",
+    "NataliyaMoon": "Nataliya Moon",
+    "AnnaIvanova": "Anna Ivanova",
+    "AndrewM": "Andrew M",
+    "NataliyaBrief": "Hold a red diploma in Journalism and a Master’s degree in Social Sciences. A few years ago made a career shift to fullstack dev. Enjoy planning and structuring.",
+    "AnnaBrief": "Believes that on the path a wrong turn was taken... On the way to development, accidentally turned off and became an engineer in relay protection and automation. Trying to correct this unfortunate mistake.",
+    "AndrewBrief": "Passionate about learning new technologies and building innovative projects. Key softskills: responsibility, attention to detail, eagerness to learn."
+  },
+  "AuthPage": {
+    "signin": "Sign in",
+    "createAccount": "Create account",
+    "login": "Login"
+  },
+  "AuthForm": {
+    "email": "email",
+    "password": "password",
+    "confirmPassword": "confirm password"
+  },
+  "SignupPage": {
+    "heading": "Sign Up",
+    "alreadyHaveAccount": "Already have an account?",
+    "signIn": "Sign in",
+    "register": "Register"
   }
 }

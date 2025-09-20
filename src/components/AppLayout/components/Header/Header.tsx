@@ -12,23 +12,16 @@ import { type ReactNode } from 'react';
 import styles from './Header.module.scss';
 import { useLogoutButton } from './hooks/useLogoutButton.ts';
 import { useStickyHeader } from './hooks/useStickyHeader.ts';
+import { useTranslations } from 'next-intl';
 
 const LOGO_PROPS = { src: '/logo.png', alt: 'app logo' };
 const ICON_SIZE = 16;
-const LinkText = {
-  Signin: 'Sign in',
-  Signup: 'Sign up',
-  Logout: 'Logout',
-  Home: 'Home',
-  History: 'History',
-  Variables: 'Variables',
-  Client: 'REST client',
-} as const;
 
 export const Header = (): ReactNode => {
   const { logout, isAuth, loggingOut, currentUser } = useLogoutButton();
   const { isSticky } = useStickyHeader({ scrollThreshold: 70 });
   const pathname = usePathname();
+  const tCommon = useTranslations('Common');
 
   return (
     <header className={clsx(styles.header, isSticky && styles.sticky)}>
@@ -51,14 +44,14 @@ export const Header = (): ReactNode => {
                 href={RoutePath.Signin}
                 data-disable={pathname.includes(RoutePath.Signin)}
               >
-                {LinkText.Signin}
+                {tCommon('signin')}
               </Link>
               <Link
                 className={styles.link}
                 href={RoutePath.Signup}
                 data-disable={pathname.includes(RoutePath.Signup)}
               >
-                {LinkText.Signup}
+                {tCommon('signup')}
               </Link>
             </>
           )}
@@ -70,21 +63,21 @@ export const Header = (): ReactNode => {
                   href={RoutePath.Client}
                   data-disable={pathname.includes(RoutePath.Client)}
                 >
-                  {LinkText.Client}
+                  {tCommon('client')}
                 </Link>
                 <Link
                   className={styles.link}
                   href={RoutePath.Variables}
                   data-disable={pathname.includes(RoutePath.Variables)}
                 >
-                  {LinkText.Variables}
+                  {tCommon('variables')}
                 </Link>
                 <Link
                   className={styles.link}
                   href={RoutePath.History}
                   data-disable={pathname.includes(RoutePath.History)}
                 >
-                  {LinkText.History}
+                  {tCommon('history')}
                 </Link>
               </div>
               <Link
@@ -92,7 +85,7 @@ export const Header = (): ReactNode => {
                 href={RoutePath.Home}
                 data-disable={pathname === RoutePath.Home}
               >
-                {LinkText.Home}
+                {tCommon('home')}
               </Link>
             </>
           )}
@@ -100,7 +93,7 @@ export const Header = (): ReactNode => {
           {isAuth && (
             <Button
               className={styles.logout}
-              label={LinkText.Logout}
+              label={tCommon('logout')}
               title={currentUser?.email ?? ''}
               onClick={logout}
               loading={loggingOut}

@@ -8,9 +8,7 @@ import { CLEAR_BTN_TEXT, Input } from '../UI/Input/Input.tsx';
 import styles from './VarsForm.module.scss';
 import { DEFAULT_FORMDATA_VALUES } from './VarsForm.utils.ts';
 import { useCurrentUserVarsForm } from './hooks/useCurrentUserVarsForm.ts';
-
-const ADD_BTN_TEXT = 'Add';
-const CLEAR_ALL_BTN_TEXT = 'Clear';
+import { useTranslations } from 'next-intl';
 
 export type VarField<T = string> = {
   key: string;
@@ -31,6 +29,7 @@ export default function VarsForm(): ReactNode {
   } = useForm<VarsFormData>({ defaultValues: DEFAULT_FORMDATA_VALUES });
 
   useCurrentUserVarsForm({ getValues, reset });
+  const tVars = useTranslations('VariablesPage');
 
   const { fields, prepend, remove } = useFieldArray<VarsFormData, 'vars'>({
     control,
@@ -55,8 +54,8 @@ export default function VarsForm(): ReactNode {
   return (
     <form className={styles.form}>
       <div className={styles.group}>
-        <Button className={styles.add} label={ADD_BTN_TEXT} onClick={handleAddClick} />
-        <Button className={styles.btn} label={CLEAR_ALL_BTN_TEXT} onClick={handleClearClick} />
+        <Button className={styles.add} label={tVars('add')} onClick={handleAddClick} />
+        <Button className={styles.btn} label={tVars('clear')} onClick={handleClearClick} />
       </div>
       <div className={styles.fields}>
         {fields.map((field, idx) => (

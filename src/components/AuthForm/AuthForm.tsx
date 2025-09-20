@@ -12,9 +12,9 @@ import { toast } from 'react-toastify';
 import { useAuth } from '../ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { Button } from '../UI/Button/Button.tsx';
 import { Input } from '../UI/Input/Input.tsx';
-import { InputPlaceholder } from './AuthForm.constants.ts';
 import style from './AuthForm.module.scss';
 import { validator } from './AuthForm.utils.ts';
+import { useTranslations } from 'next-intl';
 
 const ANON_USER = 'anonymous';
 
@@ -30,6 +30,7 @@ type AuthFormInputs = {
 };
 
 export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
+  const tAuth = useTranslations('AuthForm');
   const { signin, signup, loading } = useAuth();
   const locale = useLocale();
   const router = useRouter();
@@ -74,7 +75,7 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
   return (
     <form className={style.form} onSubmit={onSubmit}>
       <Input
-        placeholder={InputPlaceholder.Email}
+        placeholder={tAuth('email')}
         autoComplete='on'
         error={errors.email?.message}
         onClear={() => {
@@ -85,7 +86,7 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
         })}
       />
       <Input
-        placeholder={InputPlaceholder.Password}
+        placeholder={tAuth('password')}
         type='password'
         error={errors.password?.message}
         onClear={() => {
@@ -98,7 +99,7 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
       {!login && (
         <Input
           type='password'
-          placeholder={InputPlaceholder.Confirm}
+          placeholder={tAuth('confirmPassword')}
           error={errors.confirmPassword?.message}
           onClear={() => {
             clearInput('confirmPassword');
