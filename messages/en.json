@@ -32,7 +32,8 @@
     "history": "History",
     "variables": "Variables",
     "client": "REST client",
-    "greeting": "Welcome back,"
+    "greeting": "Welcome back,",
+    "welcome": "Welcome!"
   },
   "AboutUsPage": {
     "heading": "Our team",
