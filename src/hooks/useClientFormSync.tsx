@@ -91,7 +91,7 @@ export function useClientFormSync(
       .finally(() => {
         setLoading(false);
       });
-  }, [path, setValue, getQueryParams, router, currentUser, getValues, searchParamsForLink]);
+  }, [path, setValue, getQueryParams, router]);
 
   return { formData: getValues(), response, error, loading };
 }

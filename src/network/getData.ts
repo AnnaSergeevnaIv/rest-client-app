@@ -37,7 +37,7 @@ export const getData = async (
     httpStatus: 0,
     timestamp: Date.now(),
     method: formData.method as Uppercase<HttpMethodName>,
-    requestSize: new TextEncoder().encode(JSON.stringify(options.body ?? undefined)).length,
+    requestSize: new TextEncoder().encode(options.body ?? undefined).length,
     responseSize: 0,
     url: formData.url,
     link: link,
@@ -46,7 +46,7 @@ export const getData = async (
   try {
     const response: AxiosResponse<string> = await axios(axiosConfig);
     analyticsData.durationMs = Date.now() - start;
-    analyticsData.responseSize = new TextEncoder().encode(JSON.stringify(response.data)).length;
+    analyticsData.responseSize = new TextEncoder().encode(response.data).length;
     analyticsData.httpStatus = response.status;
     const headers: Record<string, string> = Object.fromEntries(
       Object.entries(response.headers).map(([k, v]) => [k, String(v)]),
