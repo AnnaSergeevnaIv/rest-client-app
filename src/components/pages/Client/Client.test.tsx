@@ -7,6 +7,7 @@ vi.mock('next-intl', () => ({
     const translations: Record<string, string> = {
       submit: 'Submit',
       urlPlaceholder: 'Enter URL',
+      heading: 'REST Client',
     };
     return translations[key] || key;
   },
@@ -38,6 +39,16 @@ vi.mock('next/navigation', () => ({
   }),
   useSearchParams: () => ({
     get: vi.fn(),
+  }),
+}));
+vi.mock('@/components/ProvidersWrapper/AuthProvider/AuthContext', () => ({
+  useAuth: () => ({
+    currentUser: {
+      email: 'test@test.com',
+      uid: '123',
+    },
+    signIn: vi.fn(),
+    signOut: vi.fn(),
   }),
 }));
 

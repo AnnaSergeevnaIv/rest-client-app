@@ -1,6 +1,7 @@
 export const MS_PER_SEC = 1000;
 export const MS_PER_MIN = 60 * MS_PER_SEC;
 export const ERR_SOMETHING_WRONG = 'Something went wrong';
+const STORAGE_KEY_PREFIX = `e0abef6048ae`;
 
 export const RoutePath = {
   Home: '/',
@@ -35,9 +36,9 @@ export const KeyboardEventKey = {
   Tab: 'Tab',
 } as const;
 
-export const StorageKey = {
-  Vars: 'vars-e0abef6048ae',
-  IdToken: 'id-token-e0abef6048ae',
-  AuthForm: 'auth-form-e0abef6048ae',
-  VarsForm: 'vars-form-e0abef6048ae',
+export const StorageKey: Record<string, `${string}-${typeof STORAGE_KEY_PREFIX}`> = {
+  Vars: `vars-${STORAGE_KEY_PREFIX}`,
+  IdToken: `id-token-${STORAGE_KEY_PREFIX}`,
+  AuthForm: `auth-form-${STORAGE_KEY_PREFIX}`,
+  VarsForm: `vars-form-${STORAGE_KEY_PREFIX}`,
 } as const;
