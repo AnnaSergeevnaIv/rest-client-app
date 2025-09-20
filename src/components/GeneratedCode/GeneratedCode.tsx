@@ -10,6 +10,7 @@ import type { ClientFormType, Header } from '../pages/Client/Client.types';
 import { CODE_LANGUAGES } from './GeneratedCode.constants';
 import styles from './GeneratedCode.module.scss';
 import { generateCode } from './GeneratedCode.utils';
+import { useCurrentUserVars } from '../VarsForm/hooks/useCurrentUserVars';
 
 export type CodeLanguage = keyof typeof CODE_LANGUAGES;
 type GeneratedCodeProps = {
@@ -24,12 +25,16 @@ export default function GeneratedCode({ control }: GeneratedCodeProps): React.Re
   const onChangeCodeLanguage = (v: string): void => {
     setCodeLanguage(v as CodeLanguage);
   };
+  const { apply } = useCurrentUserVars();
 
   useEffect(() => {
-    const validHeaders = headers?.filter(
-      (header): header is Header => header.key !== undefined && header.value !== undefined,
-    );
-    generateCode(codeLanguage, url ?? '', method ?? '', validHeaders, body ?? '')
+    const validHeaders = headers
+      ?.filter((header): header is Header => header.key !== undefined && header.value !== undefined)
+      .map(header => ({
+        ...header,
+        value: apply(header.value),
+      }));
+    generateCode(codeLanguage, apply(url ?? ''), method ?? '', validHeaders, apply(body ?? ''))
       .then(c => {
         setCode(c);
       })

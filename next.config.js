@@ -7,6 +7,7 @@ const nextConfig = {
   sassOptions: {
     prependData: `@use "./src/styles/utils/placeholders" as *; @use "./src/styles/utils/vars" as *;`,
   },
+  reactStrictMode: false,
 };
 const withNextIntl = createNextIntlPlugin();
 export default withNextIntl(nextConfig);
