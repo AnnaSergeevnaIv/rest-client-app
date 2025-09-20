@@ -5,6 +5,7 @@ import Image from 'next/image';
 import type { JSX } from 'react';
 import type { PersonData } from '../../data/team-data';
 import styles from './PersonCard.module.scss';
+import { useTranslations } from 'next-intl';
 
 type PersonCardProps = PersonData & {
   className?: string;
@@ -19,6 +20,7 @@ export const PersonCard = ({
   brief,
 }: PersonCardProps): JSX.Element => {
   const [, githubName] = github.match(/\/([^/]+)$/) ?? [];
+  const tAboutUs = useTranslations('AboutUsPage');
 
   return (
     <div className={clsx(styles['card-wrapper'], className)}>
@@ -34,14 +36,14 @@ export const PersonCard = ({
           />
         </div>
       </div>
-      <span className={styles.name}>{name}</span>
-      <span className={styles.role}>{role}</span>
+      <span className={styles.name}>{tAboutUs(name)}</span>
+      <span className={styles.role}>{tAboutUs(role)}</span>
       <a className={styles.github} href={github} {...LinkProps}>
         <IconGithub size={20} />
         {githubName}
       </a>
-      <b>About:</b>
-      <p className={styles.bio}>{brief}</p>
+      <b>{tAboutUs('about')}:</b>
+      <p className={styles.bio}>{tAboutUs(brief)}</p>
     </div>
   );
 };

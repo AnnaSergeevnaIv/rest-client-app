@@ -43,7 +43,7 @@ export default function Client(): React.ReactNode {
 
   return (
     <div className={styles.wrapper}>
-      <h1 className={styles.heading}>Client REST</h1>
+      <h1 className={styles.heading}>{t('heading')}</h1>
       <form
         onSubmit={e => {
           e.preventDefault();

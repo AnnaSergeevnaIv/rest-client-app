@@ -3,12 +3,6 @@ export const EMAIL_EXAMPLE = 'login@domain.com';
 export const PASSWORD_MIN_LEN = 8;
 export const PASSWORD_MAX_LEN = 16;
 
-export const InputPlaceholder = {
-  Email: 'email',
-  Password: 'password',
-  Confirm: 'confirm password',
-} as const;
-
 export const ValidationMessage = {
   FieldIsRequired: 'The field is required.',
   MustContainLetter: 'Must contain at least one letter.',

@@ -7,6 +7,7 @@ vi.mock('next-intl', () => ({
     const translations: Record<string, string> = {
       submit: 'Submit',
       urlPlaceholder: 'Enter URL',
+      heading: 'REST Client',
     };
     return translations[key] || key;
   },
