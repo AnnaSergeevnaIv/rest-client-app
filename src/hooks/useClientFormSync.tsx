@@ -1,24 +1,22 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+import { getErrorMessage, showErrorToast } from '@/common/utils';
 import { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';
+import type { ResponseData } from '@/components/pages/Client/Client';
 import type { ClientFormType } from '@/components/pages/Client/Client.types';
 import {
   decodeUrlBody,
   parseClientPath,
   queryParamsToHeaders,
 } from '@/components/pages/Client/Client.utils';
+import { getData } from '@/network/getData';
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 import { useCustomSearchParams } from './useCustomSearchParams';
-import { useEffect, useState } from 'react';
-import { showErrorToast, getErrorMessage } from '@/common/utils';
-import { getData } from '@/network/getData';
-import type { ResponseData } from '@/components/pages/Client/Client';
-import { type UserPartial } from '@/components/ProvidersWrapper/AuthProvider/AuthContext';
 
 export function useClientFormSync(
   setValue: UseFormSetValue<ClientFormType>,
   getValues: UseFormGetValues<ClientFormType>,
-  currentUser: UserPartial | null,
 ): {
   formData: ClientFormType;
   response: ResponseData | null;
@@ -78,7 +76,7 @@ export function useClientFormSync(
 
     setLoading(true);
     const link = `${path}?${searchParamsForLink.toString()}`;
-    getData(getValues(), link, currentUser)
+    getData(getValues(), link)
       .then(res => {
         setResponse(res.data);
         setError(res.error);

@@ -6,11 +6,9 @@
 }
 
 .key {
-  border-right: unset;
-  border-bottom: unset;
-  border-radius: 0;
-  border-top-right-radius: 0;
-  border-bottom-right-radius: 0;
+  border-right: unset !important;
+  border-bottom: unset !important;
+  border-radius: 0 !important;
 }
 
 .fields {
@@ -26,14 +24,13 @@
 }
 
 .value {
-  border-bottom: unset;
-  border-radius: 0;
-  border-top-left-radius: 0;
-  border-bottom-left-radius: 0;
+  border-bottom: unset !important;
+  border-radius: 0 !important;
 }
 
 .remove {
-  padding: 8px;
+  padding: 10px;
+  color: var(--color-green-gray);
   @include mix.focused {
     color: var(--color-accent);
   }

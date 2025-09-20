@@ -13,14 +13,6 @@ export const historyEntryMock: RequestHistoryEntry = {
   link: btoa('https://test-url.com'),
 };
 
-export const isLikeQueryHistoryEntries = (obj: unknown): obj is QueryHistoryEntriesResult => {
-  return (
-    hasOwnKeys<QueryHistoryEntriesResult>(obj, 'data', 'done') &&
-    Array.isArray(obj.data) &&
-    obj.data.every(isLikeRequestHistoryEntry)
-  );
-};
-
 const isLikeRequestHistoryEntry = (obj: unknown): obj is RequestHistoryEntry => {
   return hasOwnKeys<RequestHistoryEntry>(
     obj,
@@ -33,5 +25,16 @@ const isLikeRequestHistoryEntry = (obj: unknown): obj is RequestHistoryEntry => 
     'timestamp',
     'url',
     'createdAt',
+  );
+};
+
+export const isLikeRequestHistoryEntries = (obj: unknown): obj is RequestHistoryEntry[] => {
+  return Array.isArray(obj) && obj.every(isLikeRequestHistoryEntry);
+};
+
+export const isLikeQueryHistoryEntries = (obj: unknown): obj is QueryHistoryEntriesResult => {
+  return (
+    hasOwnKeys<QueryHistoryEntriesResult>(obj, 'data', 'done') &&
+    isLikeRequestHistoryEntries(obj.data)
   );
 };
