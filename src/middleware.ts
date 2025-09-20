@@ -15,12 +15,15 @@ function authMiddleware(request: NextRequest, response: NextResponse): NextRespo
   const [, locale = AppLocales.Default, ...rest] = pathname.split('/');
   const pathnameWithoutLocale = `/${rest.join('/')}`;
 
-  const isPrivateRoute = privateRoutes.some(p => pathnameWithoutLocale.localeCompare(p) === 0);
+  const isPrivateRoute =
+    privateRoutes.some(p => pathnameWithoutLocale.localeCompare(p) === 0) ||
+    pathnameWithoutLocale.includes(RoutePath.Client);
   const isAuthRoute = authRoutes.some(p => pathnameWithoutLocale.localeCompare(p) === 0);
 
   if ((!token && isPrivateRoute) || (token && isAuthRoute)) {
     return NextResponse.redirect(new URL(`/${locale}${RoutePath.Home}`, request.url));
   }
+
   return response;
 }
 
