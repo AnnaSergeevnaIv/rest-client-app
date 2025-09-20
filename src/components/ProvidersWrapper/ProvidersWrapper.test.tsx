@@ -1,16 +1,21 @@
+import React, { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
 import { describe, it, vi, expect } from 'vitest';
 
 vi.mock('next/dynamic', () => ({
   __esModule: true,
-  default: (fn: any) => {
-    const Component = (props: any) => <>{props.children}</>;
+  default: (importFn: any, options?: any) => {
+    const Component: React.FC<PropsWithChildren<Record<string, unknown>>> = ({ children }) => (
+      <>{children}</>
+    );
     return Component;
   },
 }));
 
 vi.mock('react-toastify', () => ({
-  ToastContainer: (props: any) => <div data-testid='toast'>{props.autoClose}</div>,
+  ToastContainer: (props: React.PropsWithChildren<{ autoClose: number }>) => (
+    <div data-testid='toast'>{props.autoClose}</div>
+  ),
 }));
 
 import ProvidersWrapper from './ProvidersWrapper';
