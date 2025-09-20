@@ -4,11 +4,11 @@ import { Header } from './Header';
 
 vi.mock('next/image', () => ({
   __esModule: true,
-  default: (props: any) => <img {...props} />,
+  default: (props: React.ImgHTMLAttributes<HTMLImageElement>) => <img {...props} />,
 }));
 
 vi.mock('@i18n/navigation.ts', () => ({
-  Link: ({ href, children, ...rest }: any) => (
+  Link: ({ href, children, ...rest }: { href: string; children: React.ReactNode }) => (
     <a href={href} {...rest}>
       {children}
     </a>
@@ -35,26 +35,44 @@ vi.mock('./hooks/useStickyHeader.ts', () => ({
   useStickyHeader: () => ({ isSticky: false }),
 }));
 
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      signin: 'Sign in',
+      signup: 'Sign up',
+      client: 'REST Client',
+      variables: 'Variables',
+      history: 'History',
+      home: 'Home',
+      logout: 'Logout',
+    };
+    return translations[key] ?? key;
+  },
+}));
+
 describe('Header', () => {
   afterEach(() => {
     vi.clearAllMocks();
   });
 
-  it('renders logo and navigation', () => {
-    // render(<Header />);
-    // expect(screen.getByAltText('app logo')).toBeInTheDocument();
-    // expect(screen.getByText('REST client')).toBeInTheDocument();
-    // expect(screen.getByText('Variables')).toBeInTheDocument();
-    // expect(screen.getByText('History')).toBeInTheDocument();
-    // expect(screen.getByText('Home')).toBeInTheDocument();
-    // expect(screen.getByTestId('lang-switcher')).toBeInTheDocument();
+  it('renders logo, navigation links, and LangSwitcher', () => {
+    render(<Header />);
+
+    expect(screen.getByAltText('app logo')).toBeInTheDocument();
+    expect(screen.getByText(/REST Client/i)).toBeInTheDocument();
+    expect(screen.getByText(/Variables/i)).toBeInTheDocument();
+    expect(screen.getByText(/History/i)).toBeInTheDocument();
+    expect(screen.getByText(/Home/i)).toBeInTheDocument();
+    expect(screen.getByTestId('lang-switcher')).toBeInTheDocument();
   });
 
   it('renders Logout button and calls logout on click', () => {
-    // render(<Header />);
-    // const logoutButton = screen.getByRole('button', { name: /Logout/i });
-    // expect(logoutButton).toBeInTheDocument();
-    // fireEvent.click(logoutButton);
-    // expect(logoutMock).toHaveBeenCalled();
+    render(<Header />);
+
+    const logoutButton = screen.getByRole('button', { name: /Logout/i });
+    expect(logoutButton).toBeInTheDocument();
+
+    fireEvent.click(logoutButton);
+    expect(logoutMock).toHaveBeenCalled();
   });
 });

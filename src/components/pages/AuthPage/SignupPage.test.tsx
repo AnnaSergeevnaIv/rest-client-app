@@ -23,6 +23,18 @@ vi.mock('@/i18n/navigation.ts', () => ({
   ),
 }));
 
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      heading: 'Sign up',
+      register: 'Register',
+      alreadyHaveAccount: 'Already have an account?',
+      signIn: 'Sign in',
+    };
+    return translations[key] ?? key;
+  },
+}));
+
 import { AuthForm } from '@/components/AuthForm/AuthForm.tsx';
 
 describe('SignupPage', () => {
@@ -37,7 +49,6 @@ describe('SignupPage', () => {
 
     const mockedAuthForm = AuthForm as MockedFunction<typeof AuthForm>;
     const firstCallProps = mockedAuthForm.mock.calls[0][0];
-
     expect(firstCallProps).toEqual(
       expect.objectContaining({
         submitLabel: 'Register',
