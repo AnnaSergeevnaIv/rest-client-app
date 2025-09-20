@@ -6,7 +6,7 @@ import '../config.ts';
 
 const DEFAULT_QUERY_LIMIT = 10;
 
-type Timestamp<T = string> = T;
+type Timestamp<T = number> = T;
 
 type HttpMethodName = 'get' | 'put' | 'post' | 'delete';
 

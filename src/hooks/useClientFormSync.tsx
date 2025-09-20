@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
+import { showErrorToast } from '@/common/utils';
 import { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';
 import type { ClientFormType } from '@/components/pages/Client/Client.types';
 import {
@@ -7,10 +8,9 @@ import {
   queryParamsToHeaders,
 } from '@/components/pages/Client/Client.utils';
 import { usePathname, useRouter } from 'next/navigation';
+import { useEffect } from 'react';
 import type { UseFormGetValues, UseFormSetValue } from 'react-hook-form';
 import { useCustomSearchParams } from './useCustomSearchParams';
-import { useEffect } from 'react';
-import { showErrorToast } from '@/common/utils';
 
 export function useClientFormSync(
   setValue: UseFormSetValue<ClientFormType>,
@@ -63,6 +63,6 @@ export function useClientFormSync(
       setValue('headers', headers);
     }
     setIsInitializing(false);
-  }, [path, setValue, getQueryParams, router]);
+  }, [path, setValue, getQueryParams, router, setIsInitializing, setIsSubmitting]);
   return { formData: getValues() };
 }
