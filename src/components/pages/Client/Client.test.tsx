@@ -40,6 +40,16 @@ vi.mock('next/navigation', () => ({
     get: vi.fn(),
   }),
 }));
+vi.mock('@/components/ProvidersWrapper/AuthProvider/AuthContext', () => ({
+  useAuth: () => ({
+    currentUser: {
+      email: 'test@test.com',
+      uid: '123',
+    },
+    signIn: vi.fn(),
+    signOut: vi.fn(),
+  }),
+}));
 
 vi.mock('@/hooks/useCustomSearchParams', () => ({
   useCustomSearchParams: () => ({

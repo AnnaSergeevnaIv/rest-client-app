@@ -44,7 +44,6 @@ export const getData = async (
   };
   const start = Date.now();
   try {
-    // analyticsData.timestamp = new Date().toISOString();
     const response: AxiosResponse<string> = await axios(axiosConfig);
     analyticsData.durationMs = Date.now() - start;
     analyticsData.responseSize = new TextEncoder().encode(JSON.stringify(response.data)).length;
