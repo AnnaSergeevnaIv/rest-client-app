@@ -32,7 +32,8 @@
     "history": "История",
     "variables": "Переменные",
     "client": "REST клиент",
-    "greeting": "Добро пожаловать,"
+    "greeting": "Добро пожаловать,",
+    "welcome": "Добро пожаловать!"
   },
   "AboutUsPage": {
     "heading": "Наша команда",

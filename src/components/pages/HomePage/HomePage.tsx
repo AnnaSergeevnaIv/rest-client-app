@@ -16,7 +16,7 @@ export default function HomePage(): ReactNode {
     <section className={styles.main}>
       {!isAuth ? (
         <div className={styles.guest}>
-          <h1 className={styles.heading}>Welcome!</h1>
+          <h1 className={styles.heading}>{tCommon('welcome')}</h1>
           <div className={styles.nav}>
             <Link href={RoutePath.Signin} className={styles.link}>
               {tCommon('signin')}
