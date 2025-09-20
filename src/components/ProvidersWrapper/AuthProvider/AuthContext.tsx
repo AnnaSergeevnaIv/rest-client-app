@@ -7,6 +7,10 @@ const ERR_USE_OUTSIDE_CONTEXT = 'useAuth() can only be used within an AuthContex
 
 export type UserPartial = PartialWithRequired<User, 'email' | 'uid'>;
 
+export type PropsWithCurrentUser<P = unknown> = P & {
+  currentUser: UserPartial | null;
+};
+
 export type UseAuthReturn = Pick<typeof AuthClient, 'signin' | 'signout' | 'signup'> & {
   currentUser: UserPartial | null;
   loading: boolean;

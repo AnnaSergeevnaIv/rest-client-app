@@ -122,3 +122,11 @@ export function JSONParse(data: string | null): unknown {
     return;
   }
 }
+
+export const getTimestamp = ((): (() => number) => {
+  let id = Date.now();
+  return () => {
+    const now = Date.now();
+    return (id = id === now ? now + 1 : now);
+  };
+})();

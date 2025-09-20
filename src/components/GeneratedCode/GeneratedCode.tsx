@@ -10,12 +10,18 @@ import type { ClientFormType, Header } from '../pages/Client/Client.types';
 import { CODE_LANGUAGES } from './GeneratedCode.constants';
 import styles from './GeneratedCode.module.scss';
 import { generateCode } from './GeneratedCode.utils';
+import { useCurrentUserVars } from '../VarsForm/hooks/useCurrentUserVars';
+import { type UserPartial } from '../ProvidersWrapper/AuthProvider/AuthContext';
 
 export type CodeLanguage = keyof typeof CODE_LANGUAGES;
 type GeneratedCodeProps = {
   control: Control<ClientFormType>;
+  currentUser: UserPartial | null;
 };
-export default function GeneratedCode({ control }: GeneratedCodeProps): React.ReactNode {
+export default function GeneratedCode({
+  control,
+  currentUser,
+}: GeneratedCodeProps): React.ReactNode {
   const [codeLanguage, setCodeLanguage] = useState<CodeLanguage>('cURL');
   const [code, setCode] = useState<string>('');
   const { url, method, headers, body } = useWatch({
@@ -25,18 +31,23 @@ export default function GeneratedCode({ control }: GeneratedCodeProps): React.Re
     setCodeLanguage(v as CodeLanguage);
   };
 
+  const { apply } = useCurrentUserVars({ currentUser });
+
   useEffect(() => {
-    const validHeaders = headers?.filter(
-      (header): header is Header => header.key !== undefined && header.value !== undefined,
-    );
-    generateCode(codeLanguage, url ?? '', method ?? '', validHeaders, body ?? '')
+    const validHeaders = headers
+      ?.filter((header): header is Header => header.key !== undefined && header.value !== undefined)
+      .map(header => ({
+        ...header,
+        value: apply(header.value),
+      }));
+    generateCode(codeLanguage, apply(url ?? ''), method ?? '', validHeaders, apply(body ?? ''))
       .then(c => {
         setCode(c);
       })
       .catch((error: unknown) => {
         setCode('Error generating code: ' + getErrorMessage(error));
       });
-  }, [codeLanguage, code, url, method, headers, body]);
+  }, [codeLanguage, code, url, method, headers, body, currentUser, apply]);
 
   return (
     <div className={styles.wrapper}>

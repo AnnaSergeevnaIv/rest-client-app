@@ -5,10 +5,10 @@ export const CODE_LANGUAGES = {
   NodeJs: 'NodeJs',
   Python: 'Python',
   Java: 'Java',
-  'C#': 'C#',
+  csharp: 'csharp',
   Go: 'Go',
   PHP: 'PHP',
-  Ruby: 'Ruby',
+  ruby: 'ruby',
 } as const;
 
 export const CODE_VARIANTS = {
@@ -18,8 +18,8 @@ export const CODE_VARIANTS = {
   NodeJs: 'Axios',
   Python: 'Requests',
   Java: 'OkHttp',
-  'C#': 'RestSharp',
+  csharp: 'restsharp',
   Go: 'Native',
   PHP: 'cURL',
-  Ruby: 'Net:HTTP',
+  ruby: 'net::http',
 } as const;

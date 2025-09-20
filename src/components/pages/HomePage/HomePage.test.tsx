@@ -1,5 +1,3 @@
-'use client';
-
 import type { ReactNode } from 'react';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
@@ -8,7 +6,7 @@ import HomePage from './HomePage';
 import * as AuthContext from '@/components/ProvidersWrapper/AuthProvider/AuthContext';
 
 vi.mock('../AboutUsPage/AboutUsPage', () => ({
-  default: () => React.createElement('div', { 'data-testid': 'about-us-page' }),
+  default: () => <div data-testid='about-us-page' />,
 }));
 
 vi.mock('@i18n/navigation', () => ({
@@ -20,15 +18,26 @@ vi.mock('@i18n/navigation', () => ({
     children: ReactNode;
     href: string;
     className?: string;
-  }): React.ReactElement => React.createElement('a', { href, className }, children),
+  }) => (
+    <a href={href} className={className} data-testid='mock-link'>
+      {children}
+    </a>
+  ),
 }));
 
-vi.mock('next/navigation', () => ({
-  useRouter: (): any => ({
-    push: vi.fn(),
-    prefetch: vi.fn(),
-    replace: vi.fn(),
-  }),
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const translations: Record<string, string> = {
+      welcome: 'Welcome!',
+      signin: 'Sign in',
+      signup: 'Sign up',
+      greeting: 'Welcome back,',
+      client: 'REST Client',
+      history: 'History',
+      variables: 'Variables',
+    };
+    return translations[key] ?? key;
+  },
 }));
 
 describe('HomePage', () => {
@@ -38,7 +47,9 @@ describe('HomePage', () => {
 
   it('renders guest view when user is not authenticated', () => {
     vi.spyOn(AuthContext, 'useAuth').mockReturnValue({ currentUser: null } as any);
+
     render(<HomePage />);
+
     expect(screen.getByRole('heading', { name: /welcome!/i })).toBeInTheDocument();
     expect(screen.getByText(/sign in/i)).toBeInTheDocument();
     expect(screen.getByText(/sign up/i)).toBeInTheDocument();
@@ -48,9 +59,12 @@ describe('HomePage', () => {
   it('renders user view when user is authenticated', () => {
     const mockUser = { displayName: 'John Doe', email: 'john@example.com' };
     vi.spyOn(AuthContext, 'useAuth').mockReturnValue({ currentUser: mockUser } as any);
+
     render(<HomePage />);
+
     const heading = screen.getByRole('heading');
     expect(heading).toHaveTextContent(/welcome back, john doe/i);
+
     expect(screen.getByText(/rest client/i)).toBeInTheDocument();
     expect(screen.getByText(/history/i)).toBeInTheDocument();
     expect(screen.getByText(/variables/i)).toBeInTheDocument();
@@ -60,6 +74,7 @@ describe('HomePage', () => {
   it('falls back to email if displayName is not provided', () => {
     const mockUser = { displayName: '', email: 'john@example.com' };
     vi.spyOn(AuthContext, 'useAuth').mockReturnValue({ currentUser: mockUser } as any);
+
     render(<HomePage />);
 
     const heading = screen.getByRole('heading');

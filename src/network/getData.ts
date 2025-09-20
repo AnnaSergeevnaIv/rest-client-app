@@ -1,6 +1,12 @@
+/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { getErrorMessage, showErrorToast } from '@/common/utils';
 import { type ClientFormType } from '@/components/pages/Client/Client.types';
 import { transformFormData } from '@/components/ResponseSection/ResponseSection.utils';
+import {
+  addHistoryEntry,
+  type HttpMethodName,
+  type RequestHistoryEntry,
+} from '@/services/firebase/admin/request-history/actions';
 import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios';
 export type GetDataType = typeof getData;
 type GetDataReturnType = {
@@ -12,17 +18,10 @@ type GetDataReturnType = {
   } | null;
   error: string | null;
 };
-type AnaliticsDataType = {
-  durationMs: number;
-  status: number;
-  timestamp: string;
-  method: string;
-  requestSize: number;
-  responseSize: number;
-  error: string | null;
-  url: string;
-};
-export const getData = async (formData: ClientFormType): Promise<GetDataReturnType> => {
+export const getData = async (
+  formData: ClientFormType,
+  link: string,
+): Promise<GetDataReturnType> => {
   const options = transformFormData(formData);
   const axiosConfig: AxiosRequestConfig = {
     url: formData.url,
@@ -31,23 +30,23 @@ export const getData = async (formData: ClientFormType): Promise<GetDataReturnTy
     data: options.body,
     validateStatus: () => true,
   };
-  const analyticsData: AnaliticsDataType = {
+  const analyticsData: RequestHistoryEntry = {
     durationMs: 0,
-    status: 0,
-    timestamp: new Date().toISOString(),
-    method: formData.method,
-    requestSize: new TextEncoder().encode(JSON.stringify(options.body ?? '')).length,
+    httpStatus: 0,
+    timestamp: Date.now(),
+    method: formData.method as Uppercase<HttpMethodName>,
+    requestSize: new TextEncoder().encode(options.body ?? undefined).length,
     responseSize: 0,
-    error: null,
     url: formData.url,
+    link: link,
   };
   const start = Date.now();
   try {
-    analyticsData.timestamp = new Date().toISOString();
     const response: AxiosResponse<string> = await axios(axiosConfig);
     analyticsData.durationMs = Date.now() - start;
     analyticsData.responseSize = new TextEncoder().encode(JSON.stringify(response.data)).length;
-    analyticsData.status = response.status;
+    console.log('response.data', response.data, analyticsData.responseSize);
+    analyticsData.httpStatus = response.status;
     const headers: Record<string, string> = Object.fromEntries(
       Object.entries(response.headers).map(([k, v]) => [k, String(v)]),
     );
@@ -67,5 +66,10 @@ export const getData = async (formData: ClientFormType): Promise<GetDataReturnTy
     return { data: null, error: analyticsData.error };
   } finally {
     console.log('analyticsData', analyticsData);
+    try {
+      void addHistoryEntry(analyticsData);
+    } catch (error: unknown) {
+      showErrorToast(getErrorMessage(error));
+    }
   }
 };

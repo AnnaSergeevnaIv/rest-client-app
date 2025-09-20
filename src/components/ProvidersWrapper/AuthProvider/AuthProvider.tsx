@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-non-null-assertion */
 'use client';
 
-import { MS_PER_SEC, StorageKey } from '@/common/constants/index.ts';
+import { StorageKey } from '@/common/constants/index.ts';
 import { verifyIdToken } from '@/services/firebase/admin/utils.ts';
 import type { EmailAndPassword } from '@/services/firebase/client/auth-client.ts';
 import { AuthClient } from '@/services/firebase/client/auth-client.ts';
 import {
-  getTokenCookie,
-  removeTokenCookie,
-  setTokenCookie,
+  removeIdTokenCookie,
+  setIdTokenCookie,
 } from '@/services/firebase/utils/token-helper-server.ts';
 import { type User } from 'firebase/auth';
 import {
@@ -21,7 +19,7 @@ import {
 } from 'react';
 import type { UserPartial } from './AuthContext.tsx';
 import { AuthContext } from './AuthContext.tsx';
-import { getCurrentUserFromIdTokenCookie } from './AuthProvider.utils.tsx';
+import { decodeIdTokenFromCookie } from './AuthProvider.utils.tsx';
 
 type AuthAction = Extract<keyof typeof AuthClient, 'signin' | 'signup'>;
 
@@ -31,15 +29,14 @@ type AuthProviderProps = PropsWithChildren & {
 
 export default function AuthProvider({ children }: AuthProviderProps): ReactNode {
   const [loading, setLoading] = useState(false);
-  const possibleCurrentUser = getCurrentUserFromIdTokenCookie() ?? AuthClient.currentUser;
-  const [currentUser, setCurrentUser] = useState<UserPartial | null>(possibleCurrentUser);
+  const [currentUser, setCurrentUser] = useState<UserPartial | null>(AuthClient.currentUser);
   const timerRef = useRef<number>(0);
 
   const signout: typeof AuthClient.signout = useCallback(async () => {
     setLoading(true);
     try {
       await AuthClient.signout();
-      void removeTokenCookie();
+      void removeIdTokenCookie();
       setCurrentUser(null);
       return;
     } finally {
@@ -52,7 +49,7 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
       window.clearTimeout(timerRef.current);
 
       if (!user) {
-        void removeTokenCookie();
+        void removeIdTokenCookie();
         setCurrentUser(null);
         return;
       }
@@ -64,9 +61,7 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
             void signout();
             return;
           }
-          void setTokenCookie(token, {
-            maxAge: decodedIdToken.millisecsLeft / MS_PER_SEC,
-          });
+          void setIdTokenCookie(token, { maxAge: decodedIdToken.secondsLeft });
           timerRef.current = window.setTimeout(() => void signout(), decodedIdToken.millisecsLeft);
           setCurrentUser(user);
         })
@@ -88,40 +83,38 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
     [signout],
   );
 
+  const checkCookieIdTokenExpiration = useCallback(async () => {
+    const decodedIdToken = decodeIdTokenFromCookie();
+    if (!decodedIdToken || decodedIdToken.hasExpired) {
+      await removeIdTokenCookie();
+      await signout();
+      setCurrentUser(null);
+    } else {
+      setCurrentUser({
+        email: decodedIdToken.email,
+        uid: decodedIdToken.user_id,
+      });
+    }
+  }, [signout]);
+
   useEffect(() => {
     cookieStore.addEventListener('change', handleTokenCookieRemove);
-    AuthClient.subscribe(handleAuthStateChange);
 
-    void getTokenCookie().then(async token => {
-      if (!token) {
-        return;
-      }
-      const decodedId = await verifyIdToken(token);
-      if (!decodedId || decodedId.hasExpired) {
-        await signout();
-        void removeTokenCookie();
-        setCurrentUser(null);
-      } else {
-        setCurrentUser({
-          email: decodedId.email!,
-          uid: decodedId.uid,
-        });
-      }
-      return (): void => {
-        window.clearTimeout(timerRef.current);
-        cookieStore.removeEventListener('change', handleTokenCookieRemove);
-        AuthClient.unsubscribe(handleAuthStateChange);
-      };
+    void checkCookieIdTokenExpiration().then(() => {
+      AuthClient.subscribe(handleAuthStateChange);
     });
-  }, [signout, handleAuthStateChange, handleTokenCookieRemove]);
+    return (): void => {
+      window.clearTimeout(timerRef.current);
+      cookieStore.removeEventListener('change', handleTokenCookieRemove);
+      AuthClient.unsubscribe(handleAuthStateChange);
+    };
+  }, [handleAuthStateChange, handleTokenCookieRemove, checkCookieIdTokenExpiration]);
 
   const authenticate = useCallback(async (creds: EmailAndPassword, action: AuthAction) => {
     setLoading(true);
     try {
       const result = await AuthClient[action](creds);
       setCurrentUser(result.user);
-      const idToken = await result.user.getIdToken();
-      void setTokenCookie(idToken);
       return result;
     } finally {
       setLoading(false);

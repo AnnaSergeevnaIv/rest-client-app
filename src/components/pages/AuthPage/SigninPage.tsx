@@ -3,19 +3,17 @@ import { AuthForm } from '@/components/AuthForm/AuthForm.tsx';
 import { Link } from '@/i18n/navigation.ts';
 import type { ReactNode } from 'react';
 import styles from './styles.module.scss';
-
-const LINK_TEXT = 'Create account';
-const SUBMIT_BTN_TEXT = 'Login';
-const HEADING = 'Sign In';
+import { useTranslations } from 'next-intl';
 
 export default function SigninPage(): ReactNode {
+  const tAuth = useTranslations('AuthPage');
   return (
     <section>
       <div className={styles.wrapper}>
-        <h1 className={styles.heading}>{HEADING}</h1>
-        <AuthForm login submitLabel={SUBMIT_BTN_TEXT} />
+        <h1 className={styles.heading}>{tAuth('signin')}</h1>
+        <AuthForm login submitLabel={tAuth('login')} />
         <div className={styles.hint}>
-          <Link href={RoutePath.Signup}>{LINK_TEXT}</Link>
+          <Link href={RoutePath.Signup}>{tAuth('createAccount')}</Link>
         </div>
       </div>
     </section>

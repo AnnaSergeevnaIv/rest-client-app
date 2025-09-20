@@ -1,6 +1,6 @@
 import { StorageKey } from '@/common/constants/index.ts';
 import { isObject, JSONParse } from '@/common/utils/index.ts';
-import { usePathname } from 'next/navigation';
+import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { useCallback, useEffect } from 'react';
 import type { UseFormGetValues, UseFormReset } from 'react-hook-form';
 import type { VarsFormData } from '../VarsForm.tsx';
@@ -13,33 +13,30 @@ type UseCurrentUserFormProps = {
 };
 
 type UseCurrentUserFormResult = UseCurrentUserVarsResult & {
-  saveToLocalStorage: () => VarsFormData | null;
+  saveToLocalStorage: () => void;
 };
 
 export const useCurrentUserVarsForm = ({
   getValues,
   reset,
 }: UseCurrentUserFormProps): UseCurrentUserFormResult => {
-  const pathname = usePathname();
-  const result = useCurrentUserVars();
-  const { getFromLocalStorage, currentUser } = result;
+  const { currentUser } = useAuth();
+  const result = useCurrentUserVars({ currentUser });
+  const { getFromLocalStorage } = result;
 
   const saveToLocalStorage = useCallback(() => {
     if (!currentUser?.email) {
       return null;
     }
-    const currentPersisted = parseVarFieldsArray(getValues().vars, true);
-    const vars = { vars: currentPersisted ? currentPersisted.array : [] };
+    const parsed = parseVarFieldsArray(getValues().vars);
     let allVars = JSONParse(localStorage.getItem(StorageKey.Vars));
 
-    if (!isObject(allVars)) {
-      allVars = { [currentUser.email]: vars };
+    if (isObject(allVars)) {
+      allVars[currentUser.email] = { vars: parsed.normalizedArray };
     } else {
-      allVars[currentUser.email] = vars;
+      allVars = { [currentUser.email]: { vars: parsed.normalizedArray } };
     }
     localStorage.setItem(StorageKey.Vars, JSON.stringify(allVars));
-
-    return vars;
   }, [currentUser?.email, getValues]);
 
   const handleBeforeUnload = useCallback((): void => {
@@ -47,14 +44,14 @@ export const useCurrentUserVarsForm = ({
   }, [saveToLocalStorage]);
 
   useEffect(() => {
-    reset({ vars: getFromLocalStorage()?.array });
+    reset({ vars: getFromLocalStorage()?.normalizedArray });
     window.addEventListener('beforeunload', handleBeforeUnload);
 
     return (): void => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
       saveToLocalStorage();
+      window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [pathname, saveToLocalStorage, handleBeforeUnload, reset, getFromLocalStorage]);
+  }, [saveToLocalStorage, handleBeforeUnload, reset, getFromLocalStorage]);
 
   return {
     ...result,

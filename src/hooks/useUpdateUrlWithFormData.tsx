@@ -3,13 +3,15 @@
 import type { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';
 import type { ClientFormType } from '@/components/pages/Client/Client.types';
 import { encodeUrlBody, headersArrayToObject } from '@/components/pages/Client/Client.utils';
+import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
+import { useCurrentUserVars } from '@/components/VarsForm/hooks/useCurrentUserVars';
 import { usePathname } from 'next/navigation';
 import { useCallback } from 'react';
 import { type Control, useWatch } from 'react-hook-form';
 import { useCustomSearchParams } from './useCustomSearchParams';
-// import { VarsHelper } from '@/components/VarsForm/VarsForm.utils';
 
 export function useUpdateUrlWithFormData(control: Control<ClientFormType>): () => void {
+  const { currentUser } = useAuth();
   const watchedFields = useWatch({
     control,
     name: ['url', 'method', 'headers', 'body'],
@@ -17,15 +19,14 @@ export function useUpdateUrlWithFormData(control: Control<ClientFormType>): () =
 
   const { createParamsWithEncodedData } = useCustomSearchParams();
   const path = usePathname();
-
+  const { apply } = useCurrentUserVars({ currentUser });
   return useCallback(
     (v?: keyof typeof METHODS) => {
-      // const [url, method, headers, body] = watchedFields;
-      const [method] = watchedFields;
-      const encodedUrl = encodeUrlBody('' /*VarsHelper.apply(url)*/);
-      const encodedBody = encodeUrlBody('' /*VarsHelper.apply(body ?? '')*/);
+      const [url, method, headers, body] = watchedFields;
+      const encodedUrl = encodeUrlBody(apply(url));
+      const encodedBody = encodeUrlBody(apply(body ?? ''));
       const basePath = `/client/${v ?? method}/${encodedUrl}/${encodedBody}`;
-      const headersObject = headersArrayToObject(/*headers*/);
+      const headersObject = headersArrayToObject(apply, headers);
       createParamsWithEncodedData(headersObject, basePath);
     },
     [watchedFields, createParamsWithEncodedData, path],

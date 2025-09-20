@@ -7,9 +7,17 @@ vi.mock('next-intl', () => ({
     const translations: Record<string, string> = {
       submit: 'Submit',
       urlPlaceholder: 'Enter URL',
+      heading: 'REST Client',
     };
     return translations[key] || key;
   },
+}));
+vi.mock('@/components/ProvidersWrapper/AuthProvider/AuthContext', () => ({
+  useAuth: () => ({
+    currentUser: null,
+    signIn: vi.fn(),
+    signOut: vi.fn(),
+  }),
 }));
 vi.mock('next-intl/navigation', () => ({
   createNavigation: () => ({
@@ -28,6 +36,19 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({
     push: vi.fn(),
     replace: vi.fn(),
+  }),
+  useSearchParams: () => ({
+    get: vi.fn(),
+  }),
+}));
+vi.mock('@/components/ProvidersWrapper/AuthProvider/AuthContext', () => ({
+  useAuth: () => ({
+    currentUser: {
+      email: 'test@test.com',
+      uid: '123',
+    },
+    signIn: vi.fn(),
+    signOut: vi.fn(),
   }),
 }));
 
