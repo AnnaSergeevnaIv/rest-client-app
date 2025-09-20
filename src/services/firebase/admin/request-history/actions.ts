@@ -2,9 +2,10 @@
 
 import { getErrorMessage, getTimestamp } from '@/common/utils/index.ts';
 import { firestore } from 'firebase-admin';
+import { getIdTokenCookie } from '../../utils/token-helper-server.ts';
 import '../config.ts';
-
-const DEFAULT_QUERY_LIMIT = 10;
+import { verifyIdToken } from '../utils.ts';
+import { isLikeRequestHistoryEntries } from './utils.ts';
 
 type Timestamp<T = number> = T;
 
@@ -14,6 +15,7 @@ export type ErrorResponse = {
   error: string;
 };
 export type RequestHistoryEntry = {
+  id?: string;
   durationMs: number;
   httpStatus: number;
   timestamp: Timestamp;
@@ -24,11 +26,6 @@ export type RequestHistoryEntry = {
   url: string;
   link: string;
   createdAt?: number;
-};
-type QueryEntriesOptions = {
-  orderBy: keyof RequestHistoryEntry;
-  sortOrder: 'asc' | 'desc';
-  limit: number;
 };
 export type QueryHistoryEntriesResult = {
   data: RequestHistoryEntry[];
@@ -43,26 +40,37 @@ const getId = (): string => {
   return `${getTimestamp().toString()}-${crypto.randomUUID().replaceAll('-', '').slice(0, 10)}`;
 };
 
-export const addHistoryEntry = async (
-  userEmail: string,
-  entry: RequestHistoryEntry,
-): Promise<string> => {
+const getCurrentUserEmail = async (): Promise<string | null> => {
+  const token = await getIdTokenCookie();
+  const decoded = await verifyIdToken(token);
+  return decoded?.email ?? null;
+};
+
+export const addHistoryEntry = async (entry: RequestHistoryEntry): Promise<string | null> => {
   try {
-    entry = { ...entry, createdAt: Date.now() };
+    const userEmail = await getCurrentUserEmail();
+    if (!userEmail) {
+      return null;
+    }
     const id = getId();
+    entry = { ...entry, createdAt: Date.now(), id };
     await historyRef(userEmail).doc(id).set(entry);
-    return JSON.stringify({ id });
-  } catch (error) {
-    return JSON.stringify({ error: getErrorMessage(error) });
+    return id;
+  } catch {
+    return null;
   }
 };
 
-export const deleteHistoryEntry = async (userEmail: string, id: string): Promise<string> => {
+export const deleteHistoryEntry = async (id: string): Promise<string | null> => {
   try {
+    const userEmail = await getCurrentUserEmail();
+    if (!userEmail) {
+      return null;
+    }
     await historyRef(userEmail).doc(id).delete();
-    return JSON.stringify({ id });
-  } catch (error) {
-    return JSON.stringify({ error: getErrorMessage(error) });
+    return id;
+  } catch {
+    return null;
   }
 };
 
@@ -79,38 +87,17 @@ export const getHistoryEntry = async (userEmail: string, id: string): Promise<st
   }
 };
 
-let nextSnapshot: firestore.QuerySnapshot | null = null;
-
-export const resetQueryCursor = async (): Promise<void> => {
-  nextSnapshot = null;
-  return Promise.resolve();
-};
-
-export const queryHistoryEntries = async (
-  userEmail: string,
-  opts?: QueryEntriesOptions,
-): Promise<string> => {
+export const getAllHistoryEntries = async (): Promise<RequestHistoryEntry[] | null> => {
   try {
-    const { orderBy = 'createdAt', sortOrder = 'asc' } = opts ?? {};
-    const limit = Math.max(opts?.limit ?? DEFAULT_QUERY_LIMIT, 0);
-    const snapshot =
-      nextSnapshot ?? (await historyRef(userEmail).orderBy(orderBy, sortOrder).limit(limit).get());
-
-    if (!snapshot.size) {
-      return JSON.stringify({ data: [], done: true });
+    const token = await getIdTokenCookie();
+    const decoded = await verifyIdToken(token);
+    if (!decoded?.email) {
+      return null;
     }
-    const lastDoc = snapshot.docs[snapshot.docs.length - 1];
-    nextSnapshot = await historyRef(userEmail)
-      .orderBy(orderBy, sortOrder)
-      .startAfter(lastDoc)
-      .limit(limit)
-      .get();
-
-    return JSON.stringify({
-      data: snapshot.docs.map(doc => doc.data()),
-      done: nextSnapshot.size === 0,
-    });
-  } catch (error) {
-    return JSON.stringify({ error: getErrorMessage(error) });
+    const snapshot = await historyRef(decoded.email).orderBy('createdAt', 'asc').get();
+    const data = snapshot.docs.map(doc => doc.data());
+    return isLikeRequestHistoryEntries(data) && data.length ? data : null;
+  } catch {
+    return null;
   }
 };

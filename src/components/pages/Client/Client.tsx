@@ -3,6 +3,7 @@ import BodyEditor from '@/components/BodyEditor/BodyEditor';
 import GeneratedCode from '@/components/GeneratedCode/GeneratedCode';
 import HeadersEditor from '@/components/HeadersEditor/HeadersEditor';
 import MethodUrlSelector from '@/components/MethodUrlSelector/MethodUrlSelector';
+import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext';
 import ResponseSection from '@/components/ResponseSection/ResponseSection';
 import { Button } from '@/components/UI/Button/Button';
 import { useClientFormSync } from '@/hooks/useClientFormSync';
@@ -12,7 +13,6 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { DEFAULT_FORM_DATA } from './Client.constants';
 import styles from './Client.module.scss';
 import type { ClientFormType } from './Client.types';
-import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext';
 
 export type ResponseData = {
   status: number;
@@ -35,7 +35,7 @@ export default function Client(): React.ReactNode {
 
   const updateUrlWithFormData = useUpdateUrlWithFormData(control);
 
-  const { response, error, loading } = useClientFormSync(setValue, getValues, currentUser);
+  const { response, error, loading } = useClientFormSync(setValue, getValues);
 
   const onSubmit = (): void => {
     updateUrlWithFormData();

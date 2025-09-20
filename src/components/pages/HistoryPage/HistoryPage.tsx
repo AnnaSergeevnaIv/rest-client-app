@@ -1,48 +1,24 @@
-/* eslint-disable max-len */
-'use client';
+import { RoutePath } from '@/common/constants/index.ts';
+import { NavBtn } from '@/components/NavButton/NavBtn.tsx';
+import { getAllHistoryEntries } from '@/services/firebase/admin/request-history/actions';
+import { type ReactNode } from 'react';
+import styles from './HistoryPage.module.scss';
+import { EntriesList } from './components/EntriesList/EntriesList.tsx';
 
-import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext.tsx';
-import { Button } from '@/components/UI/Button/Button.tsx';
-import { Input } from '@/components/UI/Input/Input.tsx';
-import '@/services/firebase/admin/request-history/actions';
-import { addRequestHistoryEntry } from '@/services/firebase/admin/request-history/add-entry.ts';
-import { useRequestHistoryQuery } from '@/services/firebase/admin/request-history/useRequestHistoryQuery';
-import { historyEntryMock } from '@/services/firebase/admin/request-history/utils.ts';
-import { useState, type ReactNode } from 'react';
-
-export default function HistoryPage(): ReactNode {
-  const [value, setValue] = useState('');
-  const { currentUser } = useAuth();
-  const { deleteEntry, queryEntries } = useRequestHistoryQuery({ currentUser });
-
+export default async function HistoryPage(): Promise<ReactNode> {
+  const data = await getAllHistoryEntries();
   return (
     <section>
-      <h1>Request history</h1>
-      <p>Saved queries are stored here.</p>
-      <Button
-        label='Add entry'
-        onClick={() => {
-          void addRequestHistoryEntry(currentUser, historyEntryMock).then(console.debug);
-        }}
-      />
-      <Button
-        label='Get ALL'
-        onClick={() => {
-          void queryEntries().then(console.debug);
-        }}
-      />
-      <Button
-        label='Delete entry'
-        onClick={() => {
-          void deleteEntry(value).then(console.debug);
-        }}
-      />
-      <Input
-        value={value}
-        onChange={e => {
-          setValue(e.target.value);
-        }}
-      />
+      <div className={styles.wrapper}>
+        <h1 className={styles.heading}>Request history</h1>
+        {data && <EntriesList data={data} />}
+        {!data && (
+          <div className={styles.hint}>
+            <p>It is empty here. Go to the REST client page and make your first request.</p>
+            <NavBtn text='REST client' href={RoutePath.Client} />
+          </div>
+        )}
+      </div>
     </section>
   );
 }

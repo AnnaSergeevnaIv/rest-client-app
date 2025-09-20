@@ -1,13 +1,12 @@
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { getErrorMessage, showErrorToast } from '@/common/utils';
 import { type ClientFormType } from '@/components/pages/Client/Client.types';
-import { type UserPartial } from '@/components/ProvidersWrapper/AuthProvider/AuthContext';
 import { transformFormData } from '@/components/ResponseSection/ResponseSection.utils';
 import {
+  addHistoryEntry,
   type HttpMethodName,
   type RequestHistoryEntry,
 } from '@/services/firebase/admin/request-history/actions';
-import { addRequestHistoryEntry } from '@/services/firebase/admin/request-history/add-entry';
 import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios';
 export type GetDataType = typeof getData;
 type GetDataReturnType = {
@@ -22,7 +21,6 @@ type GetDataReturnType = {
 export const getData = async (
   formData: ClientFormType,
   link: string,
-  currentUser: UserPartial | null,
 ): Promise<GetDataReturnType> => {
   const options = transformFormData(formData);
   const axiosConfig: AxiosRequestConfig = {
@@ -69,7 +67,7 @@ export const getData = async (
   } finally {
     console.log('analyticsData', analyticsData);
     try {
-      void addRequestHistoryEntry(currentUser, analyticsData);
+      void addHistoryEntry(analyticsData);
     } catch (error: unknown) {
       showErrorToast(getErrorMessage(error));
     }
