@@ -1,8 +1,9 @@
+import { getErrorMessage } from '@/common/utils';
 import { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';
+import { addHistoryEntry } from '@/services/firebase/admin/request-history/actions';
+import axios from 'axios';
 import { describe, vi } from 'vitest';
 import { getData } from './getData';
-import axios from 'axios';
-import { getErrorMessage } from '@/common/utils';
 
 vi.mock('axios', () => ({
   default: vi.fn(),
@@ -13,11 +14,12 @@ vi.mock('@/common/utils', () => ({
   showErrorToast: vi.fn(),
 }));
 
-vi.mock('@/services/firebase/admin/request-history/add-entry', () => ({
-  addRequestHistoryEntry: vi.fn(),
+vi.mock('@/services/firebase/admin/request-history/actions', () => ({
+  addHistoryEntry: vi.fn(),
 }));
 
 describe('getData', () => {
+  vi.mocked(addHistoryEntry).mockResolvedValueOnce('fake_id');
   const mockFormData = {
     url: 'https://example.com',
     method: METHODS.GET,
@@ -44,24 +46,16 @@ describe('getData', () => {
       },
       error: null,
     };
-    const mockUser = {
-      email: 'test@test.com',
-      uid: '123',
-    };
     vi.mocked(getErrorMessage).mockReturnValue('');
     vi.mocked(axios).mockResolvedValue(mockReturnAxiosData);
-    const result = await getData(mockFormData, 'test-link', mockUser);
+    const result = await getData(mockFormData, 'test-link');
     expect(result).toStrictEqual(mockReturnData);
   });
   test('should return error', async () => {
     const errorMessage = 'Network error';
-    const mockUser = {
-      email: 'test@test.com',
-      uid: '123',
-    };
     vi.mocked(getErrorMessage).mockReturnValue(errorMessage);
     vi.mocked(axios).mockRejectedValue(new Error('Network Error'));
-    const result = await getData(mockFormData, 'test-link', mockUser);
+    const result = await getData(mockFormData, 'test-link');
     expect(result).toStrictEqual({
       data: null,
       error: errorMessage,
