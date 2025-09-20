@@ -1,4 +1,3 @@
-import type { ReactNode } from 'react';
 import React from 'react';
 import { render, screen } from '@testing-library/react';
 import { vi } from 'vitest';
@@ -6,7 +5,7 @@ import AboutUsPage from './AboutUsPage';
 import { teamData } from '../../../data/team-data';
 
 vi.mock('../../../components/PersonCard/PersonCard', () => ({
-  PersonCard: ({ name }: any) => <div data-testid='person-card'>{name}</div>,
+  PersonCard: ({ name }: { name: string }) => <div data-testid='person-card'>{name}</div>,
 }));
 
 vi.mock('next-intl', () => ({

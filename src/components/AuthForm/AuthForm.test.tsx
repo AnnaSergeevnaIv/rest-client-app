@@ -16,10 +16,12 @@ vi.mock('@/common/utils', () => ({
 vi.mock('next-intl', () => ({
   useLocale: () => 'en',
   useTranslations: () => (key: string) => {
-    if (key === 'AuthForm.email') return 'email';
-    if (key === 'AuthForm.password') return 'password';
-    if (key === 'AuthForm.confirmPassword') return 'confirmPassword';
-    return key;
+    const translations: Record<string, string> = {
+      email: 'email',
+      password: 'password',
+      confirmPassword: 'confirmPassword',
+    };
+    return translations[key] ?? key;
   },
 }));
 
