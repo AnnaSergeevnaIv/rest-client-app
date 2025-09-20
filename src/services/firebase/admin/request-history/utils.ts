@@ -4,7 +4,7 @@ import type { QueryHistoryEntriesResult, RequestHistoryEntry } from './actions.t
 export const historyEntryMock: RequestHistoryEntry = {
   durationMs: 100,
   httpStatus: 200,
-  timestamp: new Date().toISOString(),
+  timestamp: Date.now(),
   method: 'GET',
   requestSize: 1,
   responseSize: 1,
