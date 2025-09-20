@@ -12,6 +12,7 @@ import { useFieldArray, useForm } from 'react-hook-form';
 import { DEFAULT_FORM_DATA } from './Client.constants';
 import styles from './Client.module.scss';
 import type { ClientFormType } from './Client.types';
+import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext';
 
 export type ResponseData = {
   status: number;
@@ -25,6 +26,7 @@ export default function Client(): React.ReactNode {
   const { handleSubmit, control, setValue, getValues } = useForm<ClientFormType>({
     defaultValues: DEFAULT_FORM_DATA,
   });
+  const { currentUser } = useAuth();
 
   const { fields, append, remove } = useFieldArray<ClientFormType, 'headers'>({
     control,
@@ -33,7 +35,7 @@ export default function Client(): React.ReactNode {
 
   const updateUrlWithFormData = useUpdateUrlWithFormData(control);
 
-  const { response, error, loading } = useClientFormSync(setValue, getValues);
+  const { response, error, loading } = useClientFormSync(setValue, getValues, currentUser);
 
   const onSubmit = (): void => {
     updateUrlWithFormData();
@@ -52,7 +54,7 @@ export default function Client(): React.ReactNode {
         <MethodUrlSelector control={control} required />
         <HeadersEditor control={control} append={append} remove={remove} fields={fields} />
         <BodyEditor control={control} />
-        <GeneratedCode control={control} />
+        <GeneratedCode control={control} currentUser={currentUser} />
         <Button type='submit' label={t('submit')} />
       </form>
       <ResponseSection response={response} error={error} loading={loading} />

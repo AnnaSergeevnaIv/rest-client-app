@@ -13,10 +13,12 @@ import { useEffect, useState } from 'react';
 import { showErrorToast, getErrorMessage } from '@/common/utils';
 import { getData } from '@/network/getData';
 import type { ResponseData } from '@/components/pages/Client/Client';
+import { type UserPartial } from '@/components/ProvidersWrapper/AuthProvider/AuthContext';
 
 export function useClientFormSync(
   setValue: UseFormSetValue<ClientFormType>,
   getValues: UseFormGetValues<ClientFormType>,
+  currentUser: UserPartial | null,
 ): {
   formData: ClientFormType;
   response: ResponseData | null;
@@ -76,7 +78,7 @@ export function useClientFormSync(
 
     setLoading(true);
     const link = `${path}?${searchParamsForLink.toString()}`;
-    getData(getValues(), link)
+    getData(getValues(), link, currentUser)
       .then(res => {
         setResponse(res.data);
         setError(res.error);
@@ -89,7 +91,7 @@ export function useClientFormSync(
       .finally(() => {
         setLoading(false);
       });
-  }, [path, setValue, getQueryParams, router]);
+  }, [path, setValue, getQueryParams, router, currentUser, getValues, searchParamsForLink]);
 
   return { formData: getValues(), response, error, loading };
 }

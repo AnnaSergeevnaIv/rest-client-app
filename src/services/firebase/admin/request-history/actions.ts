@@ -8,7 +8,7 @@ const DEFAULT_QUERY_LIMIT = 10;
 
 type Timestamp<T = number> = T;
 
-type HttpMethodName = 'get' | 'put' | 'post' | 'delete';
+export type HttpMethodName = 'get' | 'put' | 'post' | 'delete';
 
 export type ErrorResponse = {
   error: string;
