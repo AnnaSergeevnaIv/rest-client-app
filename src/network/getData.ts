@@ -37,7 +37,7 @@ export const getData = async (
     httpStatus: 0,
     timestamp: Date.now(),
     method: formData.method as Uppercase<HttpMethodName>,
-    requestSize: new TextEncoder().encode(JSON.stringify(options.body ?? '')).length,
+    requestSize: new TextEncoder().encode(JSON.stringify(options.body ?? undefined)).length,
     responseSize: 0,
     url: formData.url,
     link: link,
