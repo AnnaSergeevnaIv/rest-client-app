@@ -66,8 +66,7 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
           timerRef.current = window.setTimeout(() => void signout(), decodedIdToken.millisecsLeft);
           setCurrentUser(user);
         })
-        .catch((error: unknown) => {
-          console.debug('getIdToken failed: ', error);
+        .catch(() => {
           void signout();
         });
     },
