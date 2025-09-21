@@ -10,8 +10,8 @@ type ProvidersProps = PropsWithChildren & {
 };
 
 const ToastOptions: ToastContainerProps = {
-  autoClose: 1500,
-  position: 'top-center',
+  autoClose: 1000,
+  position: 'top-left',
   hideProgressBar: true,
 };
 const AuthProvider = dynamic(

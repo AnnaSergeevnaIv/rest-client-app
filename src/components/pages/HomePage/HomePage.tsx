@@ -3,10 +3,10 @@
 import { RoutePath } from '@/common/constants';
 import { useAuth } from '@/components/ProvidersWrapper/AuthProvider/AuthContext';
 import { Link } from '@i18n/navigation';
-import { type ReactNode } from 'react';
-import styles from './HomePage.module.scss';
-import AboutUsPage from '../AboutUsPage/AboutUsPage';
 import { useTranslations } from 'next-intl';
+import { type ReactNode } from 'react';
+import AboutUsPage from '../AboutUsPage/AboutUsPage';
+import styles from './HomePage.module.scss';
 
 export default function HomePage(): ReactNode {
   const { currentUser } = useAuth();
@@ -32,7 +32,7 @@ export default function HomePage(): ReactNode {
             {tCommon('greeting')} {currentUser?.displayName || currentUser?.email}
           </h1>
           <nav className={styles.nav}>
-            <Link href={RoutePath.Client} className={styles.link}>
+            <Link href={RoutePath.Client} className={styles.client}>
               {tCommon('client')}
             </Link>
             <Link href={RoutePath.History} className={styles.link}>
