@@ -6,8 +6,8 @@ import { vi } from 'vitest';
 import type { IconType } from 'react-icons';
 import React from 'react';
 
-vi.mock('next-intl/server', () => ({
-  getTranslations: vi.fn(async () => (key: string) => key),
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
 }));
 
 describe('EntryCard', () => {
@@ -33,9 +33,8 @@ describe('EntryCard', () => {
     vi.spyOn(utils, 'timestampToLocaleDateTime').mockReturnValue('21.09.2025, 01:03:30');
   });
 
-  it('renders EntryCard with correct data', async () => {
-    const element = await EntryCard({ data });
-    render(<>{element}</>);
+  it('renders EntryCard with correct data', () => {
+    render(<EntryCard data={data} />);
 
     expect(screen.getByTestId('icon')).toBeInTheDocument();
     expect(screen.getByText('/test')).toBeInTheDocument();
