@@ -1,7 +1,7 @@
 import { describe, vi } from 'vitest';
 
 vi.mock('react-hook-form', () => ({
-  Controller: ({ render: renderProp }: any) => {
+  Controller: ({ render: renderProp }: Either) => {
     const mockField = {
       value: '',
       onChange: vi.fn(),
@@ -46,7 +46,7 @@ describe('HeadersEditor', () => {
     vi.clearAllMocks();
   });
   test('renders correctly', () => {
-    const mockControl = {} as any;
+    const mockControl = {} as Either;
     render(
       <HeadersEditor control={mockControl} append={vi.fn()} remove={vi.fn()} fields={mockFields} />,
     );
@@ -57,7 +57,7 @@ describe('HeadersEditor', () => {
     expect(screen.getByRole('button', { name: CLEAR_BTN_TEXT })).toBeInTheDocument();
   });
   test('adds header when button is clicked', async () => {
-    const mockControl = {} as any;
+    const mockControl = {} as Either;
     const mockAppend = vi.fn();
     render(
       <HeadersEditor control={mockControl} append={mockAppend} remove={vi.fn()} fields={[]} />,
@@ -70,7 +70,7 @@ describe('HeadersEditor', () => {
     });
   });
   test('removes header when button is clicked', async () => {
-    const mockControl = {} as any;
+    const mockControl = {} as Either;
     const mockRemove = vi.fn();
     render(
       <HeadersEditor

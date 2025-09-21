@@ -4,7 +4,7 @@
 import { RoutePath, StorageKey } from '@/common/constants/index.ts';
 import { showErrorToast } from '@/common/utils/index.ts';
 import { useRouter } from '@/i18n/navigation.ts';
-import { useLocale } from 'next-intl';
+import { useLocale, useTranslations } from 'next-intl';
 import { useCallback, type ReactNode } from 'react';
 import { useForm } from 'react-hook-form';
 import useFormPersist from 'react-hook-form-persist';
@@ -13,8 +13,7 @@ import { useAuth } from '../ProvidersWrapper/AuthProvider/AuthContext.tsx';
 import { Button } from '../UI/Button/Button.tsx';
 import { Input } from '../UI/Input/Input.tsx';
 import style from './AuthForm.module.scss';
-import { validator } from './AuthForm.utils.ts';
-import { useTranslations } from 'next-intl';
+import { useAuthFormValidation } from './useAuthFormValidation.ts';
 
 const ANON_USER = 'anonymous';
 
@@ -30,7 +29,8 @@ type AuthFormInputs = {
 };
 
 export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
-  const tAuth = useTranslations('AuthForm');
+  const t = useTranslations('AuthForm');
+  const { validator } = useAuthFormValidation();
   const { signin, signup, loading } = useAuth();
   const locale = useLocale();
   const router = useRouter();
@@ -63,7 +63,7 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
     const action = login ? signin : signup;
     action(data)
       .then(({ user }) => {
-        toast.success(`Welcome, ${user.email ?? ANON_USER}`);
+        toast.success(`${t('welcome')}, ${user.email ?? ANON_USER}`);
         router.replace({ pathname: RoutePath.Home }, { locale });
       })
       .catch((error: unknown) => {
@@ -75,7 +75,7 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
   return (
     <form className={style.form} onSubmit={onSubmit}>
       <Input
-        placeholder={tAuth('email')}
+        placeholder={t('email')}
         autoComplete='on'
         error={errors.email?.message}
         onClear={() => {
@@ -86,7 +86,7 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
         })}
       />
       <Input
-        placeholder={tAuth('password')}
+        placeholder={t('password')}
         type='password'
         error={errors.password?.message}
         onClear={() => {
@@ -99,7 +99,7 @@ export const AuthForm = ({ login, submitLabel }: AuthFormProps): ReactNode => {
       {!login && (
         <Input
           type='password'
-          placeholder={tAuth('confirmPassword')}
+          placeholder={t('confirmPassword')}
           error={errors.confirmPassword?.message}
           onClear={() => {
             clearInput('confirmPassword');

@@ -4,7 +4,7 @@ import { describe, it, vi, expect } from 'vitest';
 
 vi.mock('next/dynamic', () => ({
   __esModule: true,
-  default: (importFn: any, options?: any) => {
+  default: (importFn: Either, options?: Either) => {
     const Component: React.FC<PropsWithChildren<Record<string, unknown>>> = ({ children }) => (
       <>{children}</>
     );

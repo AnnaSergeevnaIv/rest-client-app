@@ -14,7 +14,7 @@ vi.mock('@monaco-editor/react', () => ({
   )),
 }));
 vi.mock('react-hook-form', () => ({
-  Controller: ({ render: renderProp }: any) => {
+  Controller: ({ render: renderProp }: Either) => {
     const mockField = {
       value: '',
       onChange: vi.fn(),
@@ -26,13 +26,13 @@ vi.mock('react-hook-form', () => ({
 
 describe('BodyEditor', () => {
   test('renders correctly', () => {
-    const mockControl = {} as any;
+    const mockControl = {} as Either;
 
     render(<BodyEditor control={mockControl} />);
     expect(screen.getByTestId('monaco-editor')).toBeInTheDocument();
   });
   test('changes language when select value changes', () => {
-    const mockControl = {} as any;
+    const mockControl = {} as Either;
     render(<BodyEditor control={mockControl} />);
     const select = screen.getByRole('combobox');
     fireEvent.change(select, { target: { value: BODY_LANGUAGES.text } });

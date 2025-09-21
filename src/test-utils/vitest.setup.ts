@@ -97,7 +97,6 @@ vi.mock('firebase-admin', () => ({
   })),
 }));
 
-// Mock Firebase config
 vi.mock('@/services/firebase/admin/config', () => ({
   getFirebaseAdmin: vi.fn(() =>
     Promise.resolve({

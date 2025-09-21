@@ -8,9 +8,7 @@ export const PageLoader = (): ReactNode => {
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'center',
-        backgroundColor: 'var(--color-bg)',
-        width: '100vw',
-        height: '100vh',
+        width: '100%',
       }}
     >
       <Loader style={{ margin: 'auto' }} />;

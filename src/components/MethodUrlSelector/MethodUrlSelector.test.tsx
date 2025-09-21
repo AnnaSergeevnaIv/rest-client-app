@@ -5,7 +5,7 @@ import { Controller } from 'react-hook-form';
 import { METHODS } from './MethodUrlSelector.constants';
 
 vi.mock('react-hook-form', () => ({
-  Controller: ({ render: renderProp }: any) => {
+  Controller: ({ render: renderProp }: Either) => {
     const mockField = {
       value: '',
       onChange: vi.fn(),
@@ -29,7 +29,7 @@ describe('MethodUrlSelector', () => {
     vi.clearAllMocks();
   });
   test('renders correctly', () => {
-    const mockControl = {} as any;
+    const mockControl = {} as Either;
     render(<MethodUrlSelector control={mockControl} required={false} />);
     expect(screen.getByRole('combobox')).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toBeInTheDocument();
@@ -39,7 +39,7 @@ describe('MethodUrlSelector', () => {
 
     const mockControl = {
       onChange: mockOnChange,
-    } as any;
+    } as Either;
     render(<MethodUrlSelector control={mockControl} required={false} />);
 
     screen.debug();

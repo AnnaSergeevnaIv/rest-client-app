@@ -1,5 +1,3 @@
-/* eslint-disable max-len */
-
 export type PersonData = {
   id: number;
   name: string;
