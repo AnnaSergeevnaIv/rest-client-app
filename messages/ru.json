@@ -8,7 +8,7 @@
     "heading": "История запросов"
   },
   "EntryCard": {
-    "started": "начат",
+    "started": "сделан",
     "latency": "время",
     "request": "запрос",
     "response": "ответ",
