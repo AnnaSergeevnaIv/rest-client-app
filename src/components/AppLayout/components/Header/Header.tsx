@@ -2,7 +2,6 @@
 
 import { IconLogout } from '@/common/constants/icons.ts';
 import { RoutePath } from '@/common/constants/index.ts';
-
 import { LangSwitcher } from '@/components/LangSwitcher/LangSwitcher.tsx';
 import { Button } from '@/components/UI/Button/Button.tsx';
 import { Link, usePathname } from '@i18n/navigation.ts';
@@ -61,7 +60,7 @@ export const Header = (): ReactNode => {
                 <Link
                   className={styles.link}
                   href={RoutePath.Client}
-                  data-disable={pathname.includes(RoutePath.Client)}
+                  data-disable={pathname === RoutePath.Client}
                 >
                   {t('client')}
                 </Link>
