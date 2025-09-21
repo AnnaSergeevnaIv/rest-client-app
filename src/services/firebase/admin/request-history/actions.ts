@@ -11,7 +11,7 @@ import { isLikeRequestHistoryEntries, isLikeRequestHistoryEntry } from './utils.
 
 type Timestamp<T = number> = T;
 
-export type HttpMethodName = 'get' | 'put' | 'post' | 'delete';
+export type HttpMethodName = 'get' | 'put' | 'post' | 'delete' | 'patch';
 
 export type ErrorResponse = {
   error: string;
