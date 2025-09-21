@@ -3,6 +3,16 @@ import ErrorPage from './ErrorPage';
 import { RoutePath } from '@/common/constants/index.ts';
 import { vi } from 'vitest';
 
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => {
+    const map: Record<string, string> = {
+      notFound: 'Page not found',
+      home: 'Go Home',
+    };
+    return map[key] ?? key;
+  },
+}));
+
 vi.mock('next/image', () => ({
   default: (props: { src: string; alt: string; width: number; height: number }) => (
     <img src={props.src} alt={props.alt} width={props.width} height={props.height} />
