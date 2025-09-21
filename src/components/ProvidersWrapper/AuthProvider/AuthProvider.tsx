@@ -57,12 +57,11 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
       void user
         .getIdToken()
         .then(async token => {
-          const decodedIdToken = await verifyIdToken(token, 59);
+          const decodedIdToken = await verifyIdToken(token);
           if (!decodedIdToken || decodedIdToken.hasExpired) {
             void signout();
             return;
           }
-          console.debug('token exp mins=', decodedIdToken.secondsLeft / 60);
           void setIdTokenCookie(token, { maxAge: decodedIdToken.secondsLeft });
           timerRef.current = window.setTimeout(() => void signout(), decodedIdToken.millisecsLeft);
           setCurrentUser(user);
@@ -86,12 +85,11 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
   );
 
   const checkCookieIdTokenExpiration = useCallback(() => {
-    const decodedIdToken = decodeIdTokenFromCookie(59);
+    const decodedIdToken = decodeIdTokenFromCookie();
     if (!decodedIdToken || decodedIdToken.hasExpired) {
       TokenCookieHelper.remove();
       setCurrentUser(null);
     } else {
-      console.debug('useEffect token exp mins=', decodedIdToken.secondsLeft / 60);
       setCurrentUser({
         email: decodedIdToken.email,
         uid: decodedIdToken.user_id,
