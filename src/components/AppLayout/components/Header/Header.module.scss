@@ -7,7 +7,7 @@
   border-bottom: 1px solid var(--color-border);
 
   @include mix.main-transition('background-color', 150ms);
-  @media (width <= 820px) {
+  @media (width <= 850px) {
     --gap: 20px;
   }
 }
@@ -21,6 +21,10 @@
   justify-content: space-between;
 
   padding: 0 20px;
+
+  @media (width <= 650px) {
+    flex-wrap: wrap;
+  }
 }
 
 .nav {
@@ -33,7 +37,7 @@
   display: flex;
   gap: var(--gap);
   align-items: center;
-  @media (width <= 820px) {
+  @media (width <= 850px) {
     display: none;
   }
 }
@@ -41,10 +45,14 @@
 .image {
   min-width: 160px;
   height: fit-content;
+  @media (width <= 450px) {
+    margin-top: 20px;
+  }
 }
 
 .link {
   padding: 28px 0;
+  white-space: nowrap;
 
   &[data-disable='true'] {
     @include mix.non-interactive;

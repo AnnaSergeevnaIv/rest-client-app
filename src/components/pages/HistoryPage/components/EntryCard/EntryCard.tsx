@@ -4,13 +4,13 @@
 import { Loader } from '@/components/Loader/Loader.tsx';
 import { Button } from '@/components/UI/Button/Button.tsx';
 import { CLEAR_BTN_TEXT } from '@/components/UI/Input/Input.tsx';
+import { Link } from '@/i18n/navigation.ts';
 import {
   deleteHistoryEntry,
   type RequestHistoryEntry,
 } from '@/services/firebase/admin/request-history/actions.ts';
 import clsx from 'clsx';
 import { useTranslations } from 'next-intl';
-import Link from 'next/link';
 import { useCallback, useTransition, type CSSProperties, type ReactNode } from 'react';
 import styles from './EntryCard.module.scss';
 import { getIconByHttpStatusCode, timestampToLocaleDateTime } from './EntryCard.utils.ts';
