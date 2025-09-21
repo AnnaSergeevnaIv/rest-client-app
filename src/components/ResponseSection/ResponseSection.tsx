@@ -26,7 +26,7 @@ export default function ResponseSection({
           <Loader />
         </div>
       )}
-      {error && (
+      {error && !loading && (
         <div className={styles.error}>
           <p>
             {t('responseError')}: {error}
