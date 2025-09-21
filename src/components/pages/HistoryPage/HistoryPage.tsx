@@ -9,12 +9,14 @@ import styles from './HistoryPage.module.scss';
 export default async function HistoryPage(): Promise<ReactNode> {
   const t = await getTranslations('HistoryPage');
   const data = await getAllHistoryEntries();
+  const dataCopy = data && [...data].reverse();
+
   return (
     <section>
       <div className={styles.wrapper}>
         <h1 className={styles.heading}>{t('heading')}</h1>
-        {data && <EntriesList data={data} />}
-        {!data && (
+        {dataCopy && <EntriesList data={dataCopy} />}
+        {!dataCopy && (
           <div className={styles.hint}>
             <p>{t('hint')}</p>
             <Link href={RoutePath.Client} className={styles.link}>

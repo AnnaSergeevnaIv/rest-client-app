@@ -66,17 +66,17 @@ export const Header = (): ReactNode => {
                 </Link>
                 <Link
                   className={styles.link}
-                  href={RoutePath.Variables}
-                  data-disable={pathname === RoutePath.Variables}
-                >
-                  {t('variables')}
-                </Link>
-                <Link
-                  className={styles.link}
                   href={RoutePath.History}
                   data-disable={pathname === RoutePath.History}
                 >
                   {t('history')}
+                </Link>
+                <Link
+                  className={styles.link}
+                  href={RoutePath.Variables}
+                  data-disable={pathname === RoutePath.Variables}
+                >
+                  {t('variables')}
                 </Link>
               </div>
               <Link
