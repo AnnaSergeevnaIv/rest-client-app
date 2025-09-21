@@ -22,8 +22,9 @@
 
   padding: 0 20px;
 
-  @media (width <= 650px) {
-    flex-wrap: wrap;
+  @media (width <= 460px) {
+    flex-direction: column;
+    gap: 0;
   }
 }
 
@@ -45,9 +46,6 @@
 .image {
   min-width: 160px;
   height: fit-content;
-  @media (width <= 450px) {
-    margin-top: 20px;
-  }
 }
 
 .link {
@@ -58,6 +56,10 @@
     @include mix.non-interactive;
 
     opacity: 0.4;
+  }
+
+  @media (width <= 460px) {
+    padding: 16px 0;
   }
 }
 

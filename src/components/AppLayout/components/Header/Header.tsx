@@ -60,7 +60,7 @@ export const Header = (): ReactNode => {
                 <Link
                   className={styles.link}
                   href={RoutePath.Client}
-                  data-disable={pathname === RoutePath.Client}
+                  data-disable={pathname.includes(RoutePath.Client)}
                 >
                   {t('client')}
                 </Link>

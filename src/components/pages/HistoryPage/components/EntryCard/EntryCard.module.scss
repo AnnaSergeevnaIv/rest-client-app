@@ -4,12 +4,17 @@
   display: flex;
   justify-content: space-between;
 
+  min-width: 280px;
   padding: 24px;
   border: var(--border-style);
   border-top: unset;
 
   &:first-of-type {
     border-top: var(--border-style);
+  }
+
+  @media (width <= 460px) {
+    padding: 16px;
   }
 }
 
