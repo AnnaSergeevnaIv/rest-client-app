@@ -9,4 +9,5 @@ export const TestId = {
   ErrorFallbackResetBtn: 'error-fallback-reset-btn',
   ProblematicChildMock: 'problematic-child-mock',
   ModalBackdrop: 'modal-backdrop',
+  ClearBtn: 'clear-btn',
 } as const;

@@ -5,6 +5,7 @@ import {
   deleteAllHistoryEntries,
   type RequestHistoryEntry,
 } from '@/services/firebase/admin/request-history/actions.ts';
+import { useTranslations } from 'next-intl';
 import { useTransition, type ReactNode } from 'react';
 import { EntryCard } from '../EntryCard/EntryCard.tsx';
 import styles from './EntriesList.module.scss';
@@ -15,6 +16,7 @@ type EntriesListProps = {
 
 export const EntriesList = ({ data }: EntriesListProps): ReactNode => {
   const [isPending, startTransition] = useTransition();
+  const t = useTranslations('EntriesList');
 
   const handleDeleteAll = (): void => {
     startTransition(async () => {
@@ -24,7 +26,7 @@ export const EntriesList = ({ data }: EntriesListProps): ReactNode => {
   return (
     <div className={styles.wrapper}>
       <Button
-        label='Delete all'
+        label={t('deleteAll')}
         className={styles.btn}
         onClick={handleDeleteAll}
         loading={isPending}

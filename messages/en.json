@@ -3,18 +3,21 @@
     "test": "test"
   },
   "HistoryPage": {
-    "hint": "It is empty here. Go to the REST client page and make your first request.",
+    "hint": "Please go to the REST client page and make your first request.",
     "navBtn": "REST client",
     "heading": "Request history"
   },
   "EntryCard": {
-    "started": "started at",
+    "started": "started",
     "latency": "latency",
     "request": "req",
     "response": "resp",
     "error": "error",
     "ms": "ms",
     "kb": "kB"
+  },
+  "EntriesList": {
+    "deleteAll": "delete all"
   },
   "ErrorPage": {
     "notFound": "Page not found",
@@ -25,10 +28,11 @@
     "urlPlaceholder": "Enter URL"
   },
   "HeadersEditor": {
-    "headerKeyPlaceholder": "Enter Header Key",
-    "headerValuePlaceholder": "Enter Header Value",
+    "headerKeyPlaceholder": "name",
+    "headerValuePlaceholder": "value",
     "addHeader": "Add Header",
-    "removeHeader": "Remove"
+    "removeHeader": "Remove",
+    "clear": "Clear"
   },
   "Client": {
     "submit": "Submit",
