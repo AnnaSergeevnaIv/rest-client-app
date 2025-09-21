@@ -1,5 +1,5 @@
 import { RoutePath } from '@/common/constants/index.ts';
-import { NavBtn } from '@/components/NavButton/NavBtn.tsx';
+import { RedirectBtn } from '@/components/NavButton/RedirectBtn.tsx';
 import { getAllHistoryEntries } from '@/services/firebase/admin/request-history/actions';
 import { getTranslations } from 'next-intl/server';
 import { type ReactNode } from 'react';
@@ -20,7 +20,7 @@ export default async function HistoryPage(): Promise<ReactNode> {
         {!data && (
           <div className={styles.hint}>
             <p>{t('hint')}</p>
-            <NavBtn text={t('navBtn')} href={RoutePath.Client} />
+            <RedirectBtn text={t('navBtn')} to={RoutePath.Client} />
           </div>
         )}
       </div>

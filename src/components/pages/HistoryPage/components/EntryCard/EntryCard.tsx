@@ -42,7 +42,7 @@ export const EntryCard = async ({ data, style }: EntryCardProps): Promise<ReactN
             <div className={styles.prefix}>
               <div className={styles.status}>
                 <Icon color={color} size={24} />
-                <span style={{ color }}>{httpStatus}</span>
+                <span style={{ color }}>{httpStatus || 'ERR'}</span>
               </div>
               <span className={styles.method}>{method}</span>
             </div>
