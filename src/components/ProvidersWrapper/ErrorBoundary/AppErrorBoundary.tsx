@@ -4,6 +4,6 @@ import type { PropsWithChildren, ReactNode } from 'react';
 import { ErrorFallback } from './components/ErrorFallback/ErrorFallback.tsx';
 import { ErrorBoundary } from './ErrorBoundary.tsx';
 
-export const AppErrorBoundary = ({ children }: PropsWithChildren): ReactNode => {
+export default function AppErrorBoundary({ children }: PropsWithChildren): ReactNode {
   return <ErrorBoundary FallbackComponent={ErrorFallback}>{children}</ErrorBoundary>;
-};
+}

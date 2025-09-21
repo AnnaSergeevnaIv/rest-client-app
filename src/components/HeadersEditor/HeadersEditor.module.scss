@@ -3,20 +3,48 @@
 .headers {
   display: flex;
   flex-direction: column;
-  row-gap: 20px;
   width: 100%;
 }
 
-.header {
+.field {
   display: flex;
-  flex-direction: row;
-  gap: 18px;
-  align-items: center;
-  justify-content: space-between;
+
+  &:last-of-type {
+    border-bottom: var(--border-style);
+  }
 }
 
-.btn {
+.delete-header {
+  padding: 10px;
+  color: var(--color-green-gray);
   @include mix.focused {
     color: var(--color-accent);
   }
+}
+
+.value {
+  border-bottom: unset !important;
+  border-radius: 0 !important;
+}
+
+.key {
+  border-right: unset !important;
+  border-bottom: unset !important;
+  border-radius: 0 !important;
+}
+
+.group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.add {
+  flex-grow: 1;
+  min-width: 100px;
+}
+
+.btn {
+  min-width: 100px;
 }

@@ -36,9 +36,10 @@ vi.mock('next-intl', () => ({
   },
 }));
 
+import { TestId } from '@/test-utils/constants.ts';
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
-import HeadersEditor from './HeadersEditor';
 import { CLEAR_BTN_TEXT } from '../UI/Input/Input';
+import HeadersEditor from './HeadersEditor';
 
 describe('HeadersEditor', () => {
   const mockFields = [{ id: '1', key: '', value: '' }];
@@ -48,7 +49,13 @@ describe('HeadersEditor', () => {
   test('renders correctly', () => {
     const mockControl = {} as Either;
     render(
-      <HeadersEditor control={mockControl} append={vi.fn()} remove={vi.fn()} fields={mockFields} />,
+      <HeadersEditor
+        control={mockControl}
+        append={vi.fn()}
+        remove={vi.fn()}
+        fields={mockFields}
+        replace={vi.fn()}
+      />,
     );
     const addButton = screen.getByRole('button', { name: 'Add Header' });
     expect(addButton).toBeInTheDocument();
@@ -60,7 +67,13 @@ describe('HeadersEditor', () => {
     const mockControl = {} as Either;
     const mockAppend = vi.fn();
     render(
-      <HeadersEditor control={mockControl} append={mockAppend} remove={vi.fn()} fields={[]} />,
+      <HeadersEditor
+        control={mockControl}
+        append={mockAppend}
+        remove={vi.fn()}
+        fields={[]}
+        replace={vi.fn()}
+      />,
     );
     const addButton = screen.getByRole('button', { name: 'Add Header' });
     fireEvent.click(addButton);
@@ -72,16 +85,22 @@ describe('HeadersEditor', () => {
   test('removes header when button is clicked', async () => {
     const mockControl = {} as Either;
     const mockRemove = vi.fn();
+    const mockReplace = vi.fn();
     render(
       <HeadersEditor
         control={mockControl}
         append={vi.fn()}
         remove={mockRemove}
         fields={mockFields}
+        replace={mockReplace}
       />,
     );
     const removeButton = screen.getByRole('button', { name: CLEAR_BTN_TEXT });
     fireEvent.click(removeButton);
     expect(mockRemove).toHaveBeenCalled();
+
+    const replaceBtn = screen.getByTestId(TestId.ClearBtn);
+    fireEvent.click(replaceBtn);
+    expect(mockReplace).toHaveBeenCalled();
   });
 });

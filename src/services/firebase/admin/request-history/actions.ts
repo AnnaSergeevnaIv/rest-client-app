@@ -7,7 +7,7 @@ import { revalidatePath } from 'next/cache';
 import { getIdTokenCookie } from '../../utils/token-helper-server.ts';
 import '../config.ts';
 import { verifyIdToken } from '../utils.ts';
-import { isLikeRequestHistoryEntries, isLikeRequestHistoryEntry } from './utils.ts';
+import { isLikeRequestHistoryEntry } from './utils.ts';
 
 type Timestamp<T = number> = T;
 
@@ -42,18 +42,18 @@ const getId = (): string => {
   return `${getTimestamp().toString()}-${crypto.randomUUID().replaceAll('-', '').slice(0, 10)}`;
 };
 
-const getCurrentUserEmail = async (): Promise<string | null> => {
+const getCurrentUserEmail = async (): Promise<string> => {
   const token = await getIdTokenCookie();
   const decoded = await verifyIdToken(token);
-  return decoded?.email ?? null;
+  if (!decoded?.email) {
+    throw Error('Access denied');
+  }
+  return decoded.email;
 };
 
 export const addHistoryEntry = async (entry: RequestHistoryEntry): Promise<string | null> => {
   try {
     const userEmail = await getCurrentUserEmail();
-    if (!userEmail) {
-      return null;
-    }
     const id = getId();
     entry = { ...entry, createdAt: Date.now(), id };
     await historyRef(userEmail).doc(id).set(entry);
@@ -65,11 +65,8 @@ export const addHistoryEntry = async (entry: RequestHistoryEntry): Promise<strin
 
 export const deleteHistoryEntry = async (id: string): Promise<string | null> => {
   try {
-    const userEmail = await getCurrentUserEmail();
-    if (!userEmail) {
-      return null;
-    }
-    await historyRef(userEmail).doc(id).delete();
+    const email = await getCurrentUserEmail();
+    await historyRef(email).doc(id).delete();
     revalidatePath(RoutePath.History);
     return id;
   } catch {
@@ -77,13 +74,20 @@ export const deleteHistoryEntry = async (id: string): Promise<string | null> => 
   }
 };
 
+export const deleteAllHistoryEntries = async (): Promise<void> => {
+  try {
+    const email = await getCurrentUserEmail();
+    await firestore().recursiveDelete(historyRef(email));
+    revalidatePath(RoutePath.History);
+  } catch {
+    return;
+  }
+};
+
 export const getHistoryEntry = async (id: string): Promise<RequestHistoryEntry | null> => {
   try {
-    const userEmail = await getCurrentUserEmail();
-    if (!userEmail) {
-      return null;
-    }
-    const docRef = await historyRef(userEmail).doc(id).get();
+    const email = await getCurrentUserEmail();
+    const docRef = await historyRef(email).doc(id).get();
     const entry = docRef.data();
     return isLikeRequestHistoryEntry(entry) ? entry : null;
   } catch {
@@ -93,14 +97,10 @@ export const getHistoryEntry = async (id: string): Promise<RequestHistoryEntry |
 
 export const getAllHistoryEntries = async (): Promise<RequestHistoryEntry[] | null> => {
   try {
-    const token = await getIdTokenCookie();
-    const decoded = await verifyIdToken(token);
-    if (!decoded?.email) {
-      return null;
-    }
-    const snapshot = await historyRef(decoded.email).orderBy('createdAt', 'asc').get();
-    const data = snapshot.docs.map(doc => doc.data());
-    return isLikeRequestHistoryEntries(data) && data.length ? data : null;
+    const email = await getCurrentUserEmail();
+    const snapshot = await historyRef(email).orderBy('createdAt', 'asc').get();
+    const data = snapshot.docs.map(doc => doc.data()).filter(isLikeRequestHistoryEntry);
+    return data.length ? data : null;
   } catch {
     return null;
   }

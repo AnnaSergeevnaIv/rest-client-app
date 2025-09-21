@@ -4,6 +4,7 @@ import { StorageKey } from '@/common/constants/index.ts';
 import { verifyIdToken } from '@/services/firebase/admin/utils.ts';
 import type { EmailAndPassword } from '@/services/firebase/client/auth-client.ts';
 import { AuthClient } from '@/services/firebase/client/auth-client.ts';
+import { TokenCookieHelper } from '@/services/firebase/utils/token-helper-client.ts';
 import {
   removeIdTokenCookie,
   setIdTokenCookie,
@@ -83,11 +84,10 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
     [signout],
   );
 
-  const checkCookieIdTokenExpiration = useCallback(async () => {
+  const checkCookieIdTokenExpiration = useCallback(() => {
     const decodedIdToken = decodeIdTokenFromCookie();
     if (!decodedIdToken || decodedIdToken.hasExpired) {
-      await removeIdTokenCookie();
-      await signout();
+      TokenCookieHelper.remove();
       setCurrentUser(null);
     } else {
       setCurrentUser({
@@ -95,14 +95,13 @@ export default function AuthProvider({ children }: AuthProviderProps): ReactNode
         uid: decodedIdToken.user_id,
       });
     }
-  }, [signout]);
+  }, []);
 
   useEffect(() => {
+    checkCookieIdTokenExpiration();
     cookieStore.addEventListener('change', handleTokenCookieRemove);
+    AuthClient.subscribe(handleAuthStateChange);
 
-    void checkCookieIdTokenExpiration().then(() => {
-      AuthClient.subscribe(handleAuthStateChange);
-    });
     return (): void => {
       window.clearTimeout(timerRef.current);
       cookieStore.removeEventListener('change', handleTokenCookieRemove);

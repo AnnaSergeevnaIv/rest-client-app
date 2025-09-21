@@ -1,26 +1,27 @@
 import { RoutePath } from '@/common/constants/index.ts';
-import { NavBtn } from '@/components/NavButton/NavBtn.tsx';
 import { getAllHistoryEntries } from '@/services/firebase/admin/request-history/actions';
 import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 import { type ReactNode } from 'react';
-import { EntryCard } from './components/EntryCard/EntryCard.tsx';
+import { EntriesList } from './components/EntriesList/EntriesList.tsx';
 import styles from './HistoryPage.module.scss';
 
 export default async function HistoryPage(): Promise<ReactNode> {
   const t = await getTranslations('HistoryPage');
   const data = await getAllHistoryEntries();
+  const dataCopy = data && [...data].reverse();
+
   return (
     <section>
       <div className={styles.wrapper}>
         <h1 className={styles.heading}>{t('heading')}</h1>
-        {data &&
-          data.map(entry => {
-            return <EntryCard data={entry} key={entry.id} />;
-          })}
-        {!data && (
+        {dataCopy && <EntriesList data={dataCopy} />}
+        {!dataCopy && (
           <div className={styles.hint}>
             <p>{t('hint')}</p>
-            <NavBtn text={t('navBtn')} href={RoutePath.Client} />
+            <Link href={RoutePath.Client} className={styles.link}>
+              {t('navBtn')}
+            </Link>
           </div>
         )}
       </div>

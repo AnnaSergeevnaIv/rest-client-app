@@ -1,18 +1,21 @@
-import { hasOwnKeys } from '@/common/utils/type-guards.ts';
+import { hasOwnKeys, isInteger } from '@/common/utils/type-guards.ts';
 import type { QueryHistoryEntriesResult, RequestHistoryEntry } from './actions.ts';
 
 export const isLikeRequestHistoryEntry = (obj: unknown): obj is RequestHistoryEntry => {
-  return hasOwnKeys<RequestHistoryEntry>(
-    obj,
-    'durationMs',
-    'httpStatus',
-    'link',
-    'method',
-    'requestSize',
-    'responseSize',
-    'timestamp',
-    'url',
-    'createdAt',
+  return (
+    hasOwnKeys<RequestHistoryEntry>(
+      obj,
+      'durationMs',
+      'httpStatus',
+      'link',
+      'method',
+      'requestSize',
+      'responseSize',
+      'timestamp',
+      'url',
+      'createdAt',
+      'id',
+    ) && isInteger(obj.timestamp)
   );
 };
 

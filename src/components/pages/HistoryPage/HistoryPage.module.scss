@@ -1,3 +1,5 @@
+@use '../../../styles//utils//mixins' as mix;
+
 .wrapper {
   @extend %article;
 }
@@ -11,4 +13,13 @@
   flex-direction: column;
   gap: 28px;
   align-items: center;
+}
+
+.link {
+  @extend %btn-primary;
+
+  text-decoration: none;
+  @include mix.focused {
+    color: var(--color-btn);
+  }
 }

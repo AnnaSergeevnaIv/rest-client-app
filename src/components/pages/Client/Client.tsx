@@ -28,7 +28,7 @@ export default function Client(): React.ReactNode {
   });
   const { currentUser } = useAuth();
 
-  const { fields, append, remove } = useFieldArray<ClientFormType, 'headers'>({
+  const { fields, append, remove, replace } = useFieldArray<ClientFormType, 'headers'>({
     control,
     name: 'headers',
   });
@@ -52,7 +52,13 @@ export default function Client(): React.ReactNode {
         className={styles.form}
       >
         <MethodUrlSelector control={control} required />
-        <HeadersEditor control={control} append={append} remove={remove} fields={fields} />
+        <HeadersEditor
+          control={control}
+          append={append}
+          remove={remove}
+          fields={fields}
+          replace={replace}
+        />
         <BodyEditor control={control} />
         <GeneratedCode control={control} currentUser={currentUser} />
         <Button type='submit' label={t('submit')} />

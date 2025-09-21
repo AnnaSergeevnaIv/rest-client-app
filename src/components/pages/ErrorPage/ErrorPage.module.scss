@@ -1,3 +1,5 @@
+@use '../../../styles/utils/mixins' as mix;
+
 .wrapper {
   @extend %article;
 
@@ -7,4 +9,16 @@
   align-items: center;
 
   width: 400px;
+
+  font-family: 'Open Sans', sans-serif;
+}
+
+.link {
+  @extend %btn-primary;
+
+  height: auto;
+  text-decoration: none;
+  @include mix.focused {
+    color: var(--color-btn);
+  }
 }

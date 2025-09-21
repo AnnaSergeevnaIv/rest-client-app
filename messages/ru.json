@@ -3,18 +3,21 @@
     "test": "тест"
   },
   "HistoryPage": {
-    "hint": "Здесь пусто. Перейдите на страницу REST-клиента и сделайте свой первый запрос.",
+    "hint": "Пожалуйста, перейдите на страницу REST-клиента и сделайте свой первый запрос.",
     "navBtn": "REST клиент",
     "heading": "История запросов"
   },
   "EntryCard": {
-    "started": "начат",
+    "started": "сделан",
     "latency": "время",
     "request": "запрос",
     "response": "ответ",
     "error": "ошибка",
     "ms": "мс",
     "kb": "кБ"
+  },
+  "EntriesList": {
+    "deleteAll": "удалить все"
   },
   "ErrorPage": {
     "notFound": "Страница не найдена",
@@ -25,10 +28,11 @@
     "urlPlaceholder": "Введите URL"
   },
   "HeadersEditor": {
-    "headerKeyPlaceholder": "Введите ключ заголовка",
-    "headerValuePlaceholder": "Введите значение заголовка",
+    "headerKeyPlaceholder": "имя",
+    "headerValuePlaceholder": "значение",
     "addHeader": "Добавить заголовок",
-    "removeHeader": "Удалить"
+    "removeHeader": "Удалить",
+    "clear": "Очистить"
   },
   "Client": {
     "submit": "Отправить",
