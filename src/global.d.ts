@@ -11,7 +11,7 @@ type WithOptional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
 type WithRequired<Type, Key extends keyof Type> = Type & Required<Pick<Type, Key>>;
 type Mutable<T> = { -readonly [P in keyof T]: T[P] };
 type Throwable = (err: unknown) => never;
-type Either = typeof any;
+type Either<T = never> = T extends never ? unknown : T;
 
 declare namespace NodeJS {
   interface ProcessEnv {
