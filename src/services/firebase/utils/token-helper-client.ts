@@ -36,8 +36,6 @@ const getToken = (): string => {
 
 const removeToken = (): void => {
   if (RegExp(`${StorageKey.IdToken}=`).test(document.cookie)) {
-    console.debug('remive cookie token');
-
     document.cookie = [
       `${StorageKey.IdToken}=`,
       `expires=${new Date(0).toUTCString()}`,
