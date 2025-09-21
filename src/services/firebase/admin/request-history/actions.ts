@@ -77,6 +77,19 @@ export const deleteHistoryEntry = async (id: string): Promise<string | null> => 
   }
 };
 
+export const deleteAllHistoryEntries = async (): Promise<void> => {
+  try {
+    const userEmail = await getCurrentUserEmail();
+    if (!userEmail) {
+      return;
+    }
+    await firestore().recursiveDelete(historyRef(userEmail));
+    revalidatePath(RoutePath.History);
+  } catch {
+    return;
+  }
+};
+
 export const getHistoryEntry = async (id: string): Promise<RequestHistoryEntry | null> => {
   try {
     const userEmail = await getCurrentUserEmail();

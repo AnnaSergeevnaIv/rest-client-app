@@ -1,10 +1,9 @@
 import { RoutePath } from '@/common/constants/index.ts';
-// import { RedirectBtn } from '@/components/NavButton/RedirectBtn.tsx';
 import { getAllHistoryEntries } from '@/services/firebase/admin/request-history/actions';
 import { getTranslations } from 'next-intl/server';
 import Link from 'next/link';
 import { type ReactNode } from 'react';
-import { EntryCard } from './components/EntryCard/EntryCard.tsx';
+import { EntriesList } from './components/EntriesList/EntriesList.tsx';
 import styles from './HistoryPage.module.scss';
 
 export default async function HistoryPage(): Promise<ReactNode> {
@@ -14,10 +13,7 @@ export default async function HistoryPage(): Promise<ReactNode> {
     <section>
       <div className={styles.wrapper}>
         <h1 className={styles.heading}>{t('heading')}</h1>
-        {data &&
-          data.map(entry => {
-            return <EntryCard data={entry} key={entry.id} />;
-          })}
+        {data && <EntriesList data={data} />}
         {!data && (
           <div className={styles.hint}>
             <p>{t('hint')}</p>
