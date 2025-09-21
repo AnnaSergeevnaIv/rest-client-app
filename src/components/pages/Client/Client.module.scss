@@ -1,5 +1,7 @@
 .wrapper {
   @extend %article;
+
+  min-height: 90vh;
 }
 
 .form {

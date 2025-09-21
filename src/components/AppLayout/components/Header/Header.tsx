@@ -18,14 +18,14 @@ const ICON_SIZE = 16;
 
 export const Header = (): ReactNode => {
   const { logout, isAuth, loggingOut, currentUser } = useLogoutButton();
-  const { isSticky } = useStickyHeader({ scrollThreshold: 70 });
+  const { isSticky } = useStickyHeader({ scrollThreshold: 60 });
   const pathname = usePathname();
   const t = useTranslations('Common');
 
   return (
     <header className={clsx(styles.header, isSticky && styles.sticky)}>
       <div className={styles.wrapper}>
-        <Link href={RoutePath.Home}>
+        <Link href={RoutePath.Home} className={styles.link}>
           <Image
             {...LOGO_PROPS}
             className={styles.image}

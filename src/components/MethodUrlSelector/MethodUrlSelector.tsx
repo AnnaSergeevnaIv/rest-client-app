@@ -61,6 +61,7 @@ export default function MethodUrlSelector({
             onClear={field.onChange}
             onChange={field.onChange}
             required={required}
+            pattern='^https://.+'
           />
         )}
       />
