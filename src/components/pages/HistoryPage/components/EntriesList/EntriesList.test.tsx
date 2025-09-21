@@ -3,8 +3,12 @@ import { EntriesList } from './EntriesList';
 import * as actions from '@/services/firebase/admin/request-history/actions';
 import { vi } from 'vitest';
 
+vi.mock('next-intl', () => ({
+  useTranslations: () => (key: string) => key,
+}));
+
 vi.mock('@/services/firebase/admin/request-history/actions', () => ({
-  deleteHistoryEntry: vi.fn(() => Promise.resolve()),
+  deleteAllHistoryEntries: vi.fn(() => Promise.resolve()),
 }));
 
 const mockData: actions.RequestHistoryEntry[] = [
@@ -45,20 +49,14 @@ describe('EntriesList', () => {
     expect(screen.getByText('/test2')).toBeInTheDocument();
   });
 
-  it('handles deletion of an entry', async () => {
+  it('handles deletion of all entries', async () => {
     render(<EntriesList data={mockData} />);
 
-    const deleteButtons = screen.getAllByRole('button');
-    fireEvent.click(deleteButtons[0]);
+    const deleteAllButton = screen.getByRole('button', { name: 'deleteAll' });
+    fireEvent.click(deleteAllButton);
 
     await waitFor(() => {
-      expect(actions.deleteHistoryEntry).toHaveBeenCalledWith('1');
+      expect(actions.deleteAllHistoryEntries).toHaveBeenCalledTimes(1);
     });
-
-    await waitFor(() => {
-      expect(screen.queryByText('/test1')).not.toBeInTheDocument();
-    });
-
-    expect(screen.getByText('/test2')).toBeInTheDocument();
   });
 });
