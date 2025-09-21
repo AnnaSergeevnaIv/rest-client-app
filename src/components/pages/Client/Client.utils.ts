@@ -1,4 +1,3 @@
-// import { VarsHelper } from '@/components/VarsForm/VarsForm.utils';
 import { type ResponseData } from './Client';
 import { type Header } from './Client.types';
 
@@ -10,7 +9,6 @@ export function headersArrayToObject(
   apply: (s: string) => string,
   headers?: Header[],
 ): Record<string, string> {
-  // return {};
   return (
     headers?.reduce((acc, header) => {
       return { ...acc, [header.key]: apply(header.value) };

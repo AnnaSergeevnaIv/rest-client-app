@@ -3,7 +3,7 @@ import { render, screen } from '@testing-library/react';
 import ClientPage from './page';
 
 vi.mock('next/dynamic', () => ({
-  default: (importFn: () => Promise<any>, options: any) => {
+  default: (importFn: () => Promise<Either>, options: Either) => {
     const MockedComponent = () => <div data-testid='dynamic-client'>Dynamic Client</div>;
     MockedComponent.displayName = 'DynamicClient';
     return MockedComponent;

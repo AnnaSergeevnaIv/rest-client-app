@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 'use client';
 
+import { useTranslations } from 'next-intl';
 import { useCallback, type ReactNode } from 'react';
 import { useFieldArray, useForm } from 'react-hook-form';
 import { Button } from '../UI/Button/Button.tsx';
@@ -8,7 +9,6 @@ import { CLEAR_BTN_TEXT, Input } from '../UI/Input/Input.tsx';
 import styles from './VarsForm.module.scss';
 import { DEFAULT_FORMDATA_VALUES } from './VarsForm.utils.ts';
 import { useCurrentUserVarsForm } from './hooks/useCurrentUserVarsForm.ts';
-import { useTranslations } from 'next-intl';
 
 export type VarField<T = string> = {
   key: string;
@@ -29,7 +29,7 @@ export default function VarsForm(): ReactNode {
   } = useForm<VarsFormData>({ defaultValues: DEFAULT_FORMDATA_VALUES });
 
   useCurrentUserVarsForm({ getValues, reset });
-  const tVars = useTranslations('VariablesPage');
+  const t = useTranslations('VariablesPage');
 
   const { fields, prepend, remove } = useFieldArray<VarsFormData, 'vars'>({
     control,
@@ -54,8 +54,8 @@ export default function VarsForm(): ReactNode {
   return (
     <form className={styles.form}>
       <div className={styles.group}>
-        <Button className={styles.add} label={tVars('add')} onClick={handleAddClick} />
-        <Button className={styles.btn} label={tVars('clear')} onClick={handleClearClick} />
+        <Button className={styles.add} label={t('add')} onClick={handleAddClick} />
+        <Button className={styles.btn} label={t('clear')} onClick={handleClearClick} />
       </div>
       <div className={styles.fields}>
         {fields.map((field, idx) => (
@@ -65,7 +65,7 @@ export default function VarsForm(): ReactNode {
               width='40%'
               {...register(`vars.${idx}.key`)}
               error={errors.vars?.[idx]?.message}
-              placeholder='key'
+              placeholder={t('key')}
               onClear={() => {
                 setValue(`vars.${idx}.key`, '');
               }}
@@ -74,7 +74,7 @@ export default function VarsForm(): ReactNode {
               className={styles.value}
               width='100%'
               {...register(`vars.${idx}.value`)}
-              placeholder='value'
+              placeholder={t('value')}
               onClear={() => {
                 setValue(`vars.${idx}.value`, '');
               }}

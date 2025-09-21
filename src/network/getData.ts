@@ -1,10 +1,8 @@
-/* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { getErrorMessage, showErrorToast } from '@/common/utils';
 import { type ClientFormType } from '@/components/pages/Client/Client.types';
 import { transformFormData } from '@/components/ResponseSection/ResponseSection.utils';
 import {
   addHistoryEntry,
-  type HttpMethodName,
   type RequestHistoryEntry,
 } from '@/services/firebase/admin/request-history/actions';
 import axios, { type AxiosRequestConfig, type AxiosResponse } from 'axios';
@@ -34,7 +32,7 @@ export const getData = async (
     durationMs: 0,
     httpStatus: 0,
     timestamp: Date.now(),
-    method: formData.method as Uppercase<HttpMethodName>,
+    method: formData.method,
     requestSize: new TextEncoder().encode(options.body ?? undefined).length,
     responseSize: 0,
     url: formData.url,
@@ -45,7 +43,6 @@ export const getData = async (
     const response: AxiosResponse<string> = await axios(axiosConfig);
     analyticsData.durationMs = Date.now() - start;
     analyticsData.responseSize = new TextEncoder().encode(JSON.stringify(response.data)).length;
-    console.log('response.data', response.data, analyticsData.responseSize);
     analyticsData.httpStatus = response.status;
     const headers: Record<string, string> = Object.fromEntries(
       Object.entries(response.headers).map(([k, v]) => [k, String(v)]),
@@ -65,7 +62,6 @@ export const getData = async (
     showErrorToast(analyticsData.error);
     return { data: null, error: analyticsData.error };
   } finally {
-    console.log('analyticsData', analyticsData);
     try {
       void addHistoryEntry(analyticsData);
     } catch (error: unknown) {

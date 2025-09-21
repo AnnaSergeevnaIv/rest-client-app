@@ -1,13 +1,13 @@
 import { fireEvent, render, screen, waitFor } from '@testing-library/react';
+import { useWatch } from 'react-hook-form';
 import { describe, vi } from 'vitest';
+import { useCurrentUserVars } from '../VarsForm/hooks/useCurrentUserVars';
 import GeneratedCode from './GeneratedCode';
 import { CODE_LANGUAGES } from './GeneratedCode.constants';
 import { generateCode } from './GeneratedCode.utils';
-import { useWatch } from 'react-hook-form';
-import { useCurrentUserVars } from '../VarsForm/hooks/useCurrentUserVars';
 
 vi.mock('react-hook-form', () => ({
-  Controller: ({ render: renderProp }: any) => {
+  Controller: ({ render: renderProp }: Either) => {
     const mockField = {
       value: '',
       onChange: vi.fn(),
@@ -58,13 +58,12 @@ describe('GeneratedCode', () => {
     vi.mocked(useCurrentUserVars).mockReturnValue({
       apply: vi.fn().mockImplementation((value: string) => value),
       getFromLocalStorage: vi.fn(),
-      currentUser: null,
     });
   });
   test('renders correctly', () => {
-    const mockControl = {} as any;
+    const mockControl = {} as Either;
 
-    render(<GeneratedCode control={mockControl} />);
+    render(<GeneratedCode control={mockControl} currentUser={null} />);
     expect(screen.getByRole('combobox')).toBeInTheDocument();
   });
   test('changes language when select value changes', async () => {
@@ -73,10 +72,9 @@ describe('GeneratedCode', () => {
     vi.mocked(useCurrentUserVars).mockReturnValue({
       apply: vi.fn().mockImplementation((value: string) => value),
       getFromLocalStorage: vi.fn(),
-      currentUser: null,
     });
-    const mockControl = {} as any;
-    render(<GeneratedCode control={mockControl} />);
+    const mockControl = {} as Either;
+    render(<GeneratedCode control={mockControl} currentUser={null} />);
     const select = screen.getByRole('combobox');
     fireEvent.change(select, { target: { value: CODE_LANGUAGES.Java } });
     await waitFor(() => {
@@ -85,8 +83,8 @@ describe('GeneratedCode', () => {
   });
   test('shows error when generating code fails', async () => {
     vi.mocked(generateCode).mockRejectedValue('');
-    const mockControl = {} as any;
-    render(<GeneratedCode control={mockControl} />);
+    const mockControl = {} as Either;
+    render(<GeneratedCode control={mockControl} currentUser={null} />);
     await waitFor(() => {
       expect(screen.getByText('Error')).toBeInTheDocument();
     });
@@ -101,10 +99,9 @@ describe('GeneratedCode', () => {
     vi.mocked(useCurrentUserVars).mockReturnValue({
       apply: vi.fn().mockImplementation((value: string | undefined) => value ?? ''),
       getFromLocalStorage: vi.fn(),
-      currentUser: null,
     });
-    const mockControl = {} as any;
-    render(<GeneratedCode control={mockControl} />);
+    const mockControl = {} as Either;
+    render(<GeneratedCode control={mockControl} currentUser={null} />);
     expect(generateCode).toHaveBeenCalledWith('cURL', '', '', [], '');
   });
 });

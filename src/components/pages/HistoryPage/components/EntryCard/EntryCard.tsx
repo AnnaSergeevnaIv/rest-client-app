@@ -1,24 +1,20 @@
 /* eslint-disable @typescript-eslint/no-non-null-assertion */
-'use client';
-
-import { Loader } from '@/components/Loader/Loader.tsx';
-import { Button } from '@/components/UI/Button/Button.tsx';
-import { CLEAR_BTN_TEXT } from '@/components/UI/Input/Input.tsx';
-import { Link } from '@/i18n/navigation.ts';
 import type { RequestHistoryEntry } from '@/services/firebase/admin/request-history/actions.ts';
 import clsx from 'clsx';
+import { getTranslations } from 'next-intl/server';
+import Link from 'next/link';
 import type { CSSProperties, ReactNode } from 'react';
+import { DeleteBtn } from './DeleteBtn.tsx';
 import styles from './EntryCard.module.scss';
 import { getIconByHttpStatusCode, timestampToLocaleDateTime } from './EntryCard.utils.ts';
 
 type EntryCardProps = {
   data: RequestHistoryEntry;
-  onDelete?: (id: string) => void;
-  deleting?: boolean;
   style?: CSSProperties;
 };
 
-export const EntryCard = ({ data, onDelete, deleting, style }: EntryCardProps): ReactNode => {
+export const EntryCard = async ({ data, style }: EntryCardProps): Promise<ReactNode> => {
+  const t = await getTranslations('EntryCard');
   const {
     method,
     url,
@@ -54,30 +50,34 @@ export const EntryCard = ({ data, onDelete, deleting, style }: EntryCardProps): 
               {url}
             </Link>
           </div>
-          <Button variant='default' className={styles.remove} onClick={() => onDelete?.(id!)}>
-            {deleting ? <Loader size={20} /> : CLEAR_BTN_TEXT}
-          </Button>
+          <DeleteBtn id={id!} />
         </div>
         <ul className={styles.delails}>
           <li className={styles.item}>
-            <span className={styles.label}>Started:</span>
+            <span className={styles.label}>{t('started')}:</span>
             <span>{started}</span>
           </li>
           <li className={styles.item}>
-            <span className={styles.label}>Latency:</span>
-            <span>{durationMs}ms</span>
+            <span className={styles.label}>{t('latency')}:</span>
+            <span>
+              {durationMs} {t('ms')}
+            </span>
           </li>
           <li className={styles.item}>
-            <span className={styles.label}>Req:</span>
-            <span>{reqKb}kB</span>
+            <span className={styles.label}>{t('request')}:</span>
+            <span>
+              {reqKb} {t('kb')}
+            </span>
           </li>
           <li className={styles.item}>
-            <span className={styles.label}>Resp:</span>
-            <span>{respKb}kB</span>
+            <span className={styles.label}>{t('response')}:</span>
+            <span>
+              {respKb} {t('kb')}
+            </span>
           </li>
           {error && (
             <li className={styles.item}>
-              <span className={styles.label}>Error:</span>
+              <span className={styles.label}>{t('error')}:</span>
               <span className={clsx(styles.ellipsis, styles['error-msg'])}>{error}</span>
             </li>
           )}

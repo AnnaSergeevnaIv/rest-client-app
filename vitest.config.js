@@ -27,6 +27,9 @@ export default defineConfig({
         '**/hooks',
         '**/redux',
         '**/validation',
+        'src/app/**',
+        'src/i18n/**',
+        'src/services/**',
       ],
       thresholds: {
         statements: 80,

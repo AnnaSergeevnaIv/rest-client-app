@@ -1,3 +1,5 @@
+/* eslint-disable react-compiler/react-compiler */
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/consistent-type-assertions */
 import { getErrorMessage, showErrorToast } from '@/common/utils';
 import { METHODS } from '@/components/MethodUrlSelector/MethodUrlSelector.constants';

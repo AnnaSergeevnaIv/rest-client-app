@@ -46,7 +46,7 @@ describe('HomePage', () => {
   });
 
   it('renders guest view when user is not authenticated', () => {
-    vi.spyOn(AuthContext, 'useAuth').mockReturnValue({ currentUser: null } as any);
+    vi.spyOn(AuthContext, 'useAuth').mockReturnValue({ currentUser: null } as Either);
 
     render(<HomePage />);
 
@@ -58,7 +58,7 @@ describe('HomePage', () => {
 
   it('renders user view when user is authenticated', () => {
     const mockUser = { displayName: 'John Doe', email: 'john@example.com' };
-    vi.spyOn(AuthContext, 'useAuth').mockReturnValue({ currentUser: mockUser } as any);
+    vi.spyOn(AuthContext, 'useAuth').mockReturnValue({ currentUser: mockUser } as Either);
 
     render(<HomePage />);
 
@@ -73,7 +73,7 @@ describe('HomePage', () => {
 
   it('falls back to email if displayName is not provided', () => {
     const mockUser = { displayName: '', email: 'john@example.com' };
-    vi.spyOn(AuthContext, 'useAuth').mockReturnValue({ currentUser: mockUser } as any);
+    vi.spyOn(AuthContext, 'useAuth').mockReturnValue({ currentUser: mockUser } as Either);
 
     render(<HomePage />);
 

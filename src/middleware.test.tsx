@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { RoutePath, AppLocales } from './common/constants/index.ts';
 
 vi.mock('next-intl/middleware', () => ({
-  default: () => (request: any) => {
+  default: () => (request: Either) => {
     const token = request.cookies?.get?.('token');
     const isPrivateRoute = request.nextUrl.pathname === RoutePath.History;
     if (!token && isPrivateRoute) {
@@ -32,7 +32,7 @@ describe('middleware', () => {
   });
 
   it('redirects unauthenticated user from private route to home', () => {
-    (req.cookies.get as any).mockReturnValue(undefined);
+    (req.cookies.get as Either).mockReturnValue(undefined);
 
     const res = middleware(req);
 
@@ -42,7 +42,7 @@ describe('middleware', () => {
 
   it('allows access to auth route if no token', () => {
     req.nextUrl.pathname = RoutePath.Signin;
-    (req.cookies.get as any).mockReturnValue(undefined);
+    (req.cookies.get as Either).mockReturnValue(undefined);
 
     const res = middleware(req);
 

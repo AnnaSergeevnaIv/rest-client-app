@@ -17,7 +17,6 @@ const ToastOptions: ToastContainerProps = {
 };
 const AuthProvider = dynamic(
   async () => await import('@components/ProvidersWrapper/AuthProvider/AuthProvider.tsx'),
-  { ssr: false },
 );
 export default function ProvidersWrapper({ children, locale }: ProvidersProps): ReactNode {
   return (

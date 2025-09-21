@@ -16,7 +16,7 @@ vi.mock('@/i18n/navigation.ts', () => {
 });
 
 vi.mock('@/common/utils/type-guards.ts', async () => {
-  const actual: any = await vi.importActual('@/common/utils/type-guards.ts');
+  const actual: Either = await vi.importActual('@/common/utils/type-guards.ts');
   return { ...actual };
 });
 

@@ -1,15 +1,17 @@
 'use server';
 
-import { getErrorMessage, getTimestamp } from '@/common/utils/index.ts';
+import { RoutePath } from '@/common/constants/index.ts';
+import { getTimestamp } from '@/common/utils/index.ts';
 import { firestore } from 'firebase-admin';
+import { revalidatePath } from 'next/cache';
 import { getIdTokenCookie } from '../../utils/token-helper-server.ts';
 import '../config.ts';
 import { verifyIdToken } from '../utils.ts';
-import { isLikeRequestHistoryEntries } from './utils.ts';
+import { isLikeRequestHistoryEntries, isLikeRequestHistoryEntry } from './utils.ts';
 
 type Timestamp<T = number> = T;
 
-export type HttpMethodName = 'get' | 'put' | 'post' | 'delete';
+export type HttpMethodName = 'get' | 'put' | 'post' | 'delete' | 'patch';
 
 export type ErrorResponse = {
   error: string;
@@ -68,22 +70,24 @@ export const deleteHistoryEntry = async (id: string): Promise<string | null> => 
       return null;
     }
     await historyRef(userEmail).doc(id).delete();
+    revalidatePath(RoutePath.History);
     return id;
   } catch {
     return null;
   }
 };
 
-export const getHistoryEntry = async (userEmail: string, id: string): Promise<string | null> => {
+export const getHistoryEntry = async (id: string): Promise<RequestHistoryEntry | null> => {
   try {
+    const userEmail = await getCurrentUserEmail();
+    if (!userEmail) {
+      return null;
+    }
     const docRef = await historyRef(userEmail).doc(id).get();
     const entry = docRef.data();
-    if (!entry) {
-      throw Error(`Entry with id='${id}' not found`);
-    }
-    return JSON.stringify(entry);
-  } catch (error) {
-    return JSON.stringify({ error: getErrorMessage(error) });
+    return isLikeRequestHistoryEntry(entry) ? entry : null;
+  } catch {
+    return null;
   }
 };
 
