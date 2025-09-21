@@ -1,5 +1,4 @@
 export const HttpRequestHeadersArray = [
-  // Standard HTTP/1.1 headers
   'A-IM',
   'Accept',
   'Accept-Charset',
@@ -38,14 +37,12 @@ export const HttpRequestHeadersArray = [
   'Via',
   'Warning',
 
-  // HTTP/2 specific headers
   ':authority',
   ':method',
   ':path',
   ':scheme',
   ':status',
 
-  // Common non-standard (X-) headers
   'X-Requested-With',
   'X-CSRF-Token',
   'X-CSRFToken',
@@ -67,7 +64,6 @@ export const HttpRequestHeadersArray = [
   'X-DNS-Prefetch-Control',
   'X-Download-Options',
 
-  // CORS headers
   'Access-Control-Allow-Origin',
   'Access-Control-Allow-Methods',
   'Access-Control-Allow-Headers',
@@ -77,7 +73,6 @@ export const HttpRequestHeadersArray = [
   'Access-Control-Request-Method',
   'Access-Control-Request-Headers',
 
-  // Security headers
   'Strict-Transport-Security',
   'Content-Security-Policy',
   'Public-Key-Pins',
@@ -86,17 +81,14 @@ export const HttpRequestHeadersArray = [
   'Permissions-Policy',
   'Referrer-Policy',
 
-  // Authentication headers
   'WWW-Authenticate',
   'Proxy-Authenticate',
   'Authorization',
   'Proxy-Authorization',
 
-  // Cookie headers
   'Set-Cookie',
   'Cookie',
 
-  // Content negotiation
   'Accept',
   'Accept-Charset',
   'Accept-Encoding',
@@ -104,31 +96,25 @@ export const HttpRequestHeadersArray = [
   'Accept-Patch',
   'Accept-Ranges',
 
-  // Conditional requests
   'If-Match',
   'If-None-Match',
   'If-Modified-Since',
   'If-Unmodified-Since',
   'If-Range',
 
-  // Range requests
   'Range',
   'If-Range',
   'Content-Range',
 
-  // Compression
   'Content-Encoding',
   'Transfer-Encoding',
   'TE',
 
-  // Redirects
   'Location',
   'Refresh',
 
-  // Download headers
   'Content-Disposition',
 
-  // Caching headers
   'Age',
   'Cache-Control',
   'Expires',
@@ -137,34 +123,28 @@ export const HttpRequestHeadersArray = [
   'Last-Modified',
   'Vary',
 
-  // Do Not Track
   'DNT',
   'Tk',
 
-  // Device/client info
   'User-Agent',
   'Device-Memory',
   'DPR',
   'Viewport-Width',
   'Width',
 
-  // WebSocket headers
   'Sec-WebSocket-Key',
   'Sec-WebSocket-Version',
   'Sec-WebSocket-Extensions',
   'Sec-WebSocket-Protocol',
   'Sec-WebSocket-Accept',
 
-  // Server-sent events
   'Last-Event-ID',
 
-  // Fetch metadata
   'Sec-Fetch-Site',
   'Sec-Fetch-Mode',
   'Sec-Fetch-User',
   'Sec-Fetch-Dest',
 
-  // Client hints
   'Accept-CH',
   'Accept-CH-Lifetime',
   'Device-Memory',
@@ -173,14 +153,12 @@ export const HttpRequestHeadersArray = [
   'Width',
   'Save-Data',
 
-  // Proxy headers
   'Forwarded',
   'X-Forwarded-For',
   'X-Forwarded-Host',
   'X-Forwarded-Proto',
   'Via',
 
-  // Diagnostic headers
   'X-Request-Start',
   'X-Request-ID',
   'X-Correlation-ID',

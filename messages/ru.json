@@ -2,6 +2,25 @@
   "Test": {
     "test": "тест"
   },
+  "HistoryPage": {
+    "hint": "Здесь пусто. Перейдите на страницу REST-клиента и сделайте свой первый запрос.",
+    "navBtn": "REST клиент",
+    "heading": "История запросов"
+  },
+  "EntryCard": {
+    "started": "начат",
+    "latency": "время",
+    "request": "запрос",
+    "response": "ответ",
+    "error": "ошибка",
+    "ms": "мс",
+    "kb": "кБ"
+  },
+  "ErrorPage": {
+    "notFound": "Страница не найдена",
+    "home": "Домой",
+    "lost": "Are you lost?"
+  },
   "MethodUrlSelector": {
     "urlPlaceholder": "Введите URL"
   },
@@ -22,7 +41,9 @@
   "VariablesPage": {
     "heading": "Переменные",
     "add": "Добавить",
-    "clear": "Очистить"
+    "clear": "Очистить",
+    "key": "имя",
+    "value": "значение"
   },
   "Common": {
     "signin": "Войти",
@@ -55,7 +76,19 @@
   "AuthForm": {
     "email": "почта",
     "password": "пароль",
-    "confirmPassword": "подтвердить пароль"
+    "confirmPassword": "подтвердить пароль",
+    "welcome": "Добро пожаловать"
+  },
+  "ValidationMessage": {
+    "required": "Это поле обязательное",
+    "oneLetter": "Должен содержать хотя бы одну букву",
+    "oneDigit": "Должен содержать хотя бы одну цифру",
+    "oneSpecial": "Должен содержать хотя бы один спецсимвол (!@#$%^&*)",
+    "noSpaces": "Не должен содержать конечных пробелов",
+    "atLeast": "Должен быть не менее $1 символов",
+    "noLonger": "Должен быть не более $1 символов",
+    "invalidEmail": "Неверный емейл (напр., login@domain.com)",
+    "notMatch": "Пароли не совпадают"
   },
   "SignupPage": {
     "heading": "Регистрация",

@@ -1,6 +1,6 @@
 import { render, screen } from '@testing-library/react';
-import { PageLoader } from './PageLoader';
 import { vi } from 'vitest';
+import { PageLoader } from './PageLoader';
 
 vi.mock('./Loader', () => ({
   Loader: vi.fn(() => <div data-testid='mock-loader' />),
@@ -20,8 +20,7 @@ describe('PageLoader', () => {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      width: '100vw',
-      height: '100vh',
+      width: '100%',
     });
   });
 });

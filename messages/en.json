@@ -2,6 +2,25 @@
   "Test": {
     "test": "test"
   },
+  "HistoryPage": {
+    "hint": "It is empty here. Go to the REST client page and make your first request.",
+    "navBtn": "REST client",
+    "heading": "Request history"
+  },
+  "EntryCard": {
+    "started": "started at",
+    "latency": "latency",
+    "request": "req",
+    "response": "resp",
+    "error": "error",
+    "ms": "ms",
+    "kb": "kB"
+  },
+  "ErrorPage": {
+    "notFound": "Page not found",
+    "home": "Go Home",
+    "lost": "Заблудились?"
+  },
   "MethodUrlSelector": {
     "urlPlaceholder": "Enter URL"
   },
@@ -22,7 +41,9 @@
   "VariablesPage": {
     "heading": "Variables",
     "add": "Add",
-    "clear": "Clear"
+    "clear": "Clear",
+    "key": "name",
+    "value": "value"
   },
   "Common": {
     "signin": "Sign in",
@@ -55,7 +76,19 @@
   "AuthForm": {
     "email": "email",
     "password": "password",
-    "confirmPassword": "confirm password"
+    "confirmPassword": "confirm password",
+    "welcome": "Welcome"
+  },
+  "ValidationMessage": {
+    "required": "The field is required",
+    "oneLetter": "Must contain at least one letter",
+    "oneDigit": "Must contain at least one digit",
+    "oneSpecial": "Must contain at least one special character (!@#$%^&*)",
+    "noSpaces": "Must not contain leading or trailing whitespace",
+    "atLeast": "Must be at least $1 characters long",
+    "noLonger": "Must be no longer than $1 characters",
+    "invalidEmail": "Invalid email (e.g.login@domain.com)",
+    "notMatch": "Passwords do not match"
   },
   "SignupPage": {
     "heading": "Sign Up",

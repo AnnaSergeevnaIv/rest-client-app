@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
-import { describe, it, vi, beforeEach } from 'vitest';
-import AuthProvider from './AuthProvider';
+import { beforeEach, describe, it, vi } from 'vitest';
 import { AuthContext } from './AuthContext';
+import AuthProvider from './AuthProvider';
 
 vi.mock('@/services/firebase/utils/token-helper-server.ts', () => ({
   removeIdTokenCookie: vi.fn(),
@@ -11,8 +11,8 @@ vi.mock('@/services/firebase/utils/token-helper-server.ts', () => ({
 vi.mock('@/services/firebase/client/auth-client.ts', () => ({
   AuthClient: {
     currentUser: null,
-    signin: vi.fn(async creds => ({ user: { uid: 'uid123', email: 'test@test.com' } })),
-    signup: vi.fn(async creds => ({ user: { uid: 'uid456', email: 'new@test.com' } })),
+    signin: vi.fn(async _ => ({ user: { uid: 'uid123', email: 'test@test.com' } })),
+    signup: vi.fn(async _ => ({ user: { uid: 'uid456', email: 'new@test.com' } })),
     signout: vi.fn(async () => {}),
     subscribe: vi.fn(),
     unsubscribe: vi.fn(),
@@ -22,7 +22,7 @@ vi.mock('@/services/firebase/client/auth-client.ts', () => ({
 globalThis.cookieStore = {
   addEventListener: vi.fn(),
   removeEventListener: vi.fn(),
-} as any;
+} as Either;
 
 describe('AuthProvider', () => {
   beforeEach(() => {

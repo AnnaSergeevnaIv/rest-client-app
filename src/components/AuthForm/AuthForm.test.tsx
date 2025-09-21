@@ -1,9 +1,9 @@
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
-import { describe, it, expect, beforeEach, vi, type Mock } from 'vitest';
-import { AuthForm } from './AuthForm';
-import { useAuth } from '../ProvidersWrapper/AuthProvider/AuthContext';
 import { showErrorToast } from '@/common/utils';
+import { fireEvent, render, screen, waitFor } from '@testing-library/react';
 import { toast } from 'react-toastify';
+import { beforeEach, describe, expect, it, vi, type Mock } from 'vitest';
+import { useAuth } from '../ProvidersWrapper/AuthProvider/AuthContext';
+import { AuthForm } from './AuthForm';
 
 vi.mock('../ProvidersWrapper/AuthProvider/AuthContext', () => ({
   useAuth: vi.fn(),
@@ -65,7 +65,7 @@ describe('AuthForm', () => {
         email: 'test@example.com',
         password: 'password123!',
       });
-      expect(toast.success).toHaveBeenCalledWith('Welcome, test@example.com');
+      expect(toast.success).toHaveBeenCalledWith('welcome, test@example.com');
     });
   });
 
@@ -93,7 +93,7 @@ describe('AuthForm', () => {
         password: 'password123!',
         confirmPassword: 'password123!',
       });
-      expect(toast.success).toHaveBeenCalledWith('Welcome, new@example.com');
+      expect(toast.success).toHaveBeenCalledWith('welcome, new@example.com');
     });
   });
 
