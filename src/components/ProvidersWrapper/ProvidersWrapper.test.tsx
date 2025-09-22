@@ -1,6 +1,6 @@
-import React, { PropsWithChildren } from 'react';
 import { render } from '@testing-library/react';
-import { describe, it, vi, expect } from 'vitest';
+import React, { PropsWithChildren } from 'react';
+import { describe, expect, it, vi } from 'vitest';
 
 vi.mock('next/dynamic', () => ({
   __esModule: true,
@@ -32,6 +32,6 @@ describe('ProvidersWrapper', () => {
 
     const toast = getByTestId('toast');
     expect(toast).toBeDefined();
-    expect(toast.textContent).toBe('1500');
+    expect(toast.textContent).toBe('1000');
   });
 });

@@ -1,3 +1,5 @@
+@use '../../../styles/utils/mixins' as mix;
+
 .heading {
   @extend %section-heading;
 
@@ -48,11 +50,20 @@
   margin-top: 20px;
 }
 
-.link {
+.link,
+.client {
   @extend %btn-secondary;
 
   width: 120px;
   text-decoration: none;
+}
+
+.client {
+  border-color: var(--color-accent);
+  color: var(--color-accent);
+  @include mix.focused {
+    background-color: var(--color-accent);
+  }
 }
 
 .about {
