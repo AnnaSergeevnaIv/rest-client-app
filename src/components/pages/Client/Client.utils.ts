@@ -2,7 +2,7 @@ import { type ResponseData } from './Client';
 import { type Header } from './Client.types';
 
 export function encodeUrlBody(string: string): string {
-  return btoa(string);
+  return btoa(encodeURIComponent(string));
 }
 
 export function headersArrayToObject(
@@ -22,7 +22,7 @@ export function queryParamsToHeaders(queryParams: Record<string, string>): Heade
 
 export function decodeUrlBody(encodedUrlBody?: string): string {
   if (!encodedUrlBody) return '';
-  return atob(encodedUrlBody);
+  return decodeURIComponent(atob(encodedUrlBody));
 }
 
 export function parseClientPath(path: string): {
